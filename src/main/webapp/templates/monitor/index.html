@@ -1,0 +1,70 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <i class=" icon-home"></i> 应用大盘
+    </div>
+    <div class="panel-body">
+        <div class="row" style="padding-bottom: 10px;">
+            <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
+                <div  isteven-multi-select
+                      input-model="multiOptions"
+                      output-model="applications"
+                      button-label="name"
+                      max-labels="4"
+                      item-label="name"
+                      tick-property="ticked"
+                      orientation="horizontal"
+                      group-property="appGroup">
+                </div>
+            </div>
+        </div>
+        <div class="row"  style="padding-bottom: 10px;">
+            <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
+                <span class="label {{dayRange==30?'label-warning':'label-default'}} can-click" ng-click="switchTimeRange(30)">一个月以内</span>
+                <span class="label {{dayRange==21?'label-warning':'label-primary'}}  can-click" ng-click="switchTimeRange(21)">三周以内</span>
+                <span class="label  {{dayRange==14?'label-warning':'label-primary'}} can-click" ng-click="switchTimeRange(14)">两周以内</span>
+                <span class="label {{dayRange==7?'label-warning':'label-primary'}}    can-click"  ng-click="switchTimeRange(7)">一周以内</span>
+                <span class="label  {{dayRange==6?'label-warning':'label-info'}}  can-click" ng-click="switchTimeRange(6)">6天以内</span>
+                <span class="label  {{dayRange==5?'label-warning':'label-info'}}   can-click" ng-click="switchTimeRange(5)">5天以内</span>
+                <span class="label {{dayRange==4?'label-warning':'label-info'}}  can-click" ng-click="switchTimeRange(4)">4天以内</span>
+                <span class="label  {{dayRange==3?'label-warning':'label-info'}}  can-click" ng-click="switchTimeRange(3)">3天以内</span>
+                <span class="label  {{dayRange==2?'label-warning':'label-info'}} can-click" ng-click="switchTimeRange(2)">2天以内</span>
+                <span class="label  {{dayRange==1?'label-warning':'label-danger'}} can-click" ng-click="switchTimeRange(1)">一天以内</span>
+            </div>
+        </div>
+        <div class="row"  ng-repeat="item in applications | orderBy:'-maxElapsed'">
+            <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
+                <div class="row" ng-if="$index%4===0" ng-init="group=applications.slice($index,$index+4)">
+                    <div class="col-md-3 col-xs-3 col-lg-3 col-sm-3" ng-repeat="app in group">
+                        <div class="panel panel-success">
+                            <div class="panel-body">
+                                <div class="caption">
+                                    <strong><span ng-if="app.applicationType===0" title="纯消费端" class="label label-warning">C</span><span ng-if="app.applicationType===1"  title="纯提供端" class="label label-primary">P</span><span ng-if="app.applicationType===2"  title="即是消费端也是提供端" class="label label-success">P&C</span>&nbsp;<a href="#/monitor/{{app.name}}/{{dayRange}}/top200.html" title="查看top200信息">{{app.name}}</a></strong>
+                                    <p>
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <span class="badge">{{app.maxConcurrent}}</span>
+                                            最大并发数：
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="badge">{{app.maxElapsed}}</span>
+                                            最大耗时(ms)：
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="badge">{{app.maxFault}}</span>
+                                            最大失败次数：
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="badge">{{app.maxSuccess}}</span>
+                                            最大成功次数：
+                                        </li>
+                                    </ul>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

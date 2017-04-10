@@ -1,0 +1,25 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dubboclub.dk.storage.mysql.mapper.ApplicationMapper">
+
+    <resultMap id="appMap" type="ApplicationInfo">
+        <result column="name" property="applicationName"/>
+        <result column="type" property="applicationType"/>
+    </resultMap>
+    <insert id="addApplication" parameterType="ApplicationInfo">
+        insert into application (name,type) value(#{applicationName},#{applicationType})
+    </insert>
+    <select id="listApps" resultMap="appMap">
+        select lower(name) as name,type from application
+    </select>
+
+    <select id="getAppType" parameterType="String">
+        select type from application where name=#{name}
+    </select>
+
+    <select id="updateAppType">
+        update application set type=#{type} where name=#{name}
+    </select>
+
+</mapper>

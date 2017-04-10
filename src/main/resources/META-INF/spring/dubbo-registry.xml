@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+
+    <dubbo:reference id="registryService" interface="com.alibaba.dubbo.registry.RegistryService" check="false" />
+
+    <bean class="com.dubboclub.dk.admin.sync.RegistryServerSync" id="registryServerSync">
+        <property name="registryService" ref="registryService"/>
+        <property name="alarmService" ref="alarmService"/>
+    </bean>
+
+    <bean class="com.dubboclub.dk.admin.service.AbstractService" id="abstractService" abstract="true">
+        <property name="registryServerSync" ref="registryServerSync"/>
+    </bean>
+
+    <bean class="com.dubboclub.dk.admin.service.impl.ProviderServiceImpl" id="providerService" parent="abstractService">
+        <property name="overrideService" ref="overrideService"/>
+    </bean>
+    <bean class="com.dubboclub.dk.admin.service.impl.ApplicationServiceImpl" parent="abstractService">
+        <property name="consumerService" ref="consumerService"/>
+        <property name="providerService" ref="providerService"/>
+    </bean>
+    <bean class="com.dubboclub.dk.admin.service.impl.ConsumerServiceImpl" id="consumerService" parent="abstractService"/>
+    <bean class="com.dubboclub.dk.admin.service.impl.OverrideServiceImpl" id="overrideService" parent="abstractService"/>
+    <bean class="com.dubboclub.dk.admin.service.impl.RouteServiceImpl" id="routeService" parent="abstractService"/>
+    
+    <bean class="com.dubboclub.dk.alarm.impl.AlarmServiceImpl" id="alarmService"/>
+</beans>

@@ -1,0 +1,202 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dubboclub.dk.storage.mysql.mapper.StatisticsMapper">
+
+    <insert id="batchInsert">
+        <![CDATA[
+       insert into `statistics_${application}` (timestamp,serviceInterface,method,type,tps,kbps,host,elapsed,concurrent,input,output,successCount,failureCount,remoteAddress,remoteType)
+        values
+        ]]>
+        <foreach collection="list" separator="," item="item">
+            (#{item.timestamp},
+            #{item.serviceInterface},
+            #{item.method},
+            #{item.type},
+            #{item.tps},
+            #{item.kbps},
+            #{item.host},
+            #{item.elapsed},
+            #{item.concurrent},
+            #{item.input},
+            #{item.output},
+            #{item.successCount},
+            #{item.failureCount},
+            #{item.remoteAddress},
+            #{item.remoteType})
+        </foreach>
+    </insert>
+
+    <insert id="addOne">
+        <![CDATA[
+
+       insert into `statistics_${application}` (timestamp,serviceInterface,method,type,tps,kbps,host,elapsed,concurrent,input,output,successCount,failureCount,remoteAddress,remoteType)
+        values (#{statistics.timestamp},
+            #{statistics.serviceInterface},
+            #{statistics.method},
+            #{statistics.type},
+            #{statistics.tps},
+            #{statistics.kbps},
+            #{statistics.host},
+            #{statistics.elapsed},
+            #{statistics.concurrent},
+            #{statistics.input},
+            #{statistics.output},
+            #{statistics.successCount},
+            #{statistics.failureCount},
+            #{statistics.remoteAddress},
+            #{statistics.remoteType})
+        ]]>
+        　
+    </insert>
+
+    <select id="queryMaxElapsed" resultType="long">
+        select elapsed from `statistics_${application}` where
+        <if test="service!=null">
+            serviceInterface=#{service} and
+        </if>
+        <![CDATA[
+         timestamp>=#{start} and timestamp<=#{end}  order by elapsed DESC limit 0,1
+        ]]>
+    </select>
+    <select id="queryMaxConcurrent" resultType="long">
+        select concurrent from `statistics_${application}` where
+        <if test="service!=null">
+            serviceInterface=#{service} and
+        </if>
+        <![CDATA[
+           timestamp>=#{start} and timestamp<=#{end}  order by concurrent DESC limit 0,1
+        ]]>
+    </select>
+    <select id="queryMaxFault" resultType="int">
+        select failureCount from `statistics_${application}` where
+        <if test="service!=null">
+            serviceInterface=#{service} and
+        </if>
+        <![CDATA[
+        timestamp>=#{start} and timestamp<=#{end}  order by failureCount DESC limit 0,1
+      ]]>
+    </select>
+    <select id="queryMaxSuccess" resultType="int">
+        select successCount from `statistics_${application}` where
+        <if test="service!=null">
+            serviceInterface=#{service} and
+        </if>
+        <![CDATA[
+         timestamp>=#{start} and timestamp<=#{end}  order by successCount DESC limit 0,1
+      ]]>
+    </select>
+
+    <resultMap id="statisticsMap" type="Statistics">
+        <result column="timestamp" property="timestamp"/>
+        <result column="serviceInterface" property="serviceInterface"/>
+        <result column="method" property="method"/>
+        <result column="type" property="type"/>
+        <result column="tps" property="tps"/>
+        <result column="kbps" property="kbps"/>
+        <result column="host" property="host"/>
+        <result column="elapsed" property="elapsed"/>
+        <result column="concurrent" property="concurrent"/>
+        <result column="input" property="input"/>
+        <result column="output" property="output"/>
+        <result column="successCount" property="successCount"/>
+        <result column="failureCount" property="failureCount"/>
+        <result column="remoteAddress" property="remoteAddress"/>
+        <result column="remoteType" property="remoteType"/>
+    </resultMap>
+
+
+    <sql id="statisticsSQLFragment">
+        timestamp,serviceInterface,method,type,tps,kbps,host,elapsed,concurrent,input,output,successCount,failureCount,remoteAddress,remoteType
+    </sql>
+
+    <sql id="queryMethodSQLFragment">
+       <![CDATA[
+
+         select id from `statistics_${application}` where timestamp>=#{start} and timestamp<#{end} and serviceInterface=#{serviceInterface} and method=#{method}
+
+        ]]>
+    </sql>
+
+    <sql id="queryAppSQLFragment">
+        <![CDATA[
+
+         select id from `statistics_${application}` where timestamp>=#{start} and timestamp<#{end}
+
+        ]]>
+    </sql>
+
+    <select id="queryStatisticsForMethod" resultMap="statisticsMap">
+        select
+        <include refid="statisticsSQLFragment"></include>
+        from `statistics_${application}` t
+        <where>
+            <![CDATA[
+          t.id in (select id from `statistics_${application}` where timestamp>=#{start} and timestamp<#{end} and serviceInterface=#{serviceInterface} and method=#{method})
+          ]]>
+            order by timestamp ASC
+        </where>
+    </select>
+
+    <select id="queryMethodForService" resultType="String">
+        select method from `statistics_${application}` t where serviceInterface=#{serviceInterface} group by method
+    </select>
+
+    <select id="queryMethodMaxItemByServiceForLong" resultType="Long">
+        select ${item} from `statistics_${application}` t
+        <where>
+            t.id in (
+            <include refid="queryMethodSQLFragment"></include>
+            ) order by timestamp asc limit 1
+        </where>
+    </select>
+
+    <select id="queryMethodMaxItemByServiceForInteger" resultType="Integer">
+        select ${item} from `statistics_${application}` t
+        <where>
+            t.id in (
+            <include refid="queryMethodSQLFragment"></include>
+            ) order by timestamp asc limit 1
+        </where>
+    </select>
+
+    <select id="queryMethodMaxItemByServiceForDouble" resultType="Double">
+        select ${item} from `statistics_${application}` t
+        <where>
+            t.id in (
+            <include refid="queryMethodSQLFragment"></include>
+            ) order by timestamp asc limit 1
+        </where>
+    </select>
+
+    <select id="queryApplicationOverview" resultType="Statistics">
+        select * from (select ${item},method,serviceInterface,timestamp,remoteType from
+        `statistics_${application}` t
+        <where>
+            t.id in (
+            <include refid="queryAppSQLFragment"></include>
+            ) order by ${item} desc limit 0,200
+        </where>
+        ) tmp order by timestamp asc
+    </select>
+
+    <select id="queryServiceOverview" resultType="Statistics">
+        select ${item},method,serviceInterface,timestamp,remoteType from `statistics_${application}` t
+        <where>
+            t.id in (
+            <include refid="queryAppSQLFragment"></include>
+            and serviceInterface=#{service}
+            ) order by timestamp ASC limit 0,200
+        </where>
+    </select>
+
+    <resultMap id="serviceInfoMap" type="ServiceInfo">
+        <result column="serviceInterface" property="name"></result>
+        <result column="remoteType" property="remoteType"></result>
+    </resultMap>
+
+    <select id="queryServiceByApp" resultMap="serviceInfoMap">
+        select remoteType,serviceInterface from  `statistics_${application}` t group by t.serviceInterface,t.remoteType
+    </select>
+
+</mapper>

@@ -60,7 +60,7 @@
     </appender>
 
     <!--dubbo-->
-    <logger name="com.alibaba.dubbo" level="DEBUG">
+    <logger name="com.alibaba.dubbo" level="INFO">
         <appender-ref ref="dubboRolling"/>
     </logger>
     <logger name="Application-Writer" level="INFO">
@@ -68,11 +68,11 @@
     </logger>
 
     <!--dubbo-->
-    <logger name="com.dubboclub" level="DEBUG">
+    <logger name="com.dubboclub" level="INFO">
         <appender-ref ref="dkRolling"/>
     </logger>
 
-    <root level="DEBUG">
+    <root level="INFO">
              <appender-ref ref="STDOUT" />
    </root>
 </configuration>

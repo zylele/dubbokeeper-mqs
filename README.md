@@ -33,14 +33,14 @@ dubbokeeper-mqs集成监控与展示，节省服务器资源，提供一键编�
 
 ---
 
-![](http://lle.coding.me/img/dubbo-demo/dubbokeeper-service.png)
+![](http://lle.coding.me/img/dubbokeeper-mqs/dubbokeeper-service.png)
 
 动态配置
 
-![](http://lle.coding.me/img/dubbo-demo/dubbokeeper-dpc.png)
+![](http://lle.coding.me/img/dubbokeeper-mqs/dubbokeeper-dpc.png)
 
 依赖关系
 
-![](http://lle.coding.me/img/dubbo-demo/dubbokeeper-monitor.png)
+![](http://lle.coding.me/img/dubbokeeper-mqs/dubbokeeper-monitor.png)
 
 统计信息

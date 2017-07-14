@@ -17,8 +17,6 @@ dubbokeeper-mqs集成监控与展示，节省服务器资源，提供一键编�
 
 ---
 
-执行数据库初始化脚本`application.sql`，数据库名可以自定义一个，编码采用utf-8
-
 ## 服务预警
 
 注册中心通过长连接感知服务提供者的存在，服务提供者宕机，注册中心将立即推送事件通知消费者
@@ -27,7 +25,9 @@ dubbokeeper-mqs集成监控与展示，节省服务器资源，提供一键编�
 
 ## 部署
 
-只需配置`src/main/resources/dubbo.properties`与`pom.xml`的各属性值
+执行数据库初始化脚本`application.sql`，数据库名可以自定义一个，编码采用utf-8
+
+配置`src/main/resources/dubbo.properties`与`pom.xml`的各属性值
 
 打包部署到Tomcat启动
 

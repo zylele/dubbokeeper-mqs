@@ -57,6 +57,20 @@ public class ZooPeeperController implements InitializingBean{
         SpyZooResponse response = new SpyZooResponse();
         try{
             ZooKeeper zooKeeper  = ZK_CLIENT_MAP.get(zkConnect);
+            if(!zooKeeper.getState().isAlive()) {
+                try {
+                    if(zooKeeper!=null){
+                        try {
+                            zooKeeper.close();
+                        } catch (InterruptedException e) {
+                            //do nothing
+                        }
+                    }
+                    ZK_CLIENT_MAP.put(zkConnect,new ZooKeeper(zkConnect,Integer.parseInt(ConfigUtils.getProperty("spy.zookeeper.session.timeout","60000")),new ZkWatcher(zkConnect)));
+                } catch (IOException e) {
+                    logger.error("failed to reconnect zookeeper server",e);
+                }
+            }
             if(zooKeeper.getState().isAlive()){
                 List<String> children = zooKeeper.getChildren(parent,false);
                 List<SpyZooNode> nodes = new ArrayList<SpyZooNode>();

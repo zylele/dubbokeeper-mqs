@@ -60,5 +60,7 @@
           autowire="byType">
     </bean>
 
-
+	<bean class="com.dubboclub.dk.storage.mysql.MysqlServiceWarningStorage" id="serviceWarningStorage"
+          autowire="byType">
+    </bean>
 </beans>

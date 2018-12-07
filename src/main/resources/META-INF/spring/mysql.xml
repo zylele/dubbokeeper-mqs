@@ -55,6 +55,10 @@
     <bean class="com.dubboclub.dk.storage.mysql.MysqlStatisticsStorage" id="statisticsStorage"
           autowire="byType">
     </bean>
+    
+    <bean class="com.dubboclub.dk.storage.mysql.MysqlBizWarningStorage" id="bizWarningStorage"
+          autowire="byType">
+    </bean>
 
 
 </beans>

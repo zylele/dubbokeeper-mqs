@@ -1,5 +1,6 @@
 package com.dubboclub.dk.alarm.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class AlarmServiceImpl implements AlarmService {
 			// TODO 提供者不可用时，处理逻辑
 		    ServiceWarning serviceWarning = new ServiceWarning();
 		    serviceWarning.setContent(url.toFullString());
-		    serviceWarning.setStartTime(new Date());
+		    serviceWarning.setStartTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(new Date()));
 		    serviceWarning.setHost(url.getHost());
 		    serviceWarning.setServiceInterface(url.getServiceInterface());
 		    serviceWarning.setStatus("00");

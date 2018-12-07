@@ -19,7 +19,7 @@ public class ServiceWarning {
     private BigInteger id;
     private String host;
     private String serviceInterface;
-    private Date startTime;
+    private String startTime;
     private String status;
     private String content;
 
@@ -63,11 +63,11 @@ public class ServiceWarning {
         this.serviceInterface = serviceInterface;
     }
 
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 

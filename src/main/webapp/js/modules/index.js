@@ -1,15 +1,15 @@
-var dubbokeeper=angular.module("dubbokeeper",["apps","head","menu","breadCrumb",'aboutus','fullScreen','dialog','statistics','monitor','isteven-multi-select','appDependencies','zoopeeper','httpWrapper','override','router','theme','lineChart','dateRangePicker']);
+var dubbokeeper=angular.module("dubbokeeper",["apps","head","menu","breadCrumb",'aboutus','fullScreen',"tracking","alarm",'dialog','statistics','monitor','isteven-multi-select','appDependencies','zoopeeper','httpWrapper','override','router','theme','lineChart','dateRangePicker',"alarmset"]);
 dubbokeeper.controller("dubbokeeperCtrl",function($scope,$dkContext){
     $dkContext._init($scope);
     $scope.currentHome={};
 });
 dubbokeeper.barDataset=[{
-    barShowName:"Dashboard",
+    barShowName:"控制面板",
     barIdentify:"dashboard",
     barHref:"/statistics",
     barIconClass:"icon-dashboard"
 },{
-    barShowName:"Admin",
+    barShowName:"管理员",
     barIdentify:"admin",
     barHref:"/admin/apps",
     barIconClass:"glyphicon glyphicon-user",
@@ -36,7 +36,7 @@ dubbokeeper.barDataset=[{
         icon:"icon-random"
     }]
 },{
-    barShowName:"Monitor",
+    barShowName:"监测器",
     barIdentify:"monitor",
     barHref:"/monitor",
     barIconClass:"icon-bar-chart",
@@ -49,15 +49,37 @@ dubbokeeper.barDataset=[{
         isHome:true
     }]
 },{
-    barShowName:"ZooPeeper",
+    barShowName:"动物园管理员",
     barIdentify:"zoopeeper",
     barHref:"/zoopeeper",
     barIconClass:"icon-eye-open"
 },{
-    barShowName:"AboutUs",
+    barShowName:"关于我们",
     barIdentify:"aboutus",
     barHref:"/aboutus",
     barIconClass:"icon-bookmark"
+},{
+    barShowName:"全链路跟踪",
+    barIdentify:"tracking",
+    barHref:"/tracking/text",
+    barIconClass:"icon-screenshot"
+},{
+    barShowName:"故障报警",
+    barIdentify:"alarm",
+    barHref:"/alarm/alarmlist",
+    barIconClass:" icon-warning-sign",
+    menus:[{
+        showName:"告警列表",
+        identify:"alarm/alarmlist",
+        href:"/alarm/alarmlist",
+        icon:"icon-th-large",
+        isHome:true
+    },{
+        showName:"通知设置",
+        identify:"alarm/alarmSet",
+        href:"/alarm/alarmSet",
+        icon:" icon-cogs"
+    }]
 }];
 dubbokeeper.$dkContext= function () {
     var dubboKeeperContext = function () {

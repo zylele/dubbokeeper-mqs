@@ -10,7 +10,7 @@ import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.dubboclub.dk.alarm.AlarmService;
 import com.dubboclub.dk.storage.ServiceWarningStorage;
-import com.dubboclub.dk.storage.model.ServiceWarning;
+import com.dubboclub.dk.storage.model.ServiceWarningPo;
 
 public class AlarmServiceImpl implements AlarmService {
     @Autowired
@@ -21,7 +21,7 @@ public class AlarmServiceImpl implements AlarmService {
 		//empty协议的url，category==providers为提供者
 		if(Constants.PROVIDERS_CATEGORY.equals(url.getParameter(Constants.CATEGORY_KEY))){
 			// TODO 提供者不可用时，处理逻辑
-		    ServiceWarning serviceWarning = new ServiceWarning();
+		    ServiceWarningPo serviceWarning = new ServiceWarningPo();
 		    serviceWarning.setContent(url.toFullString());
 		    serviceWarning.setStartTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(new Date()));
 		    serviceWarning.setHost(url.getHost());

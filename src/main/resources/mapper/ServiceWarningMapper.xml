@@ -10,4 +10,14 @@
             #{serviceWarning.status},
             #{serviceWarning.content})
     </insert>
+    <select id="selectServiceWarningByPage" parameterType="ServiceWarningPo" resultType="ServiceWarningPo">
+       select id,host,service_interface as serviceInterface,start_time as startTime,status,content from service_warning where 1=1
+		<if test="host != null and host != ''">
+		  and host = #{host}
+		</if>
+		<if test="status != null and status != ''">
+		  and status = #{status}
+		</if>
+        ORDER BY id asc
+    </select>
 </mapper>

@@ -1,10 +1,9 @@
 /**
  * 
  */
-package com.dubboclub.dk.storage.model;
+package com.dubboclub.dk.web.model;
 
 import java.math.BigInteger;
-import java.util.Date;
 
 /**
  * Copyright: Copyright (c) 2018 东华软件股份公司
@@ -12,10 +11,10 @@ import java.util.Date;
  * @Description: 该类的功能描述
  *
  * @author: 黄祖真
- * @date: 2018年12月7日 下午3:18:41
+ * @date: 2018年12月11日 上午11:32:39 
  *
  */
-public class ServiceWarning {
+public class ServiceWarningDto {
     private BigInteger id;
     private String host;
     private String serviceInterface;
@@ -70,5 +69,4 @@ public class ServiceWarning {
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-
 }

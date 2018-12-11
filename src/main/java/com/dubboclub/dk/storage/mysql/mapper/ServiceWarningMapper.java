@@ -3,9 +3,11 @@
  */
 package com.dubboclub.dk.storage.mysql.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
-import com.dubboclub.dk.storage.model.ServiceWarning;
+import com.dubboclub.dk.storage.model.ServiceWarningPo;
 
 /**
  * Copyright: Copyright (c) 2018 东华软件股份公司
@@ -17,5 +19,6 @@ import com.dubboclub.dk.storage.model.ServiceWarning;
  *
  */
 public interface ServiceWarningMapper {
-    public int insertServiceWarning(@Param("serviceWarning")ServiceWarning serviceWarning);
+    public int insertServiceWarning(@Param("serviceWarning")ServiceWarningPo serviceWarning);
+    public List<ServiceWarningPo> selectServiceWarningByPage(ServiceWarningPo serviceWarning);
 }

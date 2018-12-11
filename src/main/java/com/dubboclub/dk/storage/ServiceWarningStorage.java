@@ -3,7 +3,10 @@
  */
 package com.dubboclub.dk.storage;
 
-import com.dubboclub.dk.storage.model.ServiceWarning;
+import java.util.List;
+
+import com.dubboclub.dk.storage.model.CurrentPage;
+import com.dubboclub.dk.storage.model.ServiceWarningPo;
 
 /**
  * Copyright: Copyright (c) 2018 东华软件股份公司
@@ -15,5 +18,6 @@ import com.dubboclub.dk.storage.model.ServiceWarning;
  *
  */
 public interface ServiceWarningStorage {
-    public int insertServiceWarning(ServiceWarning serviceWarning);
+    public int insertServiceWarning(ServiceWarningPo serviceWarning);
+    public List<ServiceWarningPo> selectServiceWarningByPage(ServiceWarningPo serviceWarning, CurrentPage currentPage);
 }

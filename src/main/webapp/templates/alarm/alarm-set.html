@@ -1,10 +1,24 @@
-<div class="tabbable" ng-app='alarmset'> 
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="#/alarm/SetMail">邮箱设置</a></li>
-    <li><a href="#/alarm/SetPhone">手机设置</a></li>
-    <li><a href="#/alarm/Setqq">微信/QQ设置</a></li>
-  </ul> 
+<div class="row"> 
+	<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+	<ul class="nav nav-tabs">
+	  <li role="presentation" ng-click="switchTab('setMail')"><a href="#/alarmset">邮箱设置</a></li>
+	  <li class="{{currentTab=='service'?'active':''}}" role="presentation" ng-click="switchTab('setPhone')"><a href="#/alarmset">手机设置</a></li>
+	  <li class="{{currentTab=='service'?'active':''}}" role="presentation" ng-click="switchTab('setqq')"><a href="#/alarmset">QQ/微信设置</a></li>
+	</ul> 
+  	</div>
 </div>
-<div style="width: 100%;border:1px solid #ddd;height: 100%;">
-    <div></div>
+<div class="row" ng-show="currentTab=='setMail'">
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"  id="setMail" style="height: 100%;with: 100%;">
+	
+    </div>
+</div>
+<div class="row" ng-show="currentTab=='setPhone'">
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"  id="setPhone" style="height: 100%;with: 100%;">
+	
+    </div>
+</div>
+<div class="row" ng-show="currentTab=='setqq'">
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"  id="setqq" style="height: 100%;with: 100%;">
+	
+    </div>
 </div>

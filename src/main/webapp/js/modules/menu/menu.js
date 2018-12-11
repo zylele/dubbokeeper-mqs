@@ -1,6 +1,8 @@
 var menu=angular.module("menu",['ngCookies']);
 menu.statistics = {};
 menu.statistics.HOME="statistics/home";
+menu.alarmset={};
+menu.alarmset.Home="alarmset/setMail";
 menu.admin = {};
 menu.admin.APPS="admin/apps";
 menu.admin.DYNAMIC_CONFIG="admin/dynamicConfig";

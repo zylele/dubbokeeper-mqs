@@ -8,8 +8,9 @@ alarm.config(function($routeProvider){
         controller:"alarmSetTable"
     });
 });
-alarm.controller("alarmListTable",function($scope,$breadcrumb){
+alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper){
     $breadcrumb.pushCrumb("告警列表","查看告警列表","alarm/alarmlist");
+    
 });
 
 alarm.controller("alarmSetTable",function($scope,$breadcrumb){

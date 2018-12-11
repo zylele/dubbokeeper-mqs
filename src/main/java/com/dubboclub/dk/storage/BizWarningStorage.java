@@ -3,6 +3,8 @@
  */
 package com.dubboclub.dk.storage;
 
+import com.dubboclub.dk.storage.model.BizWarningPo;
+
 /**
  * Copyright: Copyright (c) 2018 东华软件股份公司
  * 
@@ -13,5 +15,6 @@ package com.dubboclub.dk.storage;
  *
  */
 public interface BizWarningStorage {
+	public BizWarningPo selectBizWarningById(BizWarningPo bizWarning);
 
 }

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.InitializingBean;
 import com.dubboclub.dk.storage.BizWarningStorage;
 import com.dubboclub.dk.storage.model.BizWarningPo;
 import com.dubboclub.dk.storage.mysql.mapper.BizWarningMapper;
-import com.dubboclub.dk.storage.mysql.mapper.ServiceWarningMapper;
 
 /**
  * Copyright: Copyright (c) 2018 东华软件股份公司
@@ -34,10 +33,28 @@ public class MysqlBizWarningStorage implements BizWarningStorage,InitializingBea
         // TODO Auto-generated method stub
         
     }
-
 	@Override
-	public BizWarningPo selectBizWarningById(BizWarningPo bizWarning) {		
+	public BizWarningPo selectBizWarningById(BizWarningPo bizWarning) {
+		// TODO Auto-generated method stub
 		return bizWarningMapper.selectBizWarningById(bizWarning);
 	}
+	@Override
+	public Integer deleteBizWarningById(BizWarningPo bizWarningPo) {
+		// TODO Auto-generated method stub
+		return bizWarningMapper.deleteBizWarningById(bizWarningPo);
+	}
+	
+	
+	
+
+	
+	
+	
+	
+
+	
+	
+
+	
 
 }

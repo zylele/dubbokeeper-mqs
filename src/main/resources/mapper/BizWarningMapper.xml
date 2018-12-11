@@ -3,7 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dubboclub.dk.storage.mysql.mapper.BizWarningMapper">
 	<select id="selectBizWarningById" resultType="BizWarningPo">
-       select id as id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt from biz_warning where id = #{bizWarning.id};
+       select id as id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt 
+       from biz_warning 
+       where id = #{bizWarning.id};
     </select>
-
+    <delete id="deleteBizWarningById">
+    	delete from biz_warning 
+    	where id = #{bizWarning.id};
+    </delete>
 </mapper>
+	

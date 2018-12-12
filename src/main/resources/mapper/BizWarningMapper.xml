@@ -11,5 +11,24 @@
     	delete from biz_warning 
     	where id = #{bizWarning.id};
     </delete>
+    <insert id="addBizWarning">
+    	insert into biz_warning (trace_id,trace_content,trace_dt)
+    	values (#{bizWarning.traceId},
+            #{bizWarning.traceContent},
+            #{bizWarning.traceDt})
+    </insert>
+    <update id="updateBizWarningById" parameterType="BizWarningPo">
+    	update biz_warning set 
+    	<if test="traceId != null and traceId != ''">
+    		trace_id = #{traceId}
+    	</if>
+    	<if test="traceContent != null and traceContent != ''">
+    		trace_content = #{traceContent}
+    	</if>
+    	<if test="traceDt != null and traceDt != ''">
+    		trace_dt = #{traceDt}
+    	</if>   		
+    	where id = #{id};
+    </update>
 </mapper>
 	

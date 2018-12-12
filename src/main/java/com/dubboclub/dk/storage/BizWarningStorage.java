@@ -17,7 +17,8 @@ import com.dubboclub.dk.storage.model.BizWarningPo;
 public interface BizWarningStorage {
 	public BizWarningPo selectBizWarningById(BizWarningPo bizWarning);
 	public Integer deleteBizWarningById(BizWarningPo bizWarningPo);
-	
+	public Integer addBizWarning(BizWarningPo bizWarningPo);
+	public Integer updateBizWarningById(BizWarningPo bizWarningPo);
 
 }
 

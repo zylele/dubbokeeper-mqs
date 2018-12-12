@@ -44,6 +44,18 @@ public class MysqlBizWarningStorage implements BizWarningStorage,InitializingBea
 		return bizWarningMapper.deleteBizWarningById(bizWarningPo);
 	}
 	
+	@Override
+	public Integer addBizWarning(BizWarningPo bizWarningPo) {
+		// TODO Auto-generated method stub
+		return bizWarningMapper.addBizWarning(bizWarningPo);
+	}
+	@Override
+	public Integer updateBizWarningById(BizWarningPo bizWarningPo) {
+		// TODO Auto-generated method stub
+		return bizWarningMapper.updateBizWarningById(bizWarningPo);
+	}
+
+	
 	
 	
 

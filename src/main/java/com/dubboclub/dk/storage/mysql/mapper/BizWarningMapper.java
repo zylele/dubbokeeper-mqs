@@ -19,4 +19,6 @@ import com.dubboclub.dk.storage.model.BizWarningPo;
 public interface BizWarningMapper {
 	public BizWarningPo selectBizWarningById(@Param("bizWarning")BizWarningPo bizWarning);
 	public Integer deleteBizWarningById(@Param("bizWarning")BizWarningPo bizWarningPo);
+	public Integer addBizWarning(@Param("bizWarning")BizWarningPo bizWarningPo);
+	public Integer updateBizWarningById(BizWarningPo bizWarningPo);
 }

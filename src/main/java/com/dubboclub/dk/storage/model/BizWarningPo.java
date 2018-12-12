@@ -37,8 +37,8 @@ public class BizWarningPo {
         return traceDt;
     }
 
-    public void setTraceDt(String traceDt) {
-        this.traceDt = traceDt;
+    public void setTraceDt(String string) {
+        this.traceDt = string;
     }
 
 

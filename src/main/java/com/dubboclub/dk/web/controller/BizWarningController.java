@@ -3,6 +3,9 @@
  */
 package com.dubboclub.dk.web.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -57,7 +60,22 @@ public class BizWarningController {
     }
     
     //插入单条语句
-
+	@RequestMapping("/addBizWarning")
+    public @ResponseBody BizWarningResultDto addBizWarning(@RequestBody BizWarningDto bizWarning){
+    	BizWarningPo bizWarningPo = new BizWarningPo();
+    	BeanUtils.copyProperties(bizWarning, bizWarningPo);
+    	bizWarningPo.setTraceDt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(new Date()));
+    	Integer bizWarningPoResult = bizWarningStorage.addBizWarning(bizWarningPo);
+        return new BizWarningResultDto(bizWarningPoResult);
+    }
+	//修改单条语句
+	@RequestMapping("/updateBizWarningById")
+    public @ResponseBody BizWarningResultDto updateBizWarningById(@RequestBody BizWarningDto bizWarning){
+		BizWarningPo bizWarningPo = new BizWarningPo();
+		BeanUtils.copyProperties(bizWarning, bizWarningPo);
+    	Integer bizWarningPoResult = bizWarningStorage.updateBizWarningById(bizWarningPo);
+        return new BizWarningResultDto(bizWarningPoResult);
+    }
     
 
 }

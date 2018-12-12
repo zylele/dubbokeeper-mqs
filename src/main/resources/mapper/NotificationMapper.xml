@@ -1,0 +1,28 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dubboclub.dk.storage.mysql.mapper.NotificationMapper">
+	<select id="selectNotificationById" resultType="NotificationPo">
+       select id,type,receiver 
+       from notification 
+       where id = #{notification.id};
+    </select>
+    <delete id="deleteNotificationById">
+    	delete from notification
+    	where id = #{notification.id};
+    </delete>
+    <insert id="addNotification">
+    	insert into notification (type,receiver)
+    	values(#{notification.type},#{notification.receiver});
+    </insert>
+    <update id="updateNotificationById" parameterType="NotificationPo">
+    	update notification set 
+    	<if test="type != null and type != ''">
+    		type = #{type}
+    	</if>
+    	<if test="receiver != null and receiver != ''">
+    		receiver = #{receiver}
+    	</if>   		
+    	where id = #{id};
+    </update>
+</mapper>

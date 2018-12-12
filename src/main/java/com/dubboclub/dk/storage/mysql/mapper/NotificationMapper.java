@@ -3,6 +3,10 @@
  */
 package com.dubboclub.dk.storage.mysql.mapper;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.dubboclub.dk.storage.model.NotificationPo;
+
 /**
  * Copyright: Copyright (c) 2018 东华软件股份公司
  * 
@@ -13,5 +17,9 @@ package com.dubboclub.dk.storage.mysql.mapper;
  *
  */
 public interface NotificationMapper {
-
+	public NotificationPo selectNotificationById(@Param("notification")NotificationPo notification);
+	public Integer deleteNotificationById(@Param("notification")NotificationPo notificationPo);
+	public Integer addNotification(@Param("notification")NotificationPo notificationPo);
+	public Integer updateNotificationById(NotificationPo notificationPo);
+	
 }

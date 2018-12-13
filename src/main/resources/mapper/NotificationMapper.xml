@@ -25,4 +25,14 @@
     	</if>   		
     	where id = #{id};
     </update>
+    <select id="selectNotificationByPage" parameterType="NotificationPo" resultType="NotificationPo">
+    	select id,type,receiver  from notification where 1=1
+    	<if test="type != null and type != ''">
+		  and type = #{type}
+		</if>
+		<if test="receiver != null and receiver != ''">
+		  and receiver = #{receiver}
+		</if>
+		ORDER BY id asc
+    </select>
 </mapper>

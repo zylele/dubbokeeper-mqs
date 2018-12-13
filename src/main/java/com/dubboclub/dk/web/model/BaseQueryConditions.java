@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dubboclub.dk.web.controller;
+package com.dubboclub.dk.web.model;
 
 import com.dubboclub.dk.storage.model.CurrentPage;
 

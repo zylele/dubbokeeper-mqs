@@ -3,6 +3,8 @@
  */
 package com.dubboclub.dk.storage.mysql.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.dubboclub.dk.storage.model.NotificationPo;
@@ -21,5 +23,6 @@ public interface NotificationMapper {
 	public Integer deleteNotificationById(@Param("notification")NotificationPo notificationPo);
 	public Integer addNotification(@Param("notification")NotificationPo notificationPo);
 	public Integer updateNotificationById(NotificationPo notificationPo);
+	public List<NotificationPo> selectNotificationByPage(NotificationPo notificationPo);
 	
 }

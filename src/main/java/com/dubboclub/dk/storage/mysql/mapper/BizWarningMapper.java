@@ -3,6 +3,8 @@
  */
 package com.dubboclub.dk.storage.mysql.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.dubboclub.dk.storage.model.BizWarningPo;
@@ -21,4 +23,5 @@ public interface BizWarningMapper {
 	public Integer deleteBizWarningById(@Param("bizWarning")BizWarningPo bizWarningPo);
 	public Integer addBizWarning(@Param("bizWarning")BizWarningPo bizWarningPo);
 	public Integer updateBizWarningById(BizWarningPo bizWarningPo);
+	public List<BizWarningPo> selectBizWarningByPage(BizWarningPo bizWarningPo);
 }

@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dubboclub.dk.storage.mysql.mapper.BizWarningMapper">
 	<select id="selectBizWarningById" resultType="BizWarningPo">
-       select id as id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt 
+       select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt 
        from biz_warning 
        where id = #{bizWarning.id};
     </select>
@@ -30,5 +30,15 @@
     	</if>   		
     	where id = #{id};
     </update>
+    <select  id="selectBizWarningByPage" parameterType="BizWarningPo" resultType="BizWarningPo">
+    	select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt from biz_Warning where 1=1
+    	<if test="traceId != null and traceId != ''">
+    		and traceId = #{traceId}
+    	</if>
+    	<if test="traceContent != null and traceContent != ''">
+    		and traceContent = #{traceContent}
+    	</if>
+    	ORDER BY id asc
+    </select>
 </mapper>
 	

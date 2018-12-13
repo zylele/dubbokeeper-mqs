@@ -1,5 +1,8 @@
 package com.dubboclub.dk.web.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,8 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dubboclub.dk.storage.NotificationStorage;
 import com.dubboclub.dk.storage.model.NotificationPo;
+import com.dubboclub.dk.web.model.BaseQueryConditions;
+import com.dubboclub.dk.web.model.BasicListResponse;
 import com.dubboclub.dk.web.model.NotificationDto;
 import com.dubboclub.dk.web.model.NotificationResultDto;
+import com.github.pagehelper.PageInfo;
 
 @Controller
 @RequestMapping("/notification")
@@ -54,4 +60,27 @@ public class NotificationController {
     	Integer notificationPoResult = notificationStorage.updateNotificationById(notificationPo);
         return new NotificationResultDto(notificationPoResult);
     }
+    
+    //多条查询
+    @RequestMapping("/getNotificationByPage")
+    public @ResponseBody BasicListResponse<NotificationDto>  getNotificationByPage(@RequestBody BaseQueryConditions<NotificationDto>  conditions) {
+    	NotificationPo notificationPo = new NotificationPo();
+        BeanUtils.copyProperties(conditions.getConditions(), notificationPo);
+        List<NotificationPo> listPo = notificationStorage.selectNotificationByPage(notificationPo, conditions.getCurrentPage());
+        PageInfo<NotificationPo> pageInfo = new PageInfo<>(listPo);
+        BasicListResponse<NotificationDto> responseList = new BasicListResponse<NotificationDto>();
+        responseList.setTotalCount(pageInfo.getSize());
+        List listDto = new ArrayList<NotificationDto>();
+        responseList.setList(listDto);
+        for(NotificationPo po: listPo) {
+        	NotificationDto NotificationDto = new NotificationDto();
+            BeanUtils.copyProperties(po, NotificationDto);
+            listDto.add(NotificationDto);
+        }
+        return responseList;
+    }
+    
+    
+    
+    
 }

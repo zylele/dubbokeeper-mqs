@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dubboclub.dk.storage.ServiceWarningStorage;
 import com.dubboclub.dk.storage.model.ServiceWarningPo;
+import com.dubboclub.dk.web.model.BaseQueryConditions;
 import com.dubboclub.dk.web.model.BasicListResponse;
 import com.dubboclub.dk.web.model.ServiceWarningDto;
+import com.dubboclub.dk.web.model.ServiceWarningResultDto;
 import com.github.pagehelper.PageInfo;
 
 /**
@@ -35,7 +37,38 @@ public class ServiceWarningController {
     @Autowired
     @Qualifier("serviceWarningStorage")
     private ServiceWarningStorage serviceWarningStorage;
+  //查询单条语句并返回
+    @RequestMapping("/getServiceWarningById")
+    public @ResponseBody ServiceWarningDto getServiceWarningById(@RequestBody ServiceWarningDto serviceWarning){
+    	ServiceWarningPo serviceWarningPo = new ServiceWarningPo();
+    	serviceWarningPo.setId(serviceWarning.getId());
+    	ServiceWarningDto serviceWarningDto = new ServiceWarningDto();
+    	ServiceWarningPo serviceWarningPoResult = serviceWarningStorage.selectServiceWarningById(serviceWarningPo);
+    	BeanUtils.copyProperties(serviceWarningPoResult, serviceWarningDto);
+        return serviceWarningDto;
+    }
     
+  //删除单条语句
+  	@RequestMapping("/deleteServiceWarningById")
+      public @ResponseBody ServiceWarningResultDto deleteServiceWarningById(@RequestBody ServiceWarningDto serviceWarning){
+      	ServiceWarningPo serviceWarningPo = new ServiceWarningPo();
+      	serviceWarningPo.setId(serviceWarning.getId());
+      	ServiceWarningDto serviceWarningDto = new ServiceWarningDto();
+      	serviceWarningDto.setId(serviceWarning.getId());
+      	Integer serviceWarningPoResult = serviceWarningStorage.deleteServiceWarningById(serviceWarningPo);
+      	
+          return new ServiceWarningResultDto(serviceWarningPoResult);
+      }
+      
+  	//修改单条语句
+  	@RequestMapping("/updateServiceWarningById")
+      public @ResponseBody ServiceWarningResultDto updateServiceWarningById(@RequestBody ServiceWarningDto serviceWarning){
+  		ServiceWarningPo serviceWarningPo = new ServiceWarningPo();
+  		BeanUtils.copyProperties(serviceWarning, serviceWarningPo);
+      	Integer serviceWarningPoResult = serviceWarningStorage.updateServiceWarningById(serviceWarningPo);
+          return new ServiceWarningResultDto(serviceWarningPoResult);
+      }
+    //查询多条语句
     @RequestMapping("/getServiceWarningByPage")
     public @ResponseBody BasicListResponse<ServiceWarningDto>  getServiceWarningByPage(@RequestBody BaseQueryConditions<ServiceWarningDto>  conditions) {
         ServiceWarningPo serviceWarningPo = new ServiceWarningPo();
@@ -53,4 +86,6 @@ public class ServiceWarningController {
         }
         return responseList;
     }
+   
+    
 }

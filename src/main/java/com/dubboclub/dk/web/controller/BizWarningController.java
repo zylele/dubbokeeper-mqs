@@ -4,7 +4,9 @@
 package com.dubboclub.dk.web.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dubboclub.dk.storage.BizWarningStorage;
 import com.dubboclub.dk.storage.model.BizWarningPo;
+import com.dubboclub.dk.storage.model.ServiceWarningPo;
+import com.dubboclub.dk.web.model.BaseQueryConditions;
+import com.dubboclub.dk.web.model.BasicListResponse;
 import com.dubboclub.dk.web.model.BizWarningDto;
 import com.dubboclub.dk.web.model.BizWarningResultDto;
+import com.dubboclub.dk.web.model.ServiceWarningDto;
+import com.github.pagehelper.PageInfo;
 
 /**
  * Copyright: Copyright (c) 2018 东华软件股份公司
@@ -48,8 +55,8 @@ public class BizWarningController {
     }
     
     //删除单条语句
-	@RequestMapping("/delectBizWarningById")
-    public @ResponseBody BizWarningResultDto delectBizWarningById(@RequestBody BizWarningDto bizWarning){
+	@RequestMapping("/deleteBizWarningById")
+    public @ResponseBody BizWarningResultDto deleteBizWarningById(@RequestBody BizWarningDto bizWarning){
     	BizWarningPo bizWarningPo = new BizWarningPo();
     	bizWarningPo.setId(bizWarning.getId());
     	BizWarningDto bizWarningDto = new BizWarningDto();
@@ -75,6 +82,24 @@ public class BizWarningController {
 		BeanUtils.copyProperties(bizWarning, bizWarningPo);
     	Integer bizWarningPoResult = bizWarningStorage.updateBizWarningById(bizWarningPo);
         return new BizWarningResultDto(bizWarningPoResult);
+    }
+	//查询多条语句
+	@RequestMapping("/getBizWarningByPage")
+    public @ResponseBody BasicListResponse<BizWarningDto>  getBizWarningByPage(@RequestBody BaseQueryConditions<BizWarningDto>  conditions) {
+        BizWarningPo bizWarningPo = new BizWarningPo();
+        BeanUtils.copyProperties(conditions.getConditions(), bizWarningPo);
+        List<BizWarningPo> listPo = bizWarningStorage.selectBizWarningByPage(bizWarningPo, conditions.getCurrentPage());
+        PageInfo<BizWarningPo> pageInfo = new PageInfo<>(listPo);
+        BasicListResponse<BizWarningDto> responseList = new BasicListResponse<BizWarningDto>();
+        responseList.setTotalCount(pageInfo.getSize());
+        List listDto = new ArrayList<BizWarningDto>();
+        responseList.setList(listDto);
+        for(BizWarningPo po: listPo) {
+            BizWarningDto bizWarningDto = new BizWarningDto();
+            BeanUtils.copyProperties(po, bizWarningDto);
+            listDto.add(bizWarningDto);
+        }
+        return responseList;
     }
     
 

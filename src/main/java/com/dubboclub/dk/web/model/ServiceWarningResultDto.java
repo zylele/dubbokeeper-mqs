@@ -1,7 +1,7 @@
 package com.dubboclub.dk.web.model;
 
-public class ServiceWrningResultDto {
-	public ServiceWrningResultDto(Integer count) {
+public class ServiceWarningResultDto {
+	public ServiceWarningResultDto(Integer count) {
 		super();
 		this.count = count;
 	}
@@ -14,4 +14,5 @@ public class ServiceWrningResultDto {
 	public void setCount(Integer count) {
 		this.count = count;
 	}
+
 }

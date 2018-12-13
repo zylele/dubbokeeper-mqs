@@ -43,12 +43,35 @@ public class MysqlServiceWarningStorage implements ServiceWarningStorage,Initial
         
     }
 
+
+	@Override
+	public ServiceWarningPo selectServiceWarningById(ServiceWarningPo serviceWarningPo) {
+		// TODO Auto-generated method stub
+		return serviceWarningMapper.selectServiceWarningById(serviceWarningPo);
+	}
+
+
+	@Override
+	public Integer deleteServiceWarningById(ServiceWarningPo serviceWarningPo) {
+		// TODO Auto-generated method stub
+		return serviceWarningMapper.deleteServiceWarningById(serviceWarningPo);
+	}
+
+
+	@Override
+	public Integer updateServiceWarningById(ServiceWarningPo serviceWarningPo) {
+		// TODO Auto-generated method stub
+		return serviceWarningMapper.updateServiceWarningById(serviceWarningPo);
+	}
+
     @Override
     public List<ServiceWarningPo> selectServiceWarningByPage(ServiceWarningPo serviceWarning, CurrentPage currentPage) {
         PageHelper.startPage(currentPage.getCurrentPage(), currentPage.getPageSize());
         List<ServiceWarningPo> serviceWarnings = serviceWarningMapper.selectServiceWarningByPage(serviceWarning);
         return serviceWarnings;
     }
+
+
 
 
 

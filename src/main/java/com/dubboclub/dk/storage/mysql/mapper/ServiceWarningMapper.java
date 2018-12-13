@@ -21,4 +21,7 @@ import com.dubboclub.dk.storage.model.ServiceWarningPo;
 public interface ServiceWarningMapper {
     public int insertServiceWarning(@Param("serviceWarning")ServiceWarningPo serviceWarning);
     public List<ServiceWarningPo> selectServiceWarningByPage(ServiceWarningPo serviceWarning);
+    public ServiceWarningPo selectServiceWarningById(ServiceWarningPo serviceWarning);
+	public Integer deleteServiceWarningById(ServiceWarningPo serviceWarningPo);
+	public Integer updateServiceWarningById(ServiceWarningPo serviceWarningPo);
 }

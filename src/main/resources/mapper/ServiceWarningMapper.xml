@@ -10,6 +10,32 @@
             #{serviceWarning.status},
             #{serviceWarning.content})
     </insert>
+    <select id="selectServiceWarningById" parameterType="ServiceWarningPo" resultType="ServiceWarningPo">
+    	select id,host,service_interface as serviceInterface,start_time as startTime,status,content
+    	from service_warning
+    	where id = #{id}
+    </select>
+    <delete id="deleteServiceWarningById" parameterType="ServiceWarningPo">
+    	delete from service_warning 
+    	where id = #{id};
+    </delete>
+    <update id="updateServiceWarningById" parameterType="ServiceWarningPo">
+    	update service_warning set 
+    	<if test="host != null and host != ''">
+    		host = #{host}
+    	</if>
+    	<if test="serviceInterface != null and serviceInterface != ''">
+    		service_interface = #{serviceInterface}
+    	</if>
+    	<if test="status != null and status != ''">
+    		status = #{status}
+    	</if>   
+    	<if test="content != null and content != ''">
+    		content = #{content}
+    	</if>    		
+    	where id = #{id};
+    </update>
+
     <select id="selectServiceWarningByPage" parameterType="ServiceWarningPo" resultType="ServiceWarningPo">
        select id,host,service_interface as serviceInterface,start_time as startTime,status,content from service_warning where 1=1
 		<if test="host != null and host != ''">
@@ -20,4 +46,5 @@
 		</if>
         ORDER BY id asc
     </select>
+    
 </mapper>

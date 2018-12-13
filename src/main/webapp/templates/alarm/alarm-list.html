@@ -8,11 +8,14 @@
         <table class="table-striped table-hover table-condensed table table-condensed table-responsive">
             <thead>
             <tr>
-                <th class="text-center" >
+            	<th class="text-center"><strong>#</strong></th>
+                <th class="text-left" >
                 	<strong>告警名称</strong>
+                	<input type="text" class="inner-form-element" ng-change="filter()" ng-model="query.application" placeholder="输入要查询的告警名称">
                 </th>
                 <th class="text-left" >
                 	<strong>告警类型</strong> 
+                	<input type="text" class="inner-form-element" ng-change="filter()" ng-model="query.username" placeholder="输入告警类型">
                 </th>
                 <th class="text-left" >
                 	<strong>操作</strong> 
@@ -22,17 +25,20 @@
             </thead>
             <tbody>
             <tr>
-                <td class="text-center text-warning">demotest-consumer</td>
+            	<td class="text-center ">1</td>
+                <td class="text-left text-warning">demotest-consumer</td>
                 <td class="text-left text-warning">programmer</td>
                 <td class="text-left text-warning"><a href="#">x</a></td>
             </tr>
             <tr>
-                <td class="text-center text-warning">demotest-consumer</td>
+            	<td class="text-center ">2</td>
+                <td class="text-left text-warning">demotest-consumer</td>
                 <td class="text-left text-warning">programmer</td>
                 <td class="text-left text-warning"><a href="#">x</a></td>
             </tr>
             <tr>
-                <td class="text-center text-warning">demotest-consumer</td>
+            	<td class="text-center ">3</td>	
+                <td class="text-left text-warning">demotest-consumer</td>
                 <td class="text-left text-warning">programmer</td>
                 <td class="text-left text-warning"><a href="#">x</a></td>
             </tr>

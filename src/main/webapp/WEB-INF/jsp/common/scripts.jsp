@@ -18,6 +18,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/angularjs/angular-route.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/angularjs/angular-animate.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/angularjs/angular-cookies.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/angularjs/wui-date.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/common/filter.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/common/util.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/common/libs-mapping.js"></script>

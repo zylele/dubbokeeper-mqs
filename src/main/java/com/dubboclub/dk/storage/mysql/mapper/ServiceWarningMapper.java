@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.dubboclub.dk.storage.model.ServiceWarningPo;
+import com.dubboclub.dk.storage.model.ServiceWarningQuery;
 
 /**
  * Copyright: Copyright (c) 2018 东华软件股份公司
@@ -24,4 +25,5 @@ public interface ServiceWarningMapper {
     public ServiceWarningPo selectServiceWarningById(ServiceWarningPo serviceWarning);
 	public Integer deleteServiceWarningById(ServiceWarningPo serviceWarningPo);
 	public Integer updateServiceWarningById(ServiceWarningPo serviceWarningPo);
+	public List<ServiceWarningPo> selectServiceWarningByPageByCondition(ServiceWarningQuery serviceWarningQuery);
 }

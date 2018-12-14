@@ -40,5 +40,10 @@
     	</if>
     	ORDER BY id asc
     </select>
+    <select id="selectBizWarningByPageByCondition" parameterType="BizWarningQuery" resultType="BizWarningPo">
+    	select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt 
+    	from biz_Warning 
+    	where 1=1 and trace_dt between #{bizStartDate} and #{bizEndDate}
+    </select>
 </mapper>
 	

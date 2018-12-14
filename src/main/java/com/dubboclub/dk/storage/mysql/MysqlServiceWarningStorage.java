@@ -10,6 +10,7 @@ import org.springframework.beans.factory.InitializingBean;
 import com.dubboclub.dk.storage.ServiceWarningStorage;
 import com.dubboclub.dk.storage.model.CurrentPage;
 import com.dubboclub.dk.storage.model.ServiceWarningPo;
+import com.dubboclub.dk.storage.model.ServiceWarningQuery;
 import com.dubboclub.dk.storage.mysql.mapper.ServiceWarningMapper;
 import com.github.pagehelper.PageHelper;
 
@@ -70,6 +71,20 @@ public class MysqlServiceWarningStorage implements ServiceWarningStorage,Initial
         List<ServiceWarningPo> serviceWarnings = serviceWarningMapper.selectServiceWarningByPage(serviceWarning);
         return serviceWarnings;
     }
+
+
+
+	@Override
+	public List<ServiceWarningPo> selectServiceWarningByPageByCondition(ServiceWarningQuery serviceWarningQuery,
+			CurrentPage currentPage) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(currentPage.getCurrentPage(), currentPage.getPageSize());
+        List<ServiceWarningPo> serviceWarnings = serviceWarningMapper.selectServiceWarningByPageByCondition(serviceWarningQuery);
+        return serviceWarnings;
+	}
+
+
+	
 
 
 

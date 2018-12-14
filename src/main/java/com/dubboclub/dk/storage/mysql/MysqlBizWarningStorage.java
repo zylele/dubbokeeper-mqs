@@ -9,6 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
 
 import com.dubboclub.dk.storage.BizWarningStorage;
 import com.dubboclub.dk.storage.model.BizWarningPo;
+import com.dubboclub.dk.storage.model.BizWarningQuery;
 import com.dubboclub.dk.storage.model.CurrentPage;
 import com.dubboclub.dk.storage.mysql.mapper.BizWarningMapper;
 import com.github.pagehelper.PageHelper;
@@ -64,6 +65,13 @@ public class MysqlBizWarningStorage implements BizWarningStorage,InitializingBea
 		PageHelper.startPage(currentPage.getCurrentPage(), currentPage.getPageSize());
         List<BizWarningPo> bizWarnings = bizWarningMapper.selectBizWarningByPage(bizWarningPo);
         return bizWarnings;
+	}
+	@Override
+	public List<BizWarningPo> selectBizWarningByPageByCondition(BizWarningQuery bizWarningQuery, CurrentPage currentPage) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(currentPage.getCurrentPage(), currentPage.getPageSize());
+        List<BizWarningPo> bizWarnings = bizWarningMapper.selectBizWarningByPageByCondition(bizWarningQuery);
+		return bizWarnings;
 	}
 
 	

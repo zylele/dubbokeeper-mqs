@@ -6,6 +6,7 @@ package com.dubboclub.dk.storage;
 import java.util.List;
 
 import com.dubboclub.dk.storage.model.BizWarningPo;
+import com.dubboclub.dk.storage.model.BizWarningQuery;
 import com.dubboclub.dk.storage.model.CurrentPage;
 
 /**
@@ -23,6 +24,7 @@ public interface BizWarningStorage {
 	public Integer addBizWarning(BizWarningPo bizWarningPo);
 	public Integer updateBizWarningById(BizWarningPo bizWarningPo);
 	public List<BizWarningPo> selectBizWarningByPage(BizWarningPo bizWarningPo, CurrentPage currentPage);
+	public List<BizWarningPo> selectBizWarningByPageByCondition(BizWarningQuery bizWarningQuery, CurrentPage currentPage);
 
 }
 

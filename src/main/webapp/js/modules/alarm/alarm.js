@@ -1,4 +1,4 @@
-var alarm=angular.module("alarm",['ngAnimate','ngRoute','serviceProvider','queryFilter','breadCrumb']);
+var alarm=angular.module("alarm",['ngAnimate','ngRoute','serviceProvider','queryFilter','breadCrumb','wui.date']);
 alarm.config(function($routeProvider){
     $routeProvider.when("/alarm/alarmlist",{
         templateUrl:"templates/alarm/alarm-list.html",
@@ -6,11 +6,18 @@ alarm.config(function($routeProvider){
     }).when("/alarm/alarmSet", {
         templateUrl:"templates/alarm/alarm-set.html",
         controller:"alarmSetTable"
+    }).when("/alarm/alarmBusiness", {
+        templateUrl:"templates/alarm/alarmBusiness.html",
+        controller:"alarmBusinessTable"
     });
 });
 alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper){
-    $breadcrumb.pushCrumb("告警列表","查看告警列表","alarm/alarmlist");
-    
+    $breadcrumb.pushCrumb("服务告警","查看服务告警列表","alarm/alarmlist");
+
+});
+
+alarm.controller("alarmBusinessTable",function($scope,$breadcrumb){
+    $breadcrumb.pushCrumb("业务告警","查看业务告警列表","alarm/alarmBusiness");
 });
 
 alarm.controller("alarmSetTable",function($scope,$breadcrumb){

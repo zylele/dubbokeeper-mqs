@@ -1,6 +1,6 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <i class="icon-th-large"></i> <span>服务告警列表</span>
+        <i class="icon-th-large"></i> <span>业务告警列表</span>
     </div>
     <div class="panel-body">
         <div class="row">
@@ -10,8 +10,8 @@
             <tr>
             	<th class="text-center"><strong>#</strong></th>
                 <th class="text-left" >
-                	<strong>服务告警名称</strong>
-                	<input type="text" class="inner-form-element" ng-change="filter()" ng-model="query.application" placeholder="输入要查询的服务告警名称">
+                	<strong>业务告警名称</strong>
+                	<input type="text" class="inner-form-element" ng-change="filter()" ng-model="query.application" placeholder="输入要查询的业务告警名称">
                 </th>
                 
                 <th class="text-center" >
@@ -19,7 +19,7 @@
 					--
 					<wui-date format="yyyy-mm-dd" placeholder="请选择或输入结束日期" id="date2" btns="{'ok':'确定','now':'此刻'}" ng-model="date2"></wui-date>
                 </th>
-                <th class="text-left" ng-show="!isConsumer">
+                <th class="text-left">
                 	<strong>详情列表</strong> 
                 </th>
             </tr>

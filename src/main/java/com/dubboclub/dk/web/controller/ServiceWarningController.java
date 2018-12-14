@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dubboclub.dk.storage.ServiceWarningStorage;
 import com.dubboclub.dk.storage.model.ServiceWarningPo;
+import com.dubboclub.dk.storage.model.ServiceWarningQuery;
 import com.dubboclub.dk.web.model.BaseQueryConditions;
 import com.dubboclub.dk.web.model.BasicListResponse;
 import com.dubboclub.dk.web.model.ServiceWarningDto;
@@ -86,6 +87,25 @@ public class ServiceWarningController {
         }
         return responseList;
     }
+    
+    @RequestMapping("/getServiceWarningByPageByCondition")
+    public @ResponseBody BasicListResponse<ServiceWarningDto>  getServiceWarningByPageByCondition(@RequestBody BaseQueryConditions<ServiceWarningQuery>  conditions) {
+    	ServiceWarningQuery serviceWarningQuery = new ServiceWarningQuery();
+        BeanUtils.copyProperties(conditions.getConditions(), serviceWarningQuery);
+        List<ServiceWarningPo> listPo = serviceWarningStorage.selectServiceWarningByPageByCondition(serviceWarningQuery, conditions.getCurrentPage());
+        PageInfo<ServiceWarningPo> pageInfo = new PageInfo<>(listPo);
+        BasicListResponse<ServiceWarningDto> responseList = new BasicListResponse<ServiceWarningDto>();
+        responseList.setTotalCount(pageInfo.getSize());
+        List listDto = new ArrayList<ServiceWarningDto>();
+        responseList.setList(listDto);
+        for(ServiceWarningPo po: listPo) {
+            ServiceWarningDto ServiceWarningDto = new ServiceWarningDto();
+            BeanUtils.copyProperties(po, ServiceWarningDto);
+            listDto.add(ServiceWarningDto);
+        }
+        return responseList;
+    }
+    
    
     
 }

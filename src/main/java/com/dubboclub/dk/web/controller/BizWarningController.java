@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dubboclub.dk.storage.BizWarningStorage;
 import com.dubboclub.dk.storage.model.BizWarningPo;
-import com.dubboclub.dk.storage.model.ServiceWarningPo;
+import com.dubboclub.dk.storage.model.BizWarningQuery;
 import com.dubboclub.dk.web.model.BaseQueryConditions;
 import com.dubboclub.dk.web.model.BasicListResponse;
 import com.dubboclub.dk.web.model.BizWarningDto;
 import com.dubboclub.dk.web.model.BizWarningResultDto;
-import com.dubboclub.dk.web.model.ServiceWarningDto;
+import com.dubboclub.dk.web.utils.ConstantsUtil;
 import com.github.pagehelper.PageInfo;
 
 /**
@@ -71,7 +71,7 @@ public class BizWarningController {
     public @ResponseBody BizWarningResultDto addBizWarning(@RequestBody BizWarningDto bizWarning){
     	BizWarningPo bizWarningPo = new BizWarningPo();
     	BeanUtils.copyProperties(bizWarning, bizWarningPo);
-    	bizWarningPo.setTraceDt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(new Date()));
+    	bizWarningPo.setTraceDt(new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date()));
     	Integer bizWarningPoResult = bizWarningStorage.addBizWarning(bizWarningPo);
         return new BizWarningResultDto(bizWarningPoResult);
     }
@@ -90,6 +90,24 @@ public class BizWarningController {
         BeanUtils.copyProperties(conditions.getConditions(), bizWarningPo);
         List<BizWarningPo> listPo = bizWarningStorage.selectBizWarningByPage(bizWarningPo, conditions.getCurrentPage());
         PageInfo<BizWarningPo> pageInfo = new PageInfo<>(listPo);
+        BasicListResponse<BizWarningDto> responseList = new BasicListResponse<BizWarningDto>();
+        responseList.setTotalCount(pageInfo.getSize());
+        List listDto = new ArrayList<BizWarningDto>();
+        responseList.setList(listDto);
+        for(BizWarningPo po: listPo) {
+            BizWarningDto bizWarningDto = new BizWarningDto();
+            BeanUtils.copyProperties(po, bizWarningDto);
+            listDto.add(bizWarningDto);
+        }
+        return responseList;
+    }
+	//按时间段查询数据
+	@RequestMapping("/getBizWarningByPageByCondition")
+    public @ResponseBody BasicListResponse<BizWarningDto>  getBizWarningByPageByCondition(@RequestBody BaseQueryConditions<BizWarningQuery>  conditions) {
+		BizWarningQuery bizWarningQuery = new BizWarningQuery();
+		BeanUtils.copyProperties(conditions.getConditions(), bizWarningQuery);
+		List<BizWarningPo> listPo = bizWarningStorage.selectBizWarningByPageByCondition(bizWarningQuery, conditions.getCurrentPage());
+		PageInfo<BizWarningPo> pageInfo = new PageInfo<>(listPo);
         BasicListResponse<BizWarningDto> responseList = new BasicListResponse<BizWarningDto>();
         responseList.setTotalCount(pageInfo.getSize());
         List listDto = new ArrayList<BizWarningDto>();

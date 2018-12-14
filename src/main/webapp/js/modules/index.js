@@ -49,7 +49,7 @@ dubbokeeper.barDataset=[{
         isHome:true
     }]
 },{
-    barShowName:"动物园管理员",
+    barShowName:"Zoopeeper监控",
     barIdentify:"zoopeeper",
     barHref:"/zoopeeper",
     barIconClass:"icon-eye-open"
@@ -69,11 +69,16 @@ dubbokeeper.barDataset=[{
     barHref:"/alarm/alarmlist",
     barIconClass:" icon-warning-sign",
     menus:[{
-        showName:"告警列表",
+        showName:"服务告警",
         identify:"alarm/alarmlist",
         href:"/alarm/alarmlist",
         icon:"icon-th-large",
         isHome:true
+    },{
+    	showName:"业务告警",
+        identify:"alarm/alarmBusiness",
+        href:"/alarm/alarmBusiness",
+        icon:"icon-th-large"
     },{
         showName:"通知设置",
         identify:"alarm/alarmSet",

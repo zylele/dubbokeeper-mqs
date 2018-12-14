@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.dubboclub.dk.storage.model.BizWarningPo;
+import com.dubboclub.dk.storage.model.BizWarningQuery;
 
 /**
  * Copyright: Copyright (c) 2018 东华软件股份公司
@@ -24,4 +25,5 @@ public interface BizWarningMapper {
 	public Integer addBizWarning(@Param("bizWarning")BizWarningPo bizWarningPo);
 	public Integer updateBizWarningById(BizWarningPo bizWarningPo);
 	public List<BizWarningPo> selectBizWarningByPage(BizWarningPo bizWarningPo);
+	public List<BizWarningPo> selectBizWarningByPageByCondition(BizWarningQuery bizWarningQuery);
 }

@@ -46,5 +46,10 @@
 		</if>
         ORDER BY id asc
     </select>
+    <select id="selectServiceWarningByPageByCondition" parameterType="ServiceWarningQuery" resultType="ServiceWarningPo">
+    	select host,service_interface as serviceInterface,start_time as startTime,status,content
+    	from service_Warning 
+    	where 1=1 and start_time between #{serviceStartDate} and #{serviceEndDate}
+    </select>
     
 </mapper>

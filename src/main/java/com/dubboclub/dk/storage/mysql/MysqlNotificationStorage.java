@@ -59,6 +59,12 @@ public class MysqlNotificationStorage implements NotificationStorage,Initializin
         return notifications;
 	}
 
+	@Override
+	public List<NotificationPo> selectNotificationByConditions(NotificationPo notificationPo) {
+        List<NotificationPo> notifications = notificationMapper.selectNotificationByConditions(notificationPo);
+        return notifications;
+	}
+
 	
 
 	

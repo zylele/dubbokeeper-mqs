@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dubboclub.dk.storage.ServiceWarningStorage;
@@ -39,7 +40,7 @@ public class ServiceWarningController {
     @Qualifier("serviceWarningStorage")
     private ServiceWarningStorage serviceWarningStorage;
   //查询单条语句并返回
-    @RequestMapping("/getServiceWarningById")
+    @RequestMapping(value = {"/getServiceWarningById"},method = {RequestMethod.POST})
     public @ResponseBody ServiceWarningDto getServiceWarningById(@RequestBody ServiceWarningDto serviceWarning){
     	ServiceWarningPo serviceWarningPo = new ServiceWarningPo();
     	serviceWarningPo.setId(serviceWarning.getId());
@@ -50,7 +51,7 @@ public class ServiceWarningController {
     }
     
   //删除单条语句
-  	@RequestMapping("/deleteServiceWarningById")
+  	@RequestMapping(value = {"/deleteServiceWarningById"},method = {RequestMethod.POST})
       public @ResponseBody ServiceWarningResultDto deleteServiceWarningById(@RequestBody ServiceWarningDto serviceWarning){
       	ServiceWarningPo serviceWarningPo = new ServiceWarningPo();
       	serviceWarningPo.setId(serviceWarning.getId());
@@ -62,7 +63,7 @@ public class ServiceWarningController {
       }
       
   	//修改单条语句
-  	@RequestMapping("/updateServiceWarningById")
+  	@RequestMapping(value = {"/updateServiceWarningById"},method = {RequestMethod.POST})
       public @ResponseBody ServiceWarningResultDto updateServiceWarningById(@RequestBody ServiceWarningDto serviceWarning){
   		ServiceWarningPo serviceWarningPo = new ServiceWarningPo();
   		BeanUtils.copyProperties(serviceWarning, serviceWarningPo);
@@ -70,7 +71,7 @@ public class ServiceWarningController {
           return new ServiceWarningResultDto(serviceWarningPoResult);
       }
     //查询多条语句
-    @RequestMapping("/getServiceWarningByPage")
+    @RequestMapping(value = {"/getServiceWarningByPage"},method = {RequestMethod.POST})
     public @ResponseBody BasicListResponse<ServiceWarningDto>  getServiceWarningByPage(@RequestBody BaseQueryConditions<ServiceWarningDto>  conditions) {
         ServiceWarningPo serviceWarningPo = new ServiceWarningPo();
         BeanUtils.copyProperties(conditions.getConditions(), serviceWarningPo);
@@ -88,7 +89,7 @@ public class ServiceWarningController {
         return responseList;
     }
     
-    @RequestMapping("/getServiceWarningByPageByCondition")
+    @RequestMapping(value = {"/getServiceWarningByPageByCondition"},method = {RequestMethod.POST})
     public @ResponseBody BasicListResponse<ServiceWarningDto>  getServiceWarningByPageByCondition(@RequestBody BaseQueryConditions<ServiceWarningQuery>  conditions) {
     	ServiceWarningQuery serviceWarningQuery = new ServiceWarningQuery();
         BeanUtils.copyProperties(conditions.getConditions(), serviceWarningQuery);

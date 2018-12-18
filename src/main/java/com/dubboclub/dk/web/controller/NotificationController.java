@@ -9,14 +9,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dubboclub.dk.notification.WarningStatusHolder;
 import com.dubboclub.dk.storage.NotificationStorage;
 import com.dubboclub.dk.storage.model.NotificationPo;
 import com.dubboclub.dk.web.model.BaseQueryConditions;
 import com.dubboclub.dk.web.model.BasicListResponse;
 import com.dubboclub.dk.web.model.NotificationDto;
 import com.dubboclub.dk.web.model.NotificationResultDto;
+import com.dubboclub.dk.web.model.WarningStatusDto;
 import com.github.pagehelper.PageInfo;
 
 @Controller
@@ -25,9 +28,10 @@ public class NotificationController {
 	@Autowired
     @Qualifier("notificationStorage")
     private NotificationStorage notificationStorage;
-	
+	@Autowired
+	private WarningStatusHolder warningStatusHolder;
 	//查询单条语句并返回
-    @RequestMapping("/getNotificationById")
+    @RequestMapping(value = {"/getNotificationById"},method = {RequestMethod.POST})
     public @ResponseBody NotificationDto getNotificationById(@RequestBody NotificationDto notification){
     	NotificationPo notificationPo = new NotificationPo();
     	notificationPo.setId(notification.getId());
@@ -37,7 +41,7 @@ public class NotificationController {
         return notificationDto;
     }
     
-    @RequestMapping("/deleteNotificationById")
+    @RequestMapping(value = {"/deleteNotificationById"},method = {RequestMethod.POST})
     public @ResponseBody NotificationResultDto deleteNotificationById(@RequestBody NotificationDto notification){
     	NotificationPo notificationPo =new NotificationPo();
     	notificationPo.setId(notification.getId());
@@ -45,7 +49,7 @@ public class NotificationController {
     	return new NotificationResultDto(notificationPoResult);	
     }
     
-    @RequestMapping("/addNotification")
+    @RequestMapping(value = {"/addNotification"},method = {RequestMethod.POST})
     public @ResponseBody NotificationResultDto addNotification(@RequestBody NotificationDto notification){
     	NotificationPo notificationPo = new NotificationPo();
     	BeanUtils.copyProperties(notification, notificationPo);
@@ -53,7 +57,7 @@ public class NotificationController {
         return new NotificationResultDto(notificationPoResult);
     }
     
-    @RequestMapping("/updateNotificationById")
+    @RequestMapping(value = {"/updateNotificationById"},method = {RequestMethod.POST})
     public @ResponseBody NotificationResultDto updateNotificationById(@RequestBody NotificationDto notification){
     	NotificationPo notificationPo = new NotificationPo();
 		BeanUtils.copyProperties(notification, notificationPo);
@@ -62,7 +66,7 @@ public class NotificationController {
     }
     
     //多条查询
-    @RequestMapping("/getNotificationByPage")
+    @RequestMapping(value = {"/getNotificationByPage"},method = {RequestMethod.POST})
     public @ResponseBody BasicListResponse<NotificationDto>  getNotificationByPage(@RequestBody BaseQueryConditions<NotificationDto>  conditions) {
     	NotificationPo notificationPo = new NotificationPo();
         BeanUtils.copyProperties(conditions.getConditions(), notificationPo);
@@ -80,7 +84,13 @@ public class NotificationController {
         return responseList;
     }
     
-    
-    
+    @RequestMapping(value = {"/getWarningStatus"},method = {RequestMethod.POST})
+    public @ResponseBody WarningStatusDto getWarningStatus(){
+    	WarningStatusDto warningStatusDto = new WarningStatusDto();
+		BeanUtils.copyProperties(warningStatusHolder, warningStatusDto);
+		warningStatusHolder.setBizStatus(false);
+		warningStatusHolder.setServiceStatus(false);
+        return warningStatusDto;
+    }
     
 }

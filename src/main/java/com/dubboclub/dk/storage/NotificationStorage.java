@@ -11,4 +11,6 @@ public interface NotificationStorage {
 	public Integer addNotification(NotificationPo notificationPo);
 	public Integer updateNotificationById(NotificationPo notificationPo);
 	public List<NotificationPo> selectNotificationByPage(NotificationPo notificationPo, CurrentPage currentPage);
+	public List<NotificationPo> selectNotificationByConditions(NotificationPo notificationPo);
+
 }

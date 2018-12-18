@@ -24,5 +24,6 @@ public interface NotificationMapper {
 	public Integer addNotification(@Param("notification")NotificationPo notificationPo);
 	public Integer updateNotificationById(NotificationPo notificationPo);
 	public List<NotificationPo> selectNotificationByPage(NotificationPo notificationPo);
+	public List<NotificationPo> selectNotificationByConditions(NotificationPo notificationPo);
 	
 }

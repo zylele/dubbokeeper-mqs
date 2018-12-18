@@ -23,6 +23,8 @@ public class ApplicationEmail  implements Serializable {
     private String subject;
     /** 邮件内容 **/
     private String content;
+	private String sender;
+	private String replyTo;
 
     public String getAddressee() {
         return addressee;
@@ -55,5 +57,21 @@ public class ApplicationEmail  implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
+
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+
+	public String getReplyTo() {
+		return replyTo;
+	}
+
+	public void setReplyTo(String replyTo) {
+		this.replyTo = replyTo;
+	}
 
 }

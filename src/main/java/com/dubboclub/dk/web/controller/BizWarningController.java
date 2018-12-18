@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dubboclub.dk.storage.BizWarningStorage;
@@ -43,7 +44,7 @@ public class BizWarningController {
     private BizWarningStorage bizWarningStorage;
     
     //查询单条语句并返回
-    @RequestMapping("/getBizWarningById")
+    @RequestMapping(value = {"/getBizWarningById"},method = {RequestMethod.POST})
     public @ResponseBody BizWarningDto getBizWarningById(@RequestBody BizWarningDto bizWarning){
     	BizWarningPo bizWarningPo = new BizWarningPo();
     	bizWarningPo.setId(bizWarning.getId());
@@ -55,7 +56,7 @@ public class BizWarningController {
     }
     
     //删除单条语句
-	@RequestMapping("/deleteBizWarningById")
+	@RequestMapping(value = {"/deleteBizWarningById"},method = {RequestMethod.POST})
     public @ResponseBody BizWarningResultDto deleteBizWarningById(@RequestBody BizWarningDto bizWarning){
     	BizWarningPo bizWarningPo = new BizWarningPo();
     	bizWarningPo.setId(bizWarning.getId());
@@ -67,7 +68,7 @@ public class BizWarningController {
     }
     
     //插入单条语句
-	@RequestMapping("/addBizWarning")
+	@RequestMapping(value = {"/addBizWarning"},method = {RequestMethod.POST})
     public @ResponseBody BizWarningResultDto addBizWarning(@RequestBody BizWarningDto bizWarning){
     	BizWarningPo bizWarningPo = new BizWarningPo();
     	BeanUtils.copyProperties(bizWarning, bizWarningPo);
@@ -76,7 +77,7 @@ public class BizWarningController {
         return new BizWarningResultDto(bizWarningPoResult);
     }
 	//修改单条语句
-	@RequestMapping("/updateBizWarningById")
+	@RequestMapping(value = {"/updateBizWarningById"},method = {RequestMethod.POST})
     public @ResponseBody BizWarningResultDto updateBizWarningById(@RequestBody BizWarningDto bizWarning){
 		BizWarningPo bizWarningPo = new BizWarningPo();
 		BeanUtils.copyProperties(bizWarning, bizWarningPo);
@@ -84,7 +85,7 @@ public class BizWarningController {
         return new BizWarningResultDto(bizWarningPoResult);
     }
 	//查询多条语句
-	@RequestMapping("/getBizWarningByPage")
+	@RequestMapping(value = {"/getBizWarningByPage"},method = {RequestMethod.POST})
     public @ResponseBody BasicListResponse<BizWarningDto>  getBizWarningByPage(@RequestBody BaseQueryConditions<BizWarningDto>  conditions) {
         BizWarningPo bizWarningPo = new BizWarningPo();
         BeanUtils.copyProperties(conditions.getConditions(), bizWarningPo);
@@ -102,7 +103,7 @@ public class BizWarningController {
         return responseList;
     }
 	//按时间段查询数据
-	@RequestMapping("/getBizWarningByPageByCondition")
+	@RequestMapping(value = {"/getBizWarningByPageByCondition"},method = {RequestMethod.POST})
     public @ResponseBody BasicListResponse<BizWarningDto>  getBizWarningByPageByCondition(@RequestBody BaseQueryConditions<BizWarningQuery>  conditions) {
 		BizWarningQuery bizWarningQuery = new BizWarningQuery();
 		BeanUtils.copyProperties(conditions.getConditions(), bizWarningQuery);

@@ -21,8 +21,8 @@
         <property name="protocol" value="smtp" /> 
         <!-- 465 for Gamil -->
         <property name="port" value="25"/>
-        <property name="username" value="xxx@sina.com"/>
-        <property name="password" value="xxx"/>
+        <property name="username" value="zgcbank_monitor@sina.com"/>
+        <property name="password" value="zgcadmin123"/>
         <property name="javaMailProperties">
             <props>
                 <prop key="mail.transport.protocol">smtp</prop>

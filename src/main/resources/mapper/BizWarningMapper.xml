@@ -33,10 +33,10 @@
     <select  id="selectBizWarningByPage" parameterType="BizWarningPo" resultType="BizWarningPo">
     	select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt from biz_Warning where 1=1
     	<if test="traceId != null and traceId != ''">
-    		and traceId = #{traceId}
+    		and trace_id = #{traceId}
     	</if>
     	<if test="traceContent != null and traceContent != ''">
-    		and traceContent = #{traceContent}
+    		and trace_content = #{traceContent}
     	</if>
     	ORDER BY id asc
     </select>

@@ -12,8 +12,8 @@
     	where id = #{notification.id};
     </delete>
     <insert id="addNotification">
-    	insert into notification (type,receiver)
-    	values(#{notification.type},#{notification.receiver});
+    	insert into notification (type,receiver,address)
+    	values(#{notification.type},#{notification.receiver},#{notification.address});
     </insert>
     <update id="updateNotificationById" parameterType="NotificationPo">
     	update notification set 
@@ -22,7 +22,10 @@
     	</if>
     	<if test="receiver != null and receiver != ''">
     		receiver = #{receiver}
-    	</if>   		
+    	</if>
+    	<if test="address != null and address != ''">
+    		address = #{address}
+    	</if>  	
     	where id = #{id};
     </update>
     <select id="selectNotificationByPage" parameterType="NotificationPo" resultType="NotificationPo">
@@ -33,6 +36,9 @@
 		<if test="receiver != null and receiver != ''">
 		  and receiver = #{receiver}
 		</if>
+		<if test="address != null and address != ''">
+    	  and address = #{address}
+    	</if>
 		ORDER BY id asc
     </select>
 </mapper>

@@ -6,7 +6,7 @@ public class NotificationDto {
 	private BigInteger id;
     private String type;
     private String receiver;
-    
+    private String address;
     
     
     public String getType() {
@@ -32,5 +32,13 @@ public class NotificationDto {
     public void setId(BigInteger id) {
         this.id = id;
     }
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
 
 }

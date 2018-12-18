@@ -1,3 +1,10 @@
+<div class="panel-heading">
+		<strong>请输入或选择需要查询的时间段:</strong>
+		<wui-date format="yyyy-mm-dd" placeholder="请选择或输入开始日期" id="startdate" btns="{'ok':'确定','now':'此刻'}" ng-model="startdate"></wui-date>
+		--
+		<wui-date format="yyyy-mm-dd" placeholder="请选择或输入结束日期" id="enddate" btns="{'ok':'确定','now':'此刻'}" ng-model="enddate"></wui-date>
+		<button type="button" class="btn" ng-click="queryBizWarning()">查询</button>
+</div>
 <div class="panel panel-default">
     <div class="panel-heading">
         <i class="icon-th-large"></i> <span>服务告警列表</span>
@@ -10,14 +17,14 @@
             <tr>
             	<th class="text-center"><strong>#</strong></th>
                 <th class="text-left" >
-                	<strong>服务告警名称</strong>
-                	<input type="text" class="inner-form-element" ng-change="filter()" ng-model="query.application" placeholder="输入要查询的服务告警名称">
+                	<strong>报文ID</strong>
+                </th>
+                <th class="text-left">
+                	<strong>报文内容</strong>
                 </th>
                 
                 <th class="text-center" >
-					<wui-date format="yyyy-mm-dd" placeholder="请选择或输入开始日期" id="date1" btns="{'ok':'确定','now':'此刻'}" ng-model="date1"></wui-date>
-					--
-					<wui-date format="yyyy-mm-dd" placeholder="请选择或输入结束日期" id="date2" btns="{'ok':'确定','now':'此刻'}" ng-model="date2"></wui-date>
+					<strong>时间</strong>
                 </th>
                 <th class="text-left" ng-show="!isConsumer">
                 	<strong>详情列表</strong> 
@@ -25,22 +32,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-            	<td class="text-center ">1</td>
-                <td class="text-left text-warning">demotest-consumer</td>
-                <td class="text-center text-warning">2018-12-12 14:22:32</td>
-                <td class="text-left text-warning"><a href="#">详情</a></td>
-            </tr>
-            <tr>
-            	<td class="text-center ">2</td>
-                <td class="text-left text-warning">demotest-consumer</td>
-                <td class="text-center text-warning">2018-12-12 14:22:32</td>
-                <td class="text-left text-warning"><a href="#">详情</a></td>
-            </tr>
-            <tr>
-            	<td class="text-center ">3</td>	
-                <td class="text-left text-warning">demotest-consumer</td>
-                <td class="text-center text-warning">2018-12-12 14:22:32</td>
+            <tr  ng-show="alarms&&alarms.length>0" ng-repeat="alarm in alarms " class="ng-animation">
+            	<td class="text-center ">{{$index+1}}</td>
+                <td class="text-left text-warning">{{alarm.traceId}}</td>
+                <td class="text-left text-warning">{{alarm.traceContent}}</td>
+                <td class="text-center text-warning">{{alarm.traceDt}}</td>
                 <td class="text-left text-warning"><a href="#">详情</a></td>
             </tr>
             
@@ -49,4 +45,5 @@
        </div>
       </div>
     </div>
+   
 </div>

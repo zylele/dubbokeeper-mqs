@@ -85,6 +85,7 @@ apps.controller("consumerDetail",function($scope,$httpWrapper,$routeParams,$quer
     $breadcrumb.pushCrumb($scope.application,"查看依赖"+$scope.application+"应用列表","consumerDetail");
     $httpWrapper.post({
         url:"app/"+$routeParams.application+"/consumers.htm",
+//        data: {}
         success:function(data){
             $scope.details=data;
             if(!data||data.length<=0){

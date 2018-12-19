@@ -35,6 +35,8 @@ CREATE TABLE `service_warning` (
   `status` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '00-新告警，01-手动恢复，02-告警过期',
   `content` varchar(4000) COLLATE utf8_unicode_ci DEFAULT NULL,
   `service_interface` varchar(300) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `application` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `category` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2289 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

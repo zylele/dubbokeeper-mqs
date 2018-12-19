@@ -3,15 +3,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dubboclub.dk.storage.mysql.mapper.ServiceWarningMapper">
     <insert id="insertServiceWarning">
-       insert into service_warning (host,service_interface,start_time,status,content) 
+       insert into service_warning (host,service_interface,start_time,status,content,application,category) 
        values (#{serviceWarning.host},
             #{serviceWarning.serviceInterface},
             #{serviceWarning.startTime},
             #{serviceWarning.status},
-            #{serviceWarning.content})
+            #{serviceWarning.content},
+            #{serviceWarning.application},
+            #{serviceWarning.category})
     </insert>
     <select id="selectServiceWarningById" parameterType="ServiceWarningPo" resultType="ServiceWarningPo">
-    	select id,host,service_interface as serviceInterface,start_time as startTime,status,content
+    	select id,host,service_interface as serviceInterface,start_time as startTime,status,content,application,category
     	from service_warning
     	where id = #{id}
     </select>
@@ -32,12 +34,18 @@
     	</if>   
     	<if test="content != null and content != ''">
     		content = #{content}
+    	</if>
+    	<if test="application != null and application != ''">
+    		application = #{application}
+    	</if>
+    	<if test="category != null and category != ''">
+    		category = #{category}
     	</if>    		
     	where id = #{id};
     </update>
 
     <select id="selectServiceWarningByPage" parameterType="ServiceWarningPo" resultType="ServiceWarningPo">
-       select id,host,service_interface as serviceInterface,start_time as startTime,status,content from service_warning where 1=1
+       select id,host,service_interface as serviceInterface,start_time as startTime,status,content,application,category from service_warning where 1=1
 		<if test="host != null and host != ''">
 		  and host = #{host}
 		</if>
@@ -47,7 +55,7 @@
         ORDER BY id asc
     </select>
     <select id="selectServiceWarningByPageByCondition" parameterType="ServiceWarningQuery" resultType="ServiceWarningPo">
-    	select host,service_interface as serviceInterface,start_time as startTime,status,content
+    	select host,service_interface as serviceInterface,start_time as startTime,status,content,application,category
     	from service_Warning 
     	where 1=1 and start_time between #{serviceStartDate} and #{serviceEndDate}
     </select>

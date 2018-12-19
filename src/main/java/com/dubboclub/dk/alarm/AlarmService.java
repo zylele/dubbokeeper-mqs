@@ -7,5 +7,5 @@ public interface AlarmService {
 	 * 服务不可用时预警方法
 	 * @param url
 	 */
-	void alarmHandle(URL url);
+	void alarmHandle(URL url, String application);
 }

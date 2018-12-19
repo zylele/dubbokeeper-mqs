@@ -122,9 +122,14 @@ public class RegistryServerSync implements InitializingBean, DisposableBean, Not
 	                		if (Tool.getInterface(service).equals(url.getServiceInterface())
 	                				&& (Constants.ANY_VALUE.equals(group) || StringUtils.isEquals(group, Tool.getGroup(service)))
 	                				&& (Constants.ANY_VALUE.equals(version) || StringUtils.isEquals(version, Tool.getVersion(service)))) {
+	                			Map<Long, URL> dataMap = services.get(service);
+	                			for(Map.Entry<Long, URL> dataEntry : dataMap.entrySet()) {
+	                				URL dataUrl = dataEntry.getValue();
+	                				String application = dataUrl.getParameter("application");
+	                				//empty协议url预警处理方法
+		                			alarmService.alarmHandle(url, application);
+	                			}
 	                			services.remove(service);
-	                			//empty协议url预警处理方法
-	                			alarmService.alarmHandle(url);
 	                		}
 	                	}
             		}

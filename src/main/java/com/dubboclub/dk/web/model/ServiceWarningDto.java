@@ -21,8 +21,26 @@ public class ServiceWarningDto {
     private String startTime;
     private String status;
     private String content;
+    private String application;
+    private String category;
 
-    public BigInteger getId() {
+    public String getApplication() {
+		return application;
+	}
+
+	public void setApplication(String application) {
+		this.application = application;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public BigInteger getId() {
         return id;
     }
 

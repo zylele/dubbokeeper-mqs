@@ -56,7 +56,8 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 		String data = restTemplate.getForObject(zipkinUrl + BIZ_EXCEPTION_URL, String.class);
 		JSONArray jsonErrors = JSONArray.parseArray(data);
 		for(Object jsonError : jsonErrors) {
-			String  error = "";
+			String error = "";
+			String txCode = "";
 			if(jsonError instanceof JSONArray) {
 				for(Object span : (JSONArray)jsonError) {
 					if(span instanceof JSONObject) {
@@ -73,8 +74,9 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 							bizWarningPo.setTraceDt(new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date(timestamp/1000)));
 							bizWarningStorage.addBizWarning(bizWarningPo);
 							error = ((JSONObject) span).getJSONObject("tags").getString("error");
+							txCode = ((JSONObject) span).getJSONObject("tags").getString("txCode");
 							logger.debug("新的业务异常，traceId: "+traceId+",error: "+error);
-							sendWarningMailAsyc("time="+bizWarningPo.getTraceDt()+","+error);
+							sendWarningMailAsyc("time="+bizWarningPo.getTraceDt()+","+error, txCode);
 							warningStatusHolder.setBizStatus(true);
 						}
 						break;
@@ -85,12 +87,12 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 
 	}
 	
-	private void sendWarningMailAsyc(String error) {
+	private void sendWarningMailAsyc(String error, String txCode) {
 		ApplicationEmail email = new ApplicationEmail();
 		NotificationPo po = new NotificationPo();
 		po.setType("01");//邮件
 		List<NotificationPo> notificationPoList = notificationStorage.selectNotificationByConditions(po);
-		email.setSubject("业务异常");
+		email.setSubject("业务异常_"+txCode);
 		String addresses = "";
 		for(NotificationPo notificationPo : notificationPoList) {
 			addresses += notificationPo.getAddress() + ",";

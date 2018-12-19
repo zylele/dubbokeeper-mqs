@@ -82,7 +82,7 @@ public class AlarmServiceImpl implements AlarmService {
 		NotificationPo po = new NotificationPo();
 		po.setType("01");// 邮件
 		List<NotificationPo> notificationPoList = notificationStorage.selectNotificationByConditions(po);
-		email.setSubject("服务异常-"+serviceName);
+		email.setSubject("服务异常_"+serviceName);
 		String addresses = "";
 		for (NotificationPo notificationPo : notificationPoList) {
 			addresses += notificationPo.getAddress() + ",";

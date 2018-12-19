@@ -22,7 +22,7 @@ CREATE TABLE `notification` (
 CREATE TABLE `biz_warning` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `trace_id` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '报文ID',
-  `trace_content` varchar(2000) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '报文内容',
+  `trace_content` varchar(4000) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '报文内容',
   `trace_dt` datetime(6) DEFAULT NULL COMMENT '报文时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `biz_warning_un` (`trace_id`)

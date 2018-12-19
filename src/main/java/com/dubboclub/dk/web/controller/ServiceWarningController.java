@@ -78,7 +78,7 @@ public class ServiceWarningController {
         List<ServiceWarningPo> listPo = serviceWarningStorage.selectServiceWarningByPage(serviceWarningPo, conditions.getCurrentPage());
         PageInfo<ServiceWarningPo> pageInfo = new PageInfo<>(listPo);
         BasicListResponse<ServiceWarningDto> responseList = new BasicListResponse<ServiceWarningDto>();
-        responseList.setTotalCount(pageInfo.getSize());
+        responseList.setTotalCount(pageInfo.getTotal());
         List listDto = new ArrayList<ServiceWarningDto>();
         responseList.setList(listDto);
         for(ServiceWarningPo po: listPo) {
@@ -96,7 +96,7 @@ public class ServiceWarningController {
         List<ServiceWarningPo> listPo = serviceWarningStorage.selectServiceWarningByPageByCondition(serviceWarningQuery, conditions.getCurrentPage());
         PageInfo<ServiceWarningPo> pageInfo = new PageInfo<>(listPo);
         BasicListResponse<ServiceWarningDto> responseList = new BasicListResponse<ServiceWarningDto>();
-        responseList.setTotalCount(pageInfo.getSize());
+        responseList.setTotalCount(pageInfo.getTotal());
         List listDto = new ArrayList<ServiceWarningDto>();
         responseList.setList(listDto);
         for(ServiceWarningPo po: listPo) {

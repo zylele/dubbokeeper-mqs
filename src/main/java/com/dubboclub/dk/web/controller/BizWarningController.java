@@ -92,7 +92,7 @@ public class BizWarningController {
         List<BizWarningPo> listPo = bizWarningStorage.selectBizWarningByPage(bizWarningPo, conditions.getCurrentPage());
         PageInfo<BizWarningPo> pageInfo = new PageInfo<>(listPo);
         BasicListResponse<BizWarningDto> responseList = new BasicListResponse<BizWarningDto>();
-        responseList.setTotalCount(pageInfo.getSize());
+        responseList.setTotalCount(pageInfo.getTotal());
         List listDto = new ArrayList<BizWarningDto>();
         responseList.setList(listDto);
         for(BizWarningPo po: listPo) {
@@ -110,7 +110,7 @@ public class BizWarningController {
 		List<BizWarningPo> listPo = bizWarningStorage.selectBizWarningByPageByCondition(bizWarningQuery, conditions.getCurrentPage());
 		PageInfo<BizWarningPo> pageInfo = new PageInfo<>(listPo);
         BasicListResponse<BizWarningDto> responseList = new BasicListResponse<BizWarningDto>();
-        responseList.setTotalCount(pageInfo.getSize());
+        responseList.setTotalCount(pageInfo.getTotal());
         List listDto = new ArrayList<BizWarningDto>();
         responseList.setList(listDto);
         for(BizWarningPo po: listPo) {

@@ -19,9 +19,6 @@
                 <th class="text-left" >
                 	<strong>报文ID</strong>
                 </th>
-                <th class="text-left">
-                	<strong>报文内容</strong>
-                </th>
                 
                 <th class="text-center" >
 					<strong>时间</strong>
@@ -35,7 +32,6 @@
             <tr  ng-show="alarms&&alarms.length>0" ng-repeat="alarm in alarms " class="ng-animation">
             	<td class="text-center ">{{$index+1}}</td>
                 <td class="text-left text-warning">{{alarm.traceId}}</td>
-                <td class="text-left text-warning">{{alarm.traceContent}}</td>
                 <td class="text-center text-warning">{{alarm.traceDt}}</td>
                 <td class="text-left text-warning"><a href="#">详情</a></td>
             </tr>
@@ -45,5 +41,7 @@
        </div>
       </div>
     </div>
+    <div ng-if="myPage.totalItems" my-pagination pg="myPage"></div>
+    
    
 </div>

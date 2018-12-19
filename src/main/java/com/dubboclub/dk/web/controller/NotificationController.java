@@ -73,7 +73,7 @@ public class NotificationController {
         List<NotificationPo> listPo = notificationStorage.selectNotificationByPage(notificationPo, conditions.getCurrentPage());
         PageInfo<NotificationPo> pageInfo = new PageInfo<>(listPo);
         BasicListResponse<NotificationDto> responseList = new BasicListResponse<NotificationDto>();
-        responseList.setTotalCount(pageInfo.getSize());
+        responseList.setTotalCount(pageInfo.getTotal());
         List listDto = new ArrayList<NotificationDto>();
         responseList.setList(listDto);
         for(NotificationPo po: listPo) {

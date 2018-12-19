@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class BasicListResponse<T> extends BasicResponse{
     private List<T> list;
-    private int totalCount;
+    private long totalCount;
 
     public List<T> getList() {
         return list;
@@ -26,11 +26,11 @@ public class BasicListResponse<T> extends BasicResponse{
         this.list = list;
     }
 
-    public int getTotalCount() {
+    public long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(int totalCount) {
+    public void setTotalCount(long totalCount) {
         this.totalCount = totalCount;
     }
 }

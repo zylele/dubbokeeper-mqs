@@ -11,8 +11,10 @@ alarm.config(function($routeProvider){
         controller:"alarmBusinessTable"
    });
 });
-alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter,$modal){
-    $breadcrumb.pushCrumb("服务告警","查看服务告警列表","alarm/alarmlist");
+alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter,$modal,$menu,$routeParams){
+	$menu.switchMenu("alarm/alarmlist");
+	$breadcrumb.pushCrumb("服务异常","查看服务异常列表","alarm/alarmlist");
+	$scope.application=$routeParams.application;
     $scope.services=[];
     $scope.isEmpty=false;
     /*$httpWrapper.post({
@@ -85,8 +87,10 @@ alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$quer
 
 
 
-alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter,$modal){
-    $breadcrumb.pushCrumb("业务告警","查看业务告警列表","alarm/alarmBusiness");
+alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter,$modal,$menu,$routeParams){
+	$menu.switchMenu("alarm/alarmBusiness");
+	$breadcrumb.pushCrumb("业务异常","查看业务异常列表","alarm/alarmBusiness");
+	$scope.application=$routeParams.application;
     $scope.alarms=[];
     $scope.isEmpty=false;
 //    $httpWrapper.post({
@@ -155,6 +159,8 @@ alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$
 });
 
 
-alarm.controller("alarmSetTable",function($scope,$breadcrumb){
+alarm.controller("alarmSetTable",function($scope,$breadcrumb,$menu,$routeParams){
+	$menu.switchMenu("alarm/alarmSet");
     $breadcrumb.pushCrumb("通知设置","进入通知设置","alarm/alarmSet");
+    $scope.application=$routeParams.application;
 });

@@ -9,7 +9,7 @@ dubbokeeper.barDataset=[{
     barHref:"/statistics",
     barIconClass:"icon-dashboard"
 },{
-    barShowName:"管理员",
+    barShowName:"管理",
     barIdentify:"admin",
     barHref:"/admin/apps",
     barIconClass:"glyphicon glyphicon-user",
@@ -36,7 +36,7 @@ dubbokeeper.barDataset=[{
         icon:"icon-random"
     }]
 },{
-    barShowName:"监测器",
+    barShowName:"监控",
     barIdentify:"monitor",
     barHref:"/monitor",
     barIconClass:"icon-bar-chart",
@@ -64,20 +64,20 @@ dubbokeeper.barDataset=[{
     barHref:"/tracking/text",
     barIconClass:"icon-screenshot"
 },{
-    barShowName:"故障报警",
+    barShowName:"故障告警",
     barIdentify:"alarm",
     barHref:"/alarm/alarmlist",
     barIconClass:" icon-warning-sign",
     menus:[{
-        showName:"服务告警",
-        identify:"alarm/alarmBusiness",
-        href:"/alarm/alarmBusinesst",
+        showName:"服务异常",
+        identify:"alarm/alarmlist",
+        href:"/alarm/alarmlist",
         icon:"icon-th-large",
         isHome:true
     },{
-    	showName:"业务告警",
-        identify:"alarm/alarmlist",
-        href:"/alarm/alarmlist",
+    	showName:"业务异常",
+        identify:"alarm/alarmBusiness",
+        href:"/alarm/alarmBusiness",
         icon:"icon-th-large"
     },{
         showName:"通知设置",

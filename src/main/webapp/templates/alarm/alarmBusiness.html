@@ -19,9 +19,14 @@
                 <th class="text-left" >
                 	<strong>报文ID</strong>
                 </th>
-                
                 <th class="text-center" >
 					<strong>时间</strong>
+                </th>
+                <th class="text-center" >
+					<strong>交易码</strong>
+                </th>
+                <th class="text-center" >
+					<strong>异常信息</strong>
                 </th>
                 <th class="text-left" ng-show="!isConsumer">
                 	<strong>详情列表</strong> 
@@ -33,6 +38,8 @@
             	<td class="text-center ">{{$index+1}}</td>
                 <td class="text-left text-warning">{{alarm.traceId}}</td>
                 <td class="text-center text-warning">{{alarm.traceDt}}</td>
+                <td class="text-center text-warning">{{alarm.txCode}}</td>
+                <td class="text-center text-warning">{{alarm.error}}</td>
                 <td class="text-left text-warning">
                 	<button type="button" class="btn-small btn-link"  ng-click="openModal(alarm.traceContent)">详  情</button>
                 </td>

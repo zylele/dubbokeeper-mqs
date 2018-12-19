@@ -20,16 +20,16 @@
                 	<strong>host</strong>
                 </th>
                 <th class="text-left" >
-                	<strong>状态</strong>
+                	<strong>服务名称</strong>
                 </th>
                 <th class="text-center" >
                 	<strong>服务接口</strong>
                 </th>
-                <th class="text-left">
-                	<strong>详情列表</strong> 
-                </th>
                 <th class="text-center" >
                 	<strong>时间</strong>
+                </th>
+                <th class="text-left">
+                	<strong>详情列表</strong> 
                 </th>
             </tr>
             </thead>
@@ -37,12 +37,13 @@
             <tr  ng-show="services&&services.length>0" ng-repeat="service in services" class="ng-animation">
             	<td class="text-center ">{{$index+1}}</td>
                 <td class="text-left text-warning">{{service.host}}</td>
-                <td class="text-left text-warning">{{service.status}}</td>
+                <td class="text-left text-warning">{{service.application}}</td>
                 <td class="text-center text-warning">{{service.serviceInterface}}</td>
+                <td class="text-center text-warning">{{service.startTime}}</td>
                 <td class="text-left text-warning">
                 	<button type="button" class="btn-small btn-link"  ng-click="openModal(service.content)">详  情</button>
                 </td>
-                <td class="text-center text-warning">{{service.startTime}}</td>
+
             </tr>
             
             </tbody>

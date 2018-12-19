@@ -1,4 +1,4 @@
-var alarm=angular.module("alarm",['ngAnimate','ngRoute','serviceProvider','queryFilter','breadCrumb','wui.date','mePagination']);
+var alarm=angular.module("alarm",['ngAnimate','ngRoute','serviceProvider','queryFilter','breadCrumb','wui.date','mePagination','ui.bootstrap','details']);
 alarm.config(function($routeProvider){
     $routeProvider.when("/alarm/alarmlist",{
         templateUrl:"templates/alarm/alarm-list.html",
@@ -9,14 +9,11 @@ alarm.config(function($routeProvider){
     }).when("/alarm/alarmBusiness", {
         templateUrl:"templates/alarm/alarmBusiness.html",
         controller:"alarmBusinessTable"
-   }).when("/alarm/detailsBussiness",{
-    	templateUrl:"templates/alarm/detailsBusiness.html",
-    	controller:"detailsBusinessTable"
-    });
+   });
 });
-alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter){
+alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter,$modal){
     $breadcrumb.pushCrumb("服务告警","查看服务告警列表","alarm/alarmlist");
-    $scope.alarms=[];
+    $scope.services=[];
     $scope.isEmpty=false;
     /*$httpWrapper.post({
         url:"bizwarning/getBizWarningByPageByCondition",
@@ -35,18 +32,18 @@ alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$quer
         if($scope.isEmpty){
             return ;
         }
-        $scope.alarms=$queryFilter($scope.originData,$scope.query);
+        $scope.services=$queryFilter($scope.originData,$scope.query);
     }
     
-    $scope.queryBizWarning=function(){
+    $scope.queryServiceWarning=function(){
     	if($scope.myPage.currentPage===0){
     		$scope.myPage.currentPage = 1;
     	}
     	$httpWrapper.post({
-            url:"bizwarning/getBizWarningByPageByCondition",
-            data:'{"currentPage": {"currentPage": '+$scope.myPage.currentPage+',"pageSize":'+$scope.myPage.itemsPerPage+'},"conditions": {"bizStartDate": "'+$scope.startdate+'","bizEndDate": "'+$scope.enddate+'"}}',
+            url:"servicewarning/getServiceWarningByPageByCondition",
+            data:'{"currentPage": {"currentPage": '+$scope.myPage.currentPage+',"pageSize":'+$scope.myPage.itemsPerPage+'},"conditions": {"serviceStartDate": "'+$scope.startdate+'","serviceEndDate": "'+$scope.enddate+'"}}',
             success:function(data){
-                $scope.alarms=data.list;
+                $scope.services=data.list;
                 if(!data||data.length<0){
                     $scope.isEmpty=true;
                 }
@@ -56,28 +53,41 @@ alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$quer
         });
     } 
     $scope.myPage={
-      		currentPage:1,//访问第几页数据，从1开始
-      		totalItems:0,//数据库中总共有多少条数据
-      		itemsPerPage: 10,//默认每页展示多少条数据，可更改
+      		currentPage:1,
+      		totalItems:0,
+      		itemsPerPage: 10,
       		pagesLength: 15,
-      		perPageOptions: [10, 20, 30, 40, 50, 60]//可选择的每页展示多少条数据
+      		perPageOptions: [10, 20, 30, 40, 50, 60]
   	  };
-
-	//监测当页码。总数据，每页展示数据个数变化时，重新加载数据
    	$scope.$watch(function (){ 
        		return $scope.myPage.itemsPerPage+' '+$scope.myPage.currentPage+' '+$scope.myPage.totalItems;
    	},getList);
 
 	function getList(){
-		//获取列表需要时，将页码重置为1
-      	//$scope.myPage.currentPage=myPage.pageNub;
-      	$scope.queryBizWarning();
-	}
+      	$scope.queryServiceWarning();
+	} 
+	
+    $scope.openModal = function(traceContent) {
+            var modalInstance = $modal.open({
+                templateUrl : 'templates/alarm/detailsBussiness.html',//script标签中定义的id
+                controller : 'modalCtrl',//modal对应的Controller
+                resolve : {
+                    data : function() {//data作为modal的controller传入的参数
+                         return traceContent;//用于传递数据
+                    }
+                }
+            })
+        }
 
 });
-alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter){
+
+
+
+
+
+alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter,$modal){
     $breadcrumb.pushCrumb("业务告警","查看业务告警列表","alarm/alarmBusiness");
-    $scope.services=[];
+    $scope.alarms=[];
     $scope.isEmpty=false;
 //    $httpWrapper.post({
 //        url:"servicewarning/getServiceWarningByPageByCondition",
@@ -96,17 +106,17 @@ alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$
         if($scope.isEmpty){
             return ;
         }
-        $scope.services=$queryFilter($scope.originData,$scope.query);
+        $scope.alarms=$queryFilter($scope.originData,$scope.query);
     }
-    $scope.queryServiceWarning=function(){
+    $scope.queryBizWarning=function(){
     	if($scope.myPage.currentPage===0){
     		$scope.myPage.currentPage = 1;
     	}
     	$httpWrapper.post({
-            url:"servicewarning/getServiceWarningByPageByCondition",
-            data:'{"currentPage": {"currentPage": '+$scope.myPage.currentPage+',"pageSize":'+$scope.myPage.itemsPerPage+'},"conditions": {"serviceStartDate": "'+$scope.startdate+'","serviceEndDate": "'+$scope.enddate+'"}}',
+            url:"bizwarning/getBizWarningByPageByCondition",
+            data:'{"currentPage": {"currentPage": '+$scope.myPage.currentPage+',"pageSize":'+$scope.myPage.itemsPerPage+'},"conditions": {"bizStartDate": "'+$scope.startdate+'","bizEndDate": "'+$scope.enddate+'"}}',
             success:function(data){
-                $scope.services=data.list;
+                $scope.alarms=data.list;
                 if(!data||data.length<0){
                     $scope.isEmpty=true;
                 }
@@ -116,31 +126,34 @@ alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$
         });
     }
     $scope.myPage={
-      		currentPage:1,//访问第几页数据，从1开始
-      		totalItems:0,//数据库中总共有多少条数据
-      		itemsPerPage: 10,//默认每页展示多少条数据，可更改
+      		currentPage:1,
+      		totalItems:0,
+      		itemsPerPage: 10,
       		pagesLength: 15,
-      		perPageOptions: [10, 20, 30, 40, 50, 60]//可选择的每页展示多少条数据
+      		perPageOptions: [10, 20, 30, 40, 50, 60]
   	  };
-
-	//监测当页码。总数据，每页展示数据个数变化时，重新加载数据
     $scope.$watch(function (){ 
    		return $scope.myPage.itemsPerPage+' '+$scope.myPage.currentPage+' '+$scope.myPage.totalItems;
 	},getList);
 
     function getList(){
-		//获取列表需要时，将页码重置为1
-      	//$scope.myPage.currentPage=myPage.pageNub;
-      	$scope.queryServiceWarning();
+      	$scope.queryBizWarning();
 	}
+   
+    $scope.openModal = function(content) {
+            var modalInstance = $modal.open({
+                templateUrl : 'templates/alarm/detailsBussiness.html',
+                controller : 'modalCtrl',
+                resolve : {
+                    data : function() {
+                         return content;
+                    }
+                }
+            })
+        }
 
 });
-alarm.controller("detailsBusinessTable",function($scope,$breadcrumb,$httpWrapper,$compile){
-    $breadcrumb.pushCrumb("业务告警详情");
-    $scope.open=function(){
-    	
-    };
-});
+
 
 alarm.controller("alarmSetTable",function($scope,$breadcrumb){
     $breadcrumb.pushCrumb("通知设置","进入通知设置","alarm/alarmSet");

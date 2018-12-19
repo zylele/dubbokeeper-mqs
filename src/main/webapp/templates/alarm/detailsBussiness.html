@@ -1,38 +1,22 @@
-<div class="panel panel-default">
-	<div>±êÌâ</div>
-    <div class="panel-heading">
-        <i class="icon-th-large"></i> <span>service£ºxxxxxxxxxx</span>
-    </div>
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
-        <table class="table-striped table-hover table-condensed table table-condensed table-responsive">
-            <thead>
-            <tr>
-            	<th class="text-center"><strong>id</strong></th>
-                <th class="text-left" >
-                	<strong>±¨ÎÄID</strong>
-                </th>
-                
-                <th class="text-center" >
-					<strong>±¨ÎÄÄÚÈÝ</strong>
-                </th>
-                <th class="text-left">
-                	<strong>±¨ÎÄÊ±¼ä</strong> 
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-            	<td class="text-center ">1</td>
-                <td class="text-left text-warning">demotest-consumer</td>
-                <td class="text-center text-warning">2018-12-12 14:22:32</td>
-                <td class="text-left text-warning"><a href="#" ng-click="open()">ÏêÇé</a></td>
-            </tr>
-            
-            </tbody>
-        </table>
-       </div>
-      </div>
-    </div>
+<div>
+	<div class="modal-header">
+	    <h3 class="modal-title" align="center">
+	        å‘Šè­¦è¯¦æƒ…
+	    </h3>
+	</div>
+	<div class="modal-body">
+	    <p>
+	    	å‘Šè­¦å†…å®¹ <br>
+	        {{data}}
+	    </p> 
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" ng-click="ok()">
+	        ç¡®è®¤
+	    </button>
+	    <button class="btn btn-warning" ng-click="cancel()">
+	        é€€å‡º
+	    </button>
+	</div>
 </div>
+

@@ -70,14 +70,14 @@ dubbokeeper.barDataset=[{
     barIconClass:" icon-warning-sign",
     menus:[{
         showName:"服务告警",
-        identify:"alarm/alarmlist",
-        href:"/alarm/alarmlist",
+        identify:"alarm/alarmBusiness",
+        href:"/alarm/alarmBusinesst",
         icon:"icon-th-large",
         isHome:true
     },{
     	showName:"业务告警",
-        identify:"alarm/alarmBusiness",
-        href:"/alarm/alarmBusiness",
+        identify:"alarm/alarmlist",
+        href:"/alarm/alarmlist",
         icon:"icon-th-large"
     },{
         showName:"通知设置",

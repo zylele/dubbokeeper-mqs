@@ -24,6 +24,8 @@ CREATE TABLE `biz_warning` (
   `trace_id` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '报文ID',
   `trace_content` varchar(4000) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '报文内容',
   `trace_dt` datetime(6) DEFAULT NULL COMMENT '报文时间',
+  `error` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `tx_code` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `biz_warning_un` (`trace_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -38,5 +40,5 @@ CREATE TABLE `service_warning` (
   `application` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
   `category` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2289 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

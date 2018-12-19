@@ -7,9 +7,27 @@ public class BizWarningDto {
     private String traceId;
     private String traceContent;
     private String traceDt;
+    private String error;
+    private String txCode;
     
     
-    public BigInteger getId() {
+    public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public String getTxCode() {
+		return txCode;
+	}
+
+	public void setTxCode(String txCode) {
+		this.txCode = txCode;
+	}
+
+	public BigInteger getId() {
         return id;
     }
 
@@ -40,9 +58,6 @@ public class BizWarningDto {
     public void setTraceDt(String traceDt) {
         this.traceDt = traceDt;
     }
-
-    
-
 
 
 }

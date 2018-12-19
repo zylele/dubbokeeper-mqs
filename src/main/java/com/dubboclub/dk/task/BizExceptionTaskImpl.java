@@ -72,9 +72,11 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 						if(result == null || result.size() == 0) {
 							bizWarningPo.setTraceContent(jsonError.toString());
 							bizWarningPo.setTraceDt(new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date(timestamp/1000)));
-							bizWarningStorage.addBizWarning(bizWarningPo);
 							error = ((JSONObject) span).getJSONObject("tags").getString("error");
 							txCode = ((JSONObject) span).getJSONObject("tags").getString("txCode");
+							bizWarningPo.setError(error);
+							bizWarningPo.setTxCode(txCode);
+							bizWarningStorage.addBizWarning(bizWarningPo);
 							logger.debug("新的业务异常，traceId: "+traceId+",error: "+error);
 							sendWarningMailAsyc("time="+bizWarningPo.getTraceDt()+","+error, txCode);
 							warningStatusHolder.setBizStatus(true);

@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dubboclub.dk.storage.mysql.mapper.BizWarningMapper">
 	<select id="selectBizWarningById" resultType="BizWarningPo">
-       select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt 
+       select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt, error, tx_code as txCode
        from biz_warning 
        where id = #{bizWarning.id};
     </select>
@@ -12,10 +12,12 @@
     	where id = #{bizWarning.id};
     </delete>
     <insert id="addBizWarning">
-    	insert into biz_warning (trace_id,trace_content,trace_dt)
+    	insert into biz_warning (trace_id,trace_content,trace_dt, error, tx_code)
     	values (#{bizWarning.traceId},
             #{bizWarning.traceContent},
-            #{bizWarning.traceDt})
+            #{bizWarning.traceDt},
+            #{bizWarning.error},
+            #{bizWarning.txCode})
     </insert>
     <update id="updateBizWarningById" parameterType="BizWarningPo">
     	update biz_warning set 
@@ -27,11 +29,17 @@
     	</if>
     	<if test="traceDt != null and traceDt != ''">
     		trace_dt = #{traceDt}
+    	</if>
+    	<if test="error != null and error != ''">
+    		error = #{error}
+    	</if>
+    	<if test="txCode != null and txCode != ''">
+    		tx_code = #{txCode}
     	</if>   		
     	where id = #{id};
     </update>
     <select  id="selectBizWarningByPage" parameterType="BizWarningPo" resultType="BizWarningPo">
-    	select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt from biz_Warning where 1=1
+    	select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt,error, tx_code as txCode from biz_Warning where 1=1
     	<if test="traceId != null and traceId != ''">
     		and trace_id = #{traceId}
     	</if>
@@ -41,7 +49,7 @@
     	ORDER BY id asc
     </select>
     <select id="selectBizWarningByPageByCondition" parameterType="BizWarningQuery" resultType="BizWarningPo">
-    	select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt 
+    	select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt,error, tx_code as txCode 
     	from biz_Warning 
     	where 1=1 and trace_dt between #{bizStartDate} and #{bizEndDate}
     </select>

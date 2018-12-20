@@ -11,12 +11,15 @@ alarm.config(function($routeProvider){
         controller:"alarmBusinessTable"
    });
 });
-alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter,$modal,$menu,$routeParams){
+alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter,$modal,$menu,$routeParams,$rootScope){
 	$menu.switchMenu("alarm/alarmlist");
 	$breadcrumb.pushCrumb("服务异常","查看服务异常列表","alarm/alarmlist");
 	$scope.application=$routeParams.application;
     $scope.services=[];
     $scope.isEmpty=false;
+    $rootScope.warnStatus.bizStatus = false;
+    $rootScope.warnStatus.serviceStatus = false;
+    
     /*$httpWrapper.post({
         url:"bizwarning/getBizWarningByPageByCondition",
         data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"bizStartDate": "'+$scope.startdate+'","bizEndDate": "'+$scope.enddate+'"}}',
@@ -87,12 +90,13 @@ alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$quer
 
 
 
-alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter,$modal,$menu,$routeParams){
+alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$queryFilter,$modal,$menu,$routeParams,$rootScope){
 	$menu.switchMenu("alarm/alarmBusiness");
 	$breadcrumb.pushCrumb("业务异常","查看业务异常列表","alarm/alarmBusiness");
 	$scope.application=$routeParams.application;
     $scope.alarms=[];
     $scope.isEmpty=false;
+    $rootScope.warnStatus.serviceStatus = false;
 //    $httpWrapper.post({
 //        url:"servicewarning/getServiceWarningByPageByCondition",
 //        data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"serviceStartDate": "'+$scope.startdate+'","serviceEndDate": "'+$scope.enddate+'"}}',

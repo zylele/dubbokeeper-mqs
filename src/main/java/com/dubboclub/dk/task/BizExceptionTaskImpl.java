@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.dubbo.common.logger.Logger;
@@ -53,7 +54,13 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 	public void getBizExceptionTask() {
 		//String zipkinUrl = ConfigUtils.getProperty("zipkin.url");
 		RestTemplate restTemplate = new RestTemplate();
-		String data = restTemplate.getForObject(zipkinUrl + BIZ_EXCEPTION_URL, String.class);
+		String data=null;
+		try {
+			data = restTemplate.getForObject(zipkinUrl + BIZ_EXCEPTION_URL, String.class);
+		} catch (Exception e) {
+			logger.warn("Can't connect Zipkin Server!!!");
+			return;
+		}
 		JSONArray jsonErrors = JSONArray.parseArray(data);
 		for(Object jsonError : jsonErrors) {
 			String error = "";

@@ -1,6 +1,7 @@
 var dubbokeeper=angular.module("dubbokeeper",["apps","head","menu","breadCrumb",'aboutus','fullScreen',"tracking","alarm",'dialog','statistics','monitor','isteven-multi-select','appDependencies','zoopeeper','httpWrapper','override','router','theme','lineChart','dateRangePicker',"alarmset"]);
-dubbokeeper.controller("dubbokeeperCtrl",function($scope,$dkContext){
+dubbokeeper.controller("dubbokeeperCtrl",function($scope,$dkContext,$rootScope){
     $dkContext._init($scope);
+    $rootScope.warnStatus = {"bizStatus":false,"serviceStatus":false};
     $scope.currentHome={};
 });
 dubbokeeper.barDataset=[{
@@ -67,7 +68,7 @@ dubbokeeper.barDataset=[{
     barShowName:"故障告警",
     barIdentify:"alarm",
     barHref:"/alarm/alarmlist",
-    barIconClass:" icon-warning-sign",
+    barIconClass:"icon-warning-sign",
     menus:[{
         showName:"服务异常",
         identify:"alarm/alarmlist",

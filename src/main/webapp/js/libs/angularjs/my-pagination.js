@@ -21,7 +21,6 @@ angular.module('mePagination',[])
                                  '<span class="page-list" ng-class="{disabled: pg.currentPage == pg.numberOfPages}" ng-click="nextPage()">&#187;</span>'+
                              '</div>'+
                              '<div class="goPage">'+
-                                 '<span>第<input type="number" ng-model="pg.jumpPageNum"  ng-change="jumpToPage()"/>页</span>'+
                                  '<span>每页<select name="" id="" ng-model="pg.itemsPerPage" ng-options="option for option in pg.perPageOptions " ng-change="changeItemsPerPage()"></select>条/</span>'+
                                  '<span>共{{pg.totalItems}}条</span>'+
                              '</div>'+

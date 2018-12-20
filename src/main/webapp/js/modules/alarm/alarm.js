@@ -1,11 +1,11 @@
-var alarm=angular.module("alarm",['ngAnimate','ngRoute','serviceProvider','queryFilter','breadCrumb','wui.date','mePagination','ui.bootstrap','details']);
+var alarm=angular.module("alarm",['ngAnimate','ngRoute','serviceProvider','queryFilter','breadCrumb','wui.date','mePagination','ui.bootstrap','details','alarmset']);
 alarm.config(function($routeProvider){
     $routeProvider.when("/alarm/alarmlist",{
         templateUrl:"templates/alarm/alarm-list.html",
         controller:"alarmListTable"
     }).when("/alarm/alarmSet", {
         templateUrl:"templates/alarm/alarm-set.html",
-        controller:"alarmSetTable"
+        controller:"alarmset"
     }).when("/alarm/alarmBusiness", {
         templateUrl:"templates/alarm/alarmBusiness.html",
         controller:"alarmBusinessTable"
@@ -204,10 +204,4 @@ alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$
             })
         }
 
-});
-
-
-alarm.controller("alarmSetTable",function($scope,$breadcrumb,$menu,$routeParams){
-	$menu.switchMenu("alarm/alarmSet");
-    $breadcrumb.pushCrumb("通知设置","进入通知设置","alarm/alarmset");
 });

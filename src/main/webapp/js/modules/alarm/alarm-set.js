@@ -6,6 +6,7 @@ alarmset.config(function($routeProvider){
     });
 });
 alarmset.controller("alarmset",function($scope,$httpWrapper,$breadcrumb,$menu,$modal){
+	 $menu.switchMenu("alarm/alarmSet");
 	 $scope.myPage={
      		currentPage:1,
      		totalItems:0,
@@ -31,8 +32,9 @@ alarmset.controller("alarmset",function($scope,$httpWrapper,$breadcrumb,$menu,$m
                 $scope.originData=data;
             }
         });
-    }
+    };
     $scope.switchTab=function(tabName){
+    	$scope.originData = '';
         $scope.currentTab=tabName;
         switch (tabName){
             case 'setMail':{
@@ -159,7 +161,7 @@ alarmset.controller("alarmset",function($scope,$httpWrapper,$breadcrumb,$menu,$m
             }
             
         }
-    }
-			
+    };
+    $scope.switchTab('setMail');
                        
 });

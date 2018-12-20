@@ -18,10 +18,10 @@
     <update id="updateNotificationById" parameterType="NotificationPo">
     	update notification set 
     	<if test="type != null and type != ''">
-    		type = #{type}
+    		type = #{type},
     	</if>
     	<if test="receiver != null and receiver != ''">
-    		receiver = #{receiver}
+    		receiver = #{receiver},
     	</if>
     	<if test="address != null and address != ''">
     		address = #{address}
@@ -29,7 +29,7 @@
     	where id = #{id};
     </update>
     <select id="selectNotificationByPage" parameterType="NotificationPo" resultType="NotificationPo">
-    	select id,type,receiver  from notification where 1=1
+    	select id,type,receiver,address  from notification where 1=1
     	<if test="type != null and type != ''">
 		  and type = #{type}
 		</if>

@@ -209,6 +209,5 @@ alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$
 
 alarm.controller("alarmSetTable",function($scope,$breadcrumb,$menu,$routeParams){
 	$menu.switchMenu("alarm/alarmSet");
-    $breadcrumb.pushCrumb("通知设置","进入通知设置","alarm/alarmSet");
-    $scope.application=$routeParams.application;
+    $breadcrumb.pushCrumb("通知设置","进入通知设置","alarm/alarmset");
 });

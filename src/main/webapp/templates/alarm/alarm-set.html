@@ -8,20 +8,61 @@
   	</div>
 </div>
 <div class="row" ng-show="currentTab=='setMail'">
-    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"  id="SetMail" style="height: 100%;with: 100%;">
-	<input type="text" class="inner-form-element" placeholder="输入邮箱地址">
-	<button type="submit" class="btn">设置</button>
-    </div>
+   <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
+        	<table class="table-striped table-hover table-condensed table table-condensed table-responsive">
+            <thead>
+            <tr>
+            	<th class="text-center"><strong>#</strong></th>
+                <th class="text-left" >
+                	<strong>邮箱地址</strong>
+                </th>
+                <th class="text-left" >
+                	<strong>接收人姓名</strong>
+                </th>
+                <th class="text-left" >
+                	<strong>接收地址</strong>
+                </th>
+                <th class="text-center">
+                	<button type="button" class="btn btn-default btn-sm"  ng-click="addMail()">
+                		<span class="glyphicon glyphicon-plus"></span> 增加
+                	</button>
+        			
+                </th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            <tr  ng-show="mails&&mails.length>0" ng-repeat="mail in mails" class="ng-animation">
+            	<td class="text-center ">{{$index+1}}</td>
+                <td class="text-left text-warning">{{mail.type}}</td>
+                <td class="text-left text-warning">{{mail.receiver}}</td>
+                <td class="text-left text-warning">{{mail.address}}</td>
+                <td class="text-center" ng-show="!isConsumer">
+                    <button type="button" class="btn btn-default btn-sm"  ng-click="updateMail(mail.id,mail.type,mail.receiver,mail.address)">
+                		<span class="glyphicon glyphicon-edit"></span> 修改
+                	</button>
+                    &nbsp;| &nbsp;
+                    <button type="button" class="btn btn-default btn-sm"  ng-click="deleteMail(mail.id)">
+                		<span class="glyphicon glyphicon-remove"></span> 删除
+                	</button> 
+                </td>
+                
+            </tr>
+            
+            </tbody>
+        </table>
+       </div>
+       <div ng-if="myPage.totalItems" my-pagination pg="myPage"></div>
 </div>
+
+
 <div class="row" ng-show="currentTab=='setPhone'">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"  id="SetPhone" style="height: 100%;with: 100%;">
-	<input type="text" class="inner-form-element" placeholder="输入手机号码">
-	<button type="submit" class="btn">设置</button>
+	<p>开发中。。。。。。001页面</p>
     </div>
 </div>
 <div class="row" ng-show="currentTab=='setqq'">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"  id="Setqq" style="height: 100%;with: 100%;">
-	<input type="text" class="inner-form-element" placeholder="输入微信号码">
-	<button type="submit" class="btn">设置</button>
+	<p>开发中。。。。。。002页面</p>
     </div>
 </div>

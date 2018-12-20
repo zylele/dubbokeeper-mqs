@@ -1,8 +1,8 @@
 	<div class="panel-heading">
 		<strong>请输入或选择需要查询的时间段:</strong>
-		<wui-date format="yyyy-mm-dd" placeholder="请选择或输入开始日期" id="startdate" btns="{'ok':'确定','now':'此刻'}" ng-model="startdate"></wui-date>
+		<wui-date format="yyyy-mm-dd hh:mm:ss" placeholder="请选择或输入开始日期" id="startdate" btns="{'ok':'确定','now':'此刻'}" ng-model="startdate"></wui-date>
 		--
-		<wui-date format="yyyy-mm-dd" placeholder="请选择或输入结束日期" id="enddate" btns="{'ok':'确定','now':'此刻'}" ng-model="enddate"></wui-date>
+		<wui-date format="yyyy-mm-dd hh:mm:ss" placeholder="请选择或输入结束日期" id="enddate" btns="{'ok':'确定','now':'此刻'}" ng-model="enddate"></wui-date>
 		<button type="button" class="btn"  ng-click="queryServiceWarning()">查询</button>
 	</div>
 <div class="panel panel-default">

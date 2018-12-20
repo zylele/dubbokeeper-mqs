@@ -19,10 +19,37 @@ alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$quer
     $scope.isEmpty=false;
     $rootScope.warnStatus.bizStatus = false;
     $rootScope.warnStatus.serviceStatus = false;
+    $scope.myPage={
+      		currentPage:1,
+      		totalItems:0,
+      		itemsPerPage: 10,
+      		pagesLength: 15,
+      		perPageOptions: [10, 20, 30, 40, 50, 60]
+  	  };
+    Date.prototype.Format = function(fmt) 
+    { //author: meizz 
+      var o = { 
+        "M+" : this.getMonth()+1,                 //月份 
+        "d+" : this.getDate(),                    //日 
+        "h+" : this.getHours(),                   //小时 
+        "m+" : this.getMinutes(),                 //分 
+        "s+" : this.getSeconds(),                 //秒 
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+        "S"  : this.getMilliseconds()             //毫秒 
+      }; 
+      if(/(y+)/.test(fmt)) 
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+      for(var k in o) 
+        if(new RegExp("("+ k +")").test(fmt)) 
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
+      return fmt; 
+    }
+    if(!$scope.startdate) $scope.startdate = new Date().Format("yyyy-MM-dd")+' 00:00:00';
+    if(!$scope.enddate) $scope.enddate = new Date().Format("yyyy-MM-dd hh:mm:ss");
     
-    /*$httpWrapper.post({
-        url:"bizwarning/getBizWarningByPageByCondition",
-        data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"bizStartDate": "'+$scope.startdate+'","bizEndDate": "'+$scope.enddate+'"}}',
+    $httpWrapper.post({
+        url:"servicewarning/getServiceWarningByPageByCondition",
+        data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"serviceStartDate": "'+$scope.startdate+'","serviceEndDate": "'+$scope.enddate+'"}}',
         success:function(data){
             $scope.alarms=data.list;
             if(!data||data.length<0){
@@ -30,7 +57,10 @@ alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$quer
             }
             $scope.originData=data;
         }
-    });*/
+    });
+    
+    
+    
     $scope.query={};
     $scope.filter=function(){
         var filterResult=[];
@@ -57,13 +87,7 @@ alarm.controller("alarmListTable",function($scope,$breadcrumb,$httpWrapper,$quer
             }
         });
     } 
-    $scope.myPage={
-      		currentPage:1,
-      		totalItems:0,
-      		itemsPerPage: 10,
-      		pagesLength: 15,
-      		perPageOptions: [10, 20, 30, 40, 50, 60]
-  	  };
+    
    	$scope.$watch(function (){ 
        		return $scope.myPage.itemsPerPage+' '+$scope.myPage.currentPage+' '+$scope.myPage.totalItems;
    	},getList);
@@ -96,18 +120,44 @@ alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$
 	$scope.application=$routeParams.application;
     $scope.alarms=[];
     $scope.isEmpty=false;
-    $rootScope.warnStatus.serviceStatus = false;
-//    $httpWrapper.post({
-//        url:"servicewarning/getServiceWarningByPageByCondition",
-//        data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"serviceStartDate": "'+$scope.startdate+'","serviceEndDate": "'+$scope.enddate+'"}}',
-//        success:function(data){
-//            $scope.services=data.list;
-//            if(!data||data.length<0){
-//                $scope.isEmpty=true;
-//            }
-//            $scope.originData=data;
-//        }
-//    });
+    $scope.myPage={
+      		currentPage:1,
+      		totalItems:0,
+      		itemsPerPage: 10,
+      		pagesLength: 15,
+      		perPageOptions: [10, 20, 30, 40, 50, 60]
+  	  };
+    Date.prototype.Format = function(fmt) 
+    { //author: meizz 
+      var o = { 
+        "M+" : this.getMonth()+1,                 //月份 
+        "d+" : this.getDate(),                    //日 
+        "h+" : this.getHours(),                   //小时 
+        "m+" : this.getMinutes(),                 //分 
+        "s+" : this.getSeconds(),                 //秒 
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+        "S"  : this.getMilliseconds()             //毫秒 
+      }; 
+      if(/(y+)/.test(fmt)) 
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+      for(var k in o) 
+        if(new RegExp("("+ k +")").test(fmt)) 
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
+      return fmt; 
+    }
+    if(!$scope.startdate) $scope.startdate = new Date().Format("yyyy-MM-dd")+' 00:00:00';
+    if(!$scope.enddate) $scope.enddate = new Date().Format("yyyy-MM-dd hh:mm:ss");
+    $httpWrapper.post({
+        url:"bizwarning/getBizWarningByPageByCondition",
+        data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"bizStartDate": "'+$scope.startdate+'","bizEndDate": "'+$scope.enddate+'"}}',
+        success:function(data){
+            $scope.services=data.list;
+            if(!data||data.length<0){
+                $scope.isEmpty=true;
+            }
+            $scope.originData=data;
+        }
+    });
     $scope.query={};
     $scope.filter=function(){
         var filterResult=[];
@@ -133,13 +183,7 @@ alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$
             }
         });
     }
-    $scope.myPage={
-      		currentPage:1,
-      		totalItems:0,
-      		itemsPerPage: 10,
-      		pagesLength: 15,
-      		perPageOptions: [10, 20, 30, 40, 50, 60]
-  	  };
+
     $scope.$watch(function (){ 
    		return $scope.myPage.itemsPerPage+' '+$scope.myPage.currentPage+' '+$scope.myPage.totalItems;
 	},getList);

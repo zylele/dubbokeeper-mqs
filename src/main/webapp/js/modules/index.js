@@ -1,4 +1,4 @@
-var dubbokeeper=angular.module("dubbokeeper",["apps","head","menu","breadCrumb",'aboutus','fullScreen',"tracking","alarm",'dialog','statistics','monitor','isteven-multi-select','appDependencies','zoopeeper','httpWrapper','override','router','theme','lineChart','dateRangePicker',"alarmset"]);
+var dubbokeeper=angular.module("dubbokeeper",["apps","head","menu","breadCrumb",'aboutus','fullScreen',"tracking","alarm",'dialog','statistics','monitor','isteven-multi-select','appDependencies','zoopeeper','httpWrapper','override','router','theme','lineChart','dateRangePicker']);
 dubbokeeper.controller("dubbokeeperCtrl",function($scope,$dkContext,$rootScope){
     $dkContext._init($scope);
     $rootScope.warnStatus = {"bizStatus":false,"serviceStatus":false};

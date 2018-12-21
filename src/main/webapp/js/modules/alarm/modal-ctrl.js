@@ -11,7 +11,7 @@ details.controller('modalCtrl', function($scope, $modalInstance, data,$httpWrapp
 	         		data:'{"type": "'+$scope.addMailType+'","receiver": "'+$scope.addMailReceiver+'","address": "'+$scope.addMailAddress+'"}',
 	         		success:function(){
 	         			$modalInstance.close();
-	         			alert("保存成功");
+	         			//alert("保存成功");
 	         		}
 	         	 });
 	          }        
@@ -31,7 +31,7 @@ details.controller('updateMailCtrl', function($scope, $modalInstance, id,type,re
          		data:'{"id":"'+$scope.updateMailId+'","type": "'+$scope.updateMailType+'","receiver": "'+$scope.updateMailReceiver+'","address": "'+$scope.updateMailAddress+'"}',
          		success:function(){
          			$modalInstance.close();
-         			alert("已修改");
+         			//alert("已修改");
          		}
          	 });
           }      
@@ -47,7 +47,7 @@ details.controller('deleteMailCtrl', function($scope, $modalInstance, id,$httpWr
        		data:'{"id":"'+id+'"}',
        		success:function(){
        			$modalInstance.close();
-       			alert("已删除");
+       			//alert("已删除");
        		}
        	 });
         }        

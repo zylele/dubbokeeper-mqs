@@ -19,9 +19,8 @@ head.controller("headController",function($scope,$menu,$dkContext,$breadcrumb,$b
     $httpWrapper.post({
 	       url:"notification/getWarningStatus",
 	       success:function(data){
-	    	   console.log(data);
 	    	   if(!$rootScope.warnStatus.serviceStatus) {$rootScope.warnStatus.serviceStatus=data.serviceStatus};
-	    	   if(!$rootScope.warnStatus.bizStatus) {$rootScope.warnStatus.serviceStatus=data.bizStatus};
+	    	   if(!$rootScope.warnStatus.bizStatus) {$rootScope.warnStatus.bizStatus=data.bizStatus};
 	       }
     });
     }, 6000);

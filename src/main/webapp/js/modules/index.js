@@ -55,11 +55,6 @@ dubbokeeper.barDataset=[{
     barHref:"/zoopeeper",
     barIconClass:"icon-eye-open"
 },{
-    barShowName:"关于我们",
-    barIdentify:"aboutus",
-    barHref:"/aboutus",
-    barIconClass:"icon-bookmark"
-},{
     barShowName:"全链路跟踪",
     barIdentify:"tracking",
     barHref:"/tracking/text",

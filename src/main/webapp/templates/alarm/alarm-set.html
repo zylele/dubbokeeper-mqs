@@ -14,9 +14,6 @@
             <tr>
             	<th class="text-center"><strong>#</strong></th>
                 <th class="text-left" >
-                	<strong>邮箱地址</strong>
-                </th>
-                <th class="text-left" >
                 	<strong>接收人姓名</strong>
                 </th>
                 <th class="text-left" >
@@ -34,7 +31,6 @@
             <tbody>
             <tr  ng-show="mails&&mails.length>0" ng-repeat="mail in mails" class="ng-animation">
             	<td class="text-center ">{{$index+1}}</td>
-                <td class="text-left text-warning">{{mail.type}}</td>
                 <td class="text-left text-warning">{{mail.receiver}}</td>
                 <td class="text-left text-warning">{{mail.address}}</td>
                 <td class="text-center" ng-show="!isConsumer">

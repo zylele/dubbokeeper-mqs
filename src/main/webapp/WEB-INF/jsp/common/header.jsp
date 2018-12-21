@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/libs/themes/assets/css/bootswatch.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/animation.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/libs/wui.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/libs/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/libs/jquery.prompt.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/my-pagination.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/libs/font-awesome/font-awesome.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/validator.css">

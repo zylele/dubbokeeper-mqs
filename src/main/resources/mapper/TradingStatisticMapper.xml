@@ -1,0 +1,33 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dubboclub.dk.storage.mysql.mapper.TradingStatisticMapper">
+    <insert id="addTradingStatistic" parameterType="TradingStatisticPo">
+    	insert into trading (tx_code,now_time,total_num, time_avg, time_max,time_min,success,fail)
+    	values (#{txCode},
+            #{nowTime},
+            #{totalNum},
+            #{timeAvg},
+            #{tiemMax},
+            #{timeMin},
+            #{success},
+            #{fail})
+    </insert>
+    <update id="updateTradingStatisticById" parameterType="TradingStatisticPo">
+    	update trading set
+    		total_num = #{totalNum},
+    		time_avg = #{timeAvg},
+    		time_max = #{tiemMax},
+    		time_min = #{timeMin},
+    		success = #{success},
+    		fail = #{fail} 		
+    	where tx_code = #{txCode} and now_time = #{nowTime};
+    </update>
+    <select id="selectTradingStatisticById" resultType="TradingStatisticPo"  parameterType="TradingStatisticPo">
+       select tx_code as txCode,now_time as nowTime,total_num as totalNum, time_avg as timeAvg, time_max as timeMax,
+       time_min as timeMin,success,fail
+       from trading 
+       where tx_code = #{txCode} and now_time = #{nowTime};
+    </select>
+
+</mapper>

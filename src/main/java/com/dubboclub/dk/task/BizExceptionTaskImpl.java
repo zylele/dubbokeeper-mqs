@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.alibaba.dubbo.common.logger.Logger;
@@ -53,7 +52,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
     @Override  
 	public void getBizExceptionTask() {
 		//String zipkinUrl = ConfigUtils.getProperty("zipkin.url");
-		RestTemplate restTemplate = new RestTemplate();
+		RestTemplate restTemplate = new RestTemplate();         
 		String data=null;
 		try {
 			data = restTemplate.getForObject(zipkinUrl + BIZ_EXCEPTION_URL, String.class);

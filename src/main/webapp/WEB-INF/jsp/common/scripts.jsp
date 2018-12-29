@@ -37,9 +37,6 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/datepicker/locale/bootstrap-datepicker.zh-CN.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/multiselect/isteven-multi-select.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/jquery/jquery.fullscreen.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/jquery/jquery.1.7.2.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/jquery/jquery.prompt.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/jquery/jquery.prompt.min.js"></script>
 <script type="text/javascript">
     // 路径配置
     require.config({

@@ -13,7 +13,7 @@
             #{success},
             #{fail})
     </insert>
-    <update id="updateTradingStatisticById" parameterType="TradingStatisticPo">
+    <update id="updateTradingStatisticByTxCode" parameterType="TradingStatisticPo">
     	update trading set
     		total_num = #{totalNum},
     		time_avg = #{timeAvg},
@@ -21,13 +21,19 @@
     		time_min = #{timeMin},
     		success = #{success},
     		fail = #{fail} 		
-    	where tx_code = #{txCode} and now_time = #{nowTime};
+    	where 1=1 and tx_code = #{txCode} and now_time = #{nowTime};
     </update>
-    <select id="selectTradingStatisticById" resultType="TradingStatisticPo"  parameterType="TradingStatisticPo">
+    <select id="selectTradingStatisticByTxCode" resultType="TradingStatisticPo"  parameterType="TradingStatisticPo">
        select tx_code as txCode,now_time as nowTime,total_num as totalNum, time_avg as timeAvg, time_max as timeMax,
        time_min as timeMin,success,fail
        from trading 
        where tx_code = #{txCode} and now_time = #{nowTime};
+    </select>
+    <select id="selectTradingStatisticByPageByCondition" parameterType="TradingStatisticQuery" resultType="TradingStatisticPo">
+    	select tx_code as txCode,now_time as nowTime,total_num as totalNum, time_avg as timeAvg, time_max as timeMax,
+       	time_min as timeMin,success,fail
+       	from trading
+    	where 1=1 and now_time = #{nowTime}
     </select>
 
 </mapper>

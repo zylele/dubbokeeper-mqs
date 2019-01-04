@@ -38,6 +38,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
     	zipkinUrl = ConfigUtils.getProperty("zipkin.url");
     }
 	@Scheduled(cron="0/10 * *  * * ? ")   //每10秒执行一次    
+	@Override 
     public void getTradingStatisticTask(){
 		Long startT;
 		Long endT;
@@ -117,8 +118,8 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 			TradingStatisticPo tradingStatisticPo = new TradingStatisticPo();
 			tradingStatisticPo.setTxCode(key);
 			tradingStatisticPo.setNowTime(value.getNowTime());
-			TradingStatisticPo dataPo = tradingStatisticStorage.selectTradingStatisticById(tradingStatisticPo);
-			
+			TradingStatisticPo dataPo = tradingStatisticStorage.selectTradingStatisticByTxCode(tradingStatisticPo);
+
 			if(dataPo == null){
 				BeanUtils.copyProperties(value, tradingStatisticPo);
 				tradingStatisticPo.setTimeAvg(value.getTotalTimePerTime()/value.getTotalNum());
@@ -129,7 +130,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 				tradingStatisticPo.setFail(dataPo.getFail()+value.getFail());
 				tradingStatisticPo.setSuccess(dataPo.getSuccess()+value.getSuccess());				
 				tradingStatisticPo.setTimeAvg(TimeAvg(key,value.getTotalNum(),value.getTotalTimePerTime(),dataPo.getTotalNum(),dataPo.getTimeAvg()));
-				tradingStatisticStorage.updateTradingStatisticById(tradingStatisticPo);
+				tradingStatisticStorage.updateTradingStatisticByTxCode(tradingStatisticPo);
 				
 			}
         }

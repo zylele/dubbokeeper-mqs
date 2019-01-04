@@ -65,13 +65,288 @@ statistics._generatePieOption=function(data,title,name){
     };
     return option;
 }
-statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb,$menu){
+statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb,$menu,$routeParams){
     $breadcrumb.pushCrumb("Home","首页","statisticsIndex");
     $menu.switchMenu(menu.HOME);
-    $scope.currentTab='apps';
+    $scope.currentTab='tradingStatistic';
     $scope.switchTab=function(tabName){
         $scope.currentTab=tabName;
         switch (tabName){
+        	case 'tradingStatistic':{
+        		var getMaxtotalNum=function (arr) {
+                    var max
+                    for (var i = 0; i < arr.length; i++) {
+                      for (var j = i; j < arr.length; j++) {
+                        if (arr[i] < arr[j]) {
+                          max = arr[j];
+                          arr[j] = arr[i];
+                          arr[i] = max;
+                        }
+                      }
+                    }
+                    return arr;
+                  }
+        		var myDate = new Date();
+        		var nowDate = myDate.toLocaleDateString();
+        		//交易量
+        		$httpWrapper.post({
+        			url:"tradingStatistic/getTradingStatisticByPageByCondition",
+        			data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"nowTime": "'+nowDate+'"}}',
+                    success:function(data){
+                        require( [
+                            'echarts',
+                            'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+                            'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+                        ], function (echarts) {
+                            require(['echarts/theme/macarons'], function(curTheme){
+                            	var arrs = data.list;
+                                var xAxisData=[];     //X轴数据
+                                var totalNum=[];      //交易量数据
+                                
+                                for(var x in arrs){
+                                	var arr = arrs[x];
+                                	for(var key in arr){
+                                    	if(key == "txCode")
+                                    		xAxisData.push(arr[key]);
+                                    	if(key == "totalNum")
+                                    		totalNum.push(arr[key]);
+                                    }
+                                }
+                                
+                                getMaxtotalNum(totalNum);
+                                var option = {
+                                		title : {
+                                            text: '交易量TOP10'
+                                        },
+                                        tooltip : {
+                                            trigger: 'axis'
+                                        },
+                                        legend: {
+                                            data:['交易量']
+                                        },
+                                        toolbox: {
+                                            show : true,
+                                            feature : {
+                                                magicType : {show: true, type: ['line', 'bar']},
+                                                restore : {show: true},
+                                                saveAsImage : {show: true}
+                                            }
+                                        },
+                                	    xAxis: {
+                                	        type: 'category',
+                                	        data: xAxisData,
+                                	        show:true
+                                	    },
+                                	    yAxis: {
+                                	        type: 'value'
+                                	    },
+                                	    series: [{
+                                	    	name: '交易量',
+                                	        data: totalNum,
+                                	        type: 'bar'
+                                	    }]
+                                	};
+                                var myChart = echarts.init(document.getElementById('total'));
+                                myChart.setTheme(curTheme)
+                                myChart.setOption(option);
+                            });
+                        });
+                    }
+                });
+        		//平均消耗时间
+        		$httpWrapper.post({
+        			url:"tradingStatistic/getTradingStatisticByPageByCondition",
+        			data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"nowTime": "'+nowDate+'"}}',
+                    success:function(data){
+                        require( [
+                            'echarts',
+                            'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+                            'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+                        ], function (echarts) {
+                            require(['echarts/theme/macarons'], function(curTheme){
+                            	var arrs = data.list;
+                                var xAxisData=[];     //交易码数据
+                                var timeAvg=[];      //平均消耗时间数据
+                                
+                                for(var x in arrs){
+                                	var arr = arrs[x];
+                                	for(var key in arr){
+                                    	if(key == "txCode")
+                                    		xAxisData.push(arr[key]);
+                                    	if(key == "timeAvg")
+                                    		timeAvg.push(arr[key]);
+                                    }
+                                }
+                                getMaxtotalNum(timeAvg);
+                                var option = {
+                                		title : {
+                                            text: '平均消耗时间TOP10'
+                                        },
+                                        tooltip : {
+                                            trigger: 'axis'
+                                        },
+                                        legend: {
+                                            data:['平均消耗时间']
+                                        },
+                                        toolbox: {
+                                            show : true,
+                                            feature : {
+                                                magicType : {show: true, type: ['line', 'bar']},
+                                                restore : {show: true},
+                                                saveAsImage : {show: true}
+                                            }
+                                        },
+                                	    xAxis: {
+                                	        type: 'category',
+                                	        data: xAxisData,
+                                	        show:true
+                                	    },
+                                	    yAxis: {
+                                	        type: 'value'
+                                	    },
+                                	    series: [{
+                                	    	name: '平均消耗时间',
+                                	        data: timeAvg,
+                                	        type: 'bar'
+                                	    }]
+                                	};
+                                var myChart = echarts.init(document.getElementById('time'));
+                                myChart.setTheme(curTheme)
+                                myChart.setOption(option);
+                            });
+                        });
+                    }
+                });
+        		//成功次数
+        		$httpWrapper.post({
+        			url:"tradingStatistic/getTradingStatisticByPageByCondition",
+        			data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"nowTime": "'+nowDate+'"}}',
+                    success:function(data){
+                        require( [
+                            'echarts',
+                            'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+                            'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+                        ], function (echarts) {
+                            require(['echarts/theme/macarons'], function(curTheme){
+                            	var arrs = data.list;
+                                var xAxisData=[];     //交易码数据
+                                var success=[];      //成功次数
+                                
+                                for(var x in arrs){
+                                	var arr = arrs[x];
+                                	for(var key in arr){
+                                    	if(key == "txCode")
+                                    		xAxisData.push(arr[key]);
+                                    	if(key == "success")
+                                    		success.push(arr[key]);
+                                    }
+                                }
+                                getMaxtotalNum(success);
+                                var option = {
+                                		title : {
+                                            text: '成功次数TOP10'
+                                        },
+                                        tooltip : {
+                                            trigger: 'axis'
+                                        },
+                                        legend: {
+                                            data:['成功次数']
+                                        },
+                                        toolbox: {
+                                            show : true,
+                                            feature : {
+                                                magicType : {show: true, type: ['line', 'bar']},
+                                                restore : {show: true},
+                                                saveAsImage : {show: true}
+                                            }
+                                        },
+                                	    xAxis: {
+                                	        type: 'category',
+                                	        data: xAxisData,
+                                	        show:true
+                                	    },
+                                	    yAxis: {
+                                	        type: 'value'
+                                	    },
+                                	    series: [{
+                                	    	name: '成功次数',
+                                	        data: success,
+                                	        type: 'bar'
+                                	    }]
+                                	};
+                                var myChart = echarts.init(document.getElementById('success'));
+                                myChart.setTheme(curTheme)
+                                myChart.setOption(option);
+                            });
+                        });
+                    }
+                });
+        		//失败次数
+        		$httpWrapper.post({
+        			url:"tradingStatistic/getTradingStatisticByPageByCondition",
+        			data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"nowTime": "'+nowDate+'"}}',
+                    success:function(data){
+                        require( [
+                            'echarts',
+                            'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+                            'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+                        ], function (echarts) {
+                            require(['echarts/theme/macarons'], function(curTheme){
+                            	var arrs = data.list;
+                                var xAxisData=[];     //交易码数据
+                                var fail=[];      //失败次数
+                                
+                                for(var x in arrs){
+                                	var arr = arrs[x];
+                                	for(var key in arr){
+                                    	if(key == "txCode")
+                                    		xAxisData.push(arr[key]);
+                                    	if(key == "fail")
+                                    		fail.push(arr[key]);
+                                    }
+                                }
+                                getMaxtotalNum(fail);
+                                var option = {
+                                		title : {
+                                            text: '失败次数TOP10'
+                                        },
+                                        tooltip : {
+                                            trigger: 'axis'
+                                        },
+                                        legend: {
+                                            data:['失败次数']
+                                        },
+                                        toolbox: {
+                                            show : true,
+                                            feature : {
+                                                magicType : {show: true, type: ['line', 'bar']},
+                                                restore : {show: true},
+                                                saveAsImage : {show: true}
+                                            }
+                                        },
+                                	    xAxis: {
+                                	        type: 'category',
+                                	        data: xAxisData,
+                                	        show:true
+                                	    },
+                                	    yAxis: {
+                                	        type: 'value'
+                                	    },
+                                	    series: [{
+                                	    	name: '失败次数',
+                                	        data: fail,
+                                	        type: 'bar'
+                                	    }]
+                                	};
+                                var myChart = echarts.init(document.getElementById('fail'));
+                                myChart.setTheme(curTheme)
+                                myChart.setOption(option);
+                            });
+                        });
+                    }
+                });
+        	    break; 
+        	}
             case 'apps':{
                 $httpWrapper.post({
                     url:"loadAppsType.htm",
@@ -290,6 +565,6 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
             }
         }
     }
-    $scope.switchTab('apps');
+    $scope.switchTab('tradingStatistic');
 
 });

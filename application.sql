@@ -57,8 +57,9 @@ CREATE TABLE `trading`(
 
 CREATE TABLE `statistics_day`(
 	`id` int(10) NOT NULL AUTO_INCREMENT,
-	`tx_code` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '交易编号',
-	`start_time` datetime(6) DEFAULT NULL,
+	`start_time` datetime(6) DEFAULT NULL COMMENT '开始时间',
+	`end_time` datetime(6) DEFAULT NULL COMMENT '结束时间',
+	`total_time` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '一段时间的交易量',
 	PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

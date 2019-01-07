@@ -30,10 +30,23 @@
        where tx_code = #{txCode} and now_time = #{nowTime};
     </select>
     <select id="selectTradingStatisticByPageByCondition" parameterType="TradingStatisticQuery" resultType="TradingStatisticPo">
-    	select tx_code as txCode,now_time as nowTime,total_num as totalNum, time_avg as timeAvg, time_max as timeMax,
-       	time_min as timeMin,success,fail
+    	select tx_code as txCode,SUM(total_num) as totalNum, AVG(time_avg) as timeAvg,SUM(success) as success,
+    	SUM(fail) as fail
        	from trading
-    	where 1=1 and now_time = #{nowTime}
+    	where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate}
+    	GROUP BY tx_code
+    	<if test="type == '01'" >
+    		order by totalNum DESC
+    	</if>
+    	<if test="type == '02'" >
+    	    order by timeAvg DESC
+    	</if>
+   	    <if test="type == '03'" >
+   	    	order by success DESC
+   	    </if>
+   	    <if test="type == '04'" >
+   	    	order by fail DESC
+   	    </if>
     </select>
 
 </mapper>

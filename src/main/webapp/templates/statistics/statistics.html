@@ -9,13 +9,21 @@
         </ul>
     </div>
 </div>
+
 <div class="row" ng-show="currentTab=='tradingStatistic'">
+	<div class="panel-heading">
+		<strong>请选择您需要查询TOP10的时间段:</strong>
+		<wui-date format="yyyy-mm-dd" placeholder="请选择或输入开始日期" id="startdate" btns="{'ok':'确定','now':'此刻'}" ng-model="startdate"></wui-date>
+		--
+		<wui-date format="yyyy-mm-dd" placeholder="请选择或输入结束日期" id="enddate" btns="{'ok':'确定','now':'此刻'}" ng-model="enddate"></wui-date>
+		<button type="button" class="btn"  ng-click="queryTrading()">查询</button>
+	</div>
      <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12 max-view-height" >
          <div class="row" >
              <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" id="total" style="height:300px">
                  
              </div>
-             <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" id="time" style="height:300px">
+             <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" id="time1" style="height:300px">
                  
              </div>
          </div>

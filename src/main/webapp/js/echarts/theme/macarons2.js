@@ -56,7 +56,7 @@ define({
     line: {
         itemStyle: {
             normal: {
-                // color: 各异,
+                 color: '#1E90FF',
                 label: {
                     show: false
                     // position: 默认自适应，水平布局为'top'，垂直布局为'right'，可选为
@@ -84,7 +84,7 @@ define({
         },
         //smooth : false,
         //symbol: null,         // 拐点图形类型
-        symbolSize: 2,          // 拐点图形大小
+        symbolSize: 0.5,          // 拐点图形大小
         //symbolRotate : null,  // 拐点图形旋转控制
         showAllSymbol: false    // 标志图形默认只有主轴显示（随主轴标签间隔隐藏策略）
     },

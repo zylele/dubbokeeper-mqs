@@ -73,7 +73,254 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
         $scope.currentTab=tabName;
         switch (tabName){
         	case 'tradingStatistic':{
+        		//每日交易量默认
+        		Date.prototype.Format = function(fmt) 
+        	    { 
+        	      var o = { 
+        	        "M+" : this.getMonth()+1,                 //月份 
+        	        "d+" : this.getDate(),                    //日 
+        	        "h+" : this.getHours(),                   //小时 
+        	        "m+" : this.getMinutes(),                 //分 
+        	        "s+" : this.getSeconds(),                 //秒 
+        	        "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+        	        "S"  : this.getMilliseconds()             //毫秒 
+        	      }; 
+        	      if(/(y+)/.test(fmt)) 
+        	        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+        	      for(var k in o) 
+        	        if(new RegExp("("+ k +")").test(fmt)) 
+        	      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
+        	      return fmt; 
+        	    }
+        		var x = new Date();
+    			if(!$scope.daydate) dayStratTime = Number(x.getTime()/1000 - 28800);
+    			if(!$scope.daydate) dayEndTime = Number(x.getTime()/1000 + 57600);
+    			$scope.daydate = new Date().Format("yyyy-MM-dd");
+    			$httpWrapper.post({
+    			url:"dayTrading/getDayTradingByPageByCondition",
+    			data:'{"dayTradingStartDate": '+dayStratTime+',"dayTradingEndDate": '+dayEndTime+' }',
+                success:function(data){
+                    require( [
+                              'echarts',
+                              'echarts/chart/line', // 使用柱状图就加载line模块，按需加载
+                              'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+                          ], function (echarts) {
+                              require(['echarts/theme/macarons2'], function(curTheme){
+                            	  var arrs = data.list;
+                                  var xAxisData=[];
+                                  
+                                  for(var a=0; a<arrs.length; a++){
+                                	  
+                                	  xAxisData.push([new Date(arrs[a].timestamp*1000),
+                                	                  arrs[a].totalTimeNum
+                                	                  ]);
+                                  }
+                            	  var option = {
+	                            			title: {
+	                              		        text: '每日交易量折线图',
+	                              		    },
+                            			    tooltip : {
+                            			        trigger: 'item',
+                            			        formatter : function (params) {
+                            			            var date = new Date(params.value[0]);
+                            			            data = date.getFullYear() + '-'
+                            			                   + (date.getMonth() + 1) + '-'
+                            			                   + date.getDate() + ' '
+                            			                   + date.getHours() + ':'
+                            			                   + date.getMinutes() + ':'
+                            			                   + date.getSeconds();
+                            			            return data + '<br/>'
+                            			                   + params.value[1] + '次交易'
+                            			        }
+                            			    },
+                            			    toolbox: {
+                            			        show : true,
+                            			        feature: {
+                                                    restore : {show: true},
+                                                    saveAsImage : {show: true}
+                                  		        }
+                            			    },
+                            			    dataZoom: {
+                            			        show: true,
+                            			        start : 0,
+                            			        end:100
+                            			    },
+                            			    legend : {
+                            			        data : ['每日交易量']
+                            			    },
+                            			    grid: {
+                            			            y2: 80
+                            			    },
+                            			    xAxis : [
+                            			        {
+                            			            type : 'time',
+                            			            splitNumber:10,
+                                    		        splitLine:{show: false},
+                                    		        splitArea : {show : false},
+                                    		        axisLine:{
+                                                        lineStyle:{color:'#708090'}
+                                                    }
+                            			        }
+                            			    ],
+                            			    yAxis : [
+                            			        {
+                            			            type : 'value',
+                                    		        splitLine:{show: false},
+                                    		        splitArea : {show : true},
+                                    		        axisLine:{
+                                                        lineStyle:{color:'#708090'}
+                                                    }
+                            			        }
+                            			    ],
+                            			    series : [
+                            			        {
+                            			            name: '每日交易量',
+                            			            type: 'line',
+                            			            showAllSymbol: true,
+                            			            data:xAxisData
+                            			        }
+                            			    ]
+                            			};
+                            			                    
+                            			              
+                            			                    
+
+                                  var myChart = echarts.init(document.getElementById('dayTrading'));
+                                  myChart.setTheme(curTheme)
+                                  myChart.setOption(option);
+                                  window.onresize = myChart.resize;
+                              });
+                          });
+                }
+            });
+        		//每日交易量查询
+        		$scope.queryDayTrading = function(){
+        			var day = new Date($scope.daydate);
+        			var dayStratTime = Number(day.getTime()/1000 - 28800);
+        			var dayEndTime = Number(day.getTime()/1000 + 57600);
+        			var x = new Date();
+        			if(!$scope.daydate) dayStratTime = Number(x.getTime()/1000 - 28800);
+        			if(!$scope.daydate) dayEndTime = Number(x.getTime()/1000 + 57600);
+        			$httpWrapper.post({
+        			url:"dayTrading/getDayTradingByPageByCondition",
+        			data:'{"dayTradingStartDate": '+dayStratTime+',"dayTradingEndDate": '+dayEndTime+' }',
+                    success:function(data){
+                        require( [
+                                  'echarts',
+                                  'echarts/chart/line', // 使用柱状图就加载line模块，按需加载
+                                  'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+                              ], function (echarts) {
+                                  require(['echarts/theme/macarons2'], function(curTheme){
+                                	  var arrs = data.list;
+                                      var xAxisData=[];
+                                      
+                                      for(var a=0; a<arrs.length; a++){
+                                    	  
+                                    	  xAxisData.push([new Date(arrs[a].timestamp*1000),
+                                    	                  arrs[a].totalTimeNum
+                                    	                  ]);
+                                      }
+                                	  var option = {
+    	                            			title: {
+    	                              		        text: '每日交易量折线图',
+    	                              		    },
+                                			    tooltip : {
+                                			        trigger: 'item',
+                                			        formatter : function (params) {
+                                			            var date = new Date(params.value[0]);
+                                			            data = date.getFullYear() + '-'
+                                			                   + (date.getMonth() + 1) + '-'
+                                			                   + date.getDate() + ' '
+                                			                   + date.getHours() + ':'
+                                			                   + date.getMinutes() + ':'
+                                			                   + date.getSeconds();
+                                			            return data + '<br/>'
+                                			                   + params.value[1] + '次交易'
+                                			        }
+                                			    },
+                                			    toolbox: {
+                                			        show : true,
+                                			        feature: {
+                                                        restore : {show: true},
+                                                        saveAsImage : {show: true}
+                                      		        }
+                                			    },
+                                			    dataZoom: {
+                                			        show: true,
+                                			        start : 0,
+                                			        end:100
+                                			    },
+                                			    legend : {
+                                			        data : ['每日交易量']
+                                			    },
+                                			    grid: {
+                            			            y2: 80
+                                			    },
+                                			    xAxis : [
+                                			        {
+                                			            type : 'time',
+                                			            splitNumber:10,
+                                        		        splitLine:{show: false},
+                                        		        splitArea : {show : false},
+                                        		        axisLine:{
+                                                            lineStyle:{color:'#708090'}
+                                                        }
+                                			        }
+                                			    ],
+                                			    yAxis : [
+                                			        {
+                                			            type : 'value',
+                                        		        splitLine:{show: false},
+                                        		        splitArea : {show : true},
+                                        		        axisLine:{
+                                                            lineStyle:{color:'#708090'}
+                                                        }
+                                			        }
+                                			    ],
+                                			    series : [
+                                			        {
+                                			            name: '每日交易量',
+                                			            type: 'line',
+                                			            showAllSymbol: true,
+                                			            data:xAxisData
+                                			        }
+                                			    ]
+                                			};
+                                			                    
+                                			              
+                                			                    
+
+                                      var myChart = echarts.init(document.getElementById('dayTrading'));
+                                      myChart.setTheme(curTheme)
+                                      myChart.setOption(option);
+                                      window.onresize = myChart.resize;
+                                  });
+                              });
+                    }
+                });
+        		}
         		$scope.queryTrading=function(){
+        			Date.prototype.Format = function(fmt) 
+        			{ //author: meizz 
+        			      var o = { 
+        			        "M+" : this.getMonth()+1,                 //月份 
+        			        "d+" : this.getDate(),                    //日 
+        			        "h+" : this.getHours(),                   //小时 
+        			        "m+" : this.getMinutes(),                 //分 
+        			        "s+" : this.getSeconds(),                 //秒 
+        			        "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+        			        "S"  : this.getMilliseconds()             //毫秒 
+        			      }; 
+        			      if(/(y+)/.test(fmt)) 
+        			        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+        			      for(var k in o) 
+        			        if(new RegExp("("+ k +")").test(fmt)) 
+        			      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
+        			      return fmt; 
+        			    } 
+        			
+        		    if(!$scope.startdate) $scope.startdate = new Date(new Date().getFullYear(), new Date().getMonth(), 1).Format("yyyy-MM-dd");
+        		    if(!$scope.enddate) $scope.enddate = new Date().Format("yyyy-MM-dd");
         		//交易量
         			$httpWrapper.post({
         			url:"tradingStatistic/getTradingStatisticByPageByCondition",
@@ -134,6 +381,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById("total"));
                                 myChart.setTheme(curTheme)
                                 myChart.setOption(option);
+                                window.onresize = myChart.resize;
                             });
                         });
                     }
@@ -171,7 +419,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                                 trigger: 'axis'
                                             },
                                             legend: {
-                                                data:['平均耗时']
+                                                data:['平均耗时(μs)']
                                             },
                                             toolbox: {
                                                 show : true,
@@ -190,7 +438,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     	        type: 'value'
                                     	    },
                                     	    series: [{
-                                    	    	name: '平均耗时',
+                                    	    	name: '平均耗时(μs)',
                                     	        data: timeAvg,
                                     	        type: 'bar'
                                     	    }]
@@ -198,6 +446,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     var myChart = echarts.init(document.getElementById("time1"));
                                     myChart.setTheme(curTheme)
                                     myChart.setOption(option);
+                                    window.onresize = myChart.resize;
                                 });
                             });
                         }
@@ -261,6 +510,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     var myChart = echarts.init(document.getElementById('success'));
                                     myChart.setTheme(curTheme)
                                     myChart.setOption(option);
+                                    window.onresize = myChart.resize;
                                 });
                             });
                         }
@@ -322,8 +572,9 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     	    }]
                                     	};
                                     var myChart = echarts.init(document.getElementById('fail'));
-                                    myChart.setTheme(curTheme)
+                                    myChart.setTheme(curTheme);
                                     myChart.setOption(option);
+                                    window.onresize = myChart.resize;
                                 });
                             });
                         }
@@ -345,6 +596,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById('statisticsAppsTypes'));
                                 myChart.setTheme(curTheme);
                                 myChart.setOption(option);
+                                window.onresize = myChart.resize;
                             });
                         });
                     }
@@ -362,6 +614,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById('statisticsServiceProtocol'));
                                 myChart.setTheme(curTheme);
                                 myChart.setOption(option);
+                                window.onresize = myChart.resize;
                             });
                         });
 
@@ -428,6 +681,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById('nodes'));
                                 myChart.setTheme(curTheme)
                                 myChart.setOption(option);
+                                window.onresize = myChart.resize;
                                 var ecConfig = require('echarts/config');
                                 myChart.on(ecConfig.EVENT.CLICK, function (params) {
                                     location.hash="#/admin/"+params.name+"/nodes";
@@ -504,6 +758,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById('serviceStatus'));
                                 myChart.setTheme(curTheme)
                                 myChart.setOption(option);
+                                window.onresize = myChart.resize;
                                 var ecConfig = require('echarts/config');
                                 myChart.on(ecConfig.EVENT.CLICK, function (params) {
                                     if(params.seriesIndex==0){

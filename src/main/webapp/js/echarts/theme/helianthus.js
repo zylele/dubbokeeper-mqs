@@ -145,7 +145,7 @@ var theme = {
     line: {
         smooth : true,
         symbol: 'emptyCircle',  // 拐点图形类型
-        symbolSize: 3           // 拐点图形大小
+        symbolSize: 1           // 拐点图形大小
     },
 
 

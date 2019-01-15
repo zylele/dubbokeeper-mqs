@@ -19,7 +19,9 @@ import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.common.utils.ConfigUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.dubboclub.dk.storage.DayTradingStorage;
 import com.dubboclub.dk.storage.TradingStatisticStorage;
+import com.dubboclub.dk.storage.model.DayTradingPo;
 import com.dubboclub.dk.storage.model.StatisticObject;
 import com.dubboclub.dk.storage.model.TradingStatisticPo;
 import com.dubboclub.dk.web.utils.ConstantsUtil;
@@ -30,6 +32,9 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 	@Autowired
 	@Qualifier("tradingStatisticStorage")
 	private TradingStatisticStorage tradingStatisticStorage;
+	@Autowired
+	@Qualifier("dayTradingStorage")
+	private DayTradingStorage dayTradingStorage;
 	private final static String BIZ_EXCEPTION_URL="/zipkin/api/v2/traces?lookback=10000";
 	long lastEndTime = 0;
 	private String zipkinUrl;
@@ -55,26 +60,43 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 		String data=null;
 		try {
 			data = restTemplate.getForObject(zipkinUrl + BIZ_EXCEPTION_URL + "&startTs=" + startT + "&endTs=" + endT  , String.class);
+			
 		} catch (Exception e) {
 			logger.warn(zipkinUrl + BIZ_EXCEPTION_URL + "&startTs=" + startT + "&endTs=" + endT);
 			return;
-		}	
+		}
+		
 		JSONArray jsonTrads = JSONArray.parseArray(data);
-		Map<String, StatisticObject> statisticMap = new HashMap<String, StatisticObject>();
+		if(jsonTrads == null || jsonTrads.size() == 0){
+			DayTradingPo dayTradingPo = new DayTradingPo();
+			dayTradingPo.setTotalTimeNum(0);
+			dayTradingPo.setStartTime(new SimpleDateFormat(ConstantsUtil.DATE_FORMATD).format(new Date()));
+			dayTradingPo.setTimestamp(((new Date()).getTime())/1000);
+			dayTradingStorage.addDayTrading(dayTradingPo);
+			
+		}
+		
+		Map<String, StatisticObject> statisticMap = new HashMap<String, StatisticObject>();  //交易量，平均耗时，成功或失败次数Map
+//		Map<String, DayStatisticObject> txCodeMap = new HashMap<String, DayStatisticObject>();  //每日峰值内层Map
+//		Map<String, Map<String, DayStatisticObject>> dayTradingMap = new HashMap<String, Map<String, DayStatisticObject>>();  ////每日峰值外层Map
+		
 		
 		for(Object jsonTrad : jsonTrads ){
 			String txCode = "";
 			long duration = 0;
 			boolean success = false;
 			String nowTime = "";
+			String startTime = "";
+			long timestamp = 0;
 			if(jsonTrad instanceof JSONArray){
 					for(Object text : (JSONArray)jsonTrad){
 						txCode = ((JSONObject) text).getJSONObject("tags").getString("txCode");
 						String kind = ((JSONObject)text).getString("kind");
 						String error = ((JSONObject) text).getJSONObject("tags").getString("error");
 						if(txCode != null || txCode !="" && text instanceof JSONObject ){
-							Long timestamp = ((JSONObject)text).getLong("timestamp");
+							timestamp = ((JSONObject)text).getLong("timestamp");
 							nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(timestamp/1000));
+							startTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date(timestamp/1000000));
 							if(kind.equalsIgnoreCase("SERVER") && error == null){
 								success = true;
 								
@@ -86,13 +108,19 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 						};
 					};
 					
+					
 				}
+			
+			
+			//交易量，平均耗时，成功或失败次数Map
 			StatisticObject	object = statisticMap.get(txCode);
 			if(object == null){
 				object = new StatisticObject();
 				object.setTotalNum(1);
 				object.setTotalTimePerTime(duration);
 				object.setNowTime(nowTime);
+				object.setTimestamp(timestamp/1000000);
+				object.setStartTime(startTime);
 				if(success)
 					object.setSuccess(1);
 				else
@@ -108,41 +136,114 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 					object.setFail(object.getFail()+1);
 				statisticMap.put(txCode, object);
 				
-			}
-			
+				}
+			object.setTotalDayTimePer(object.getTotalDayTimePer()+1);
+			statisticMap.put(txCode, object);
 			}
 		
+		
+		//遍历交易量，平均耗时，成功或失败次数Map
 		for(String key : statisticMap.keySet())
         {
+			
 			StatisticObject value = statisticMap.get(key);
 			TradingStatisticPo tradingStatisticPo = new TradingStatisticPo();
 			tradingStatisticPo.setTxCode(key);
 			tradingStatisticPo.setNowTime(value.getNowTime());
 			TradingStatisticPo dataPo = tradingStatisticStorage.selectTradingStatisticByTxCode(tradingStatisticPo);
-
+			
 			if(dataPo == null){
 				BeanUtils.copyProperties(value, tradingStatisticPo);
 				tradingStatisticPo.setTimeAvg(value.getTotalTimePerTime()/value.getTotalNum());
 				tradingStatisticPo.setTxCode(key);
 				tradingStatisticStorage.addTradingStatistic(tradingStatisticPo);
+				
 			}else{
 				tradingStatisticPo.setTotalNum(dataPo.getTotalNum()+value.getTotalNum());
 				tradingStatisticPo.setFail(dataPo.getFail()+value.getFail());
 				tradingStatisticPo.setSuccess(dataPo.getSuccess()+value.getSuccess());				
 				tradingStatisticPo.setTimeAvg(TimeAvg(key,value.getTotalNum(),value.getTotalTimePerTime(),dataPo.getTotalNum(),dataPo.getTimeAvg()));
 				tradingStatisticStorage.updateTradingStatisticByTxCode(tradingStatisticPo);
-				
 			}
+			
+			DayTradingPo dayTradingPo = new DayTradingPo();
+			dayTradingPo.setTotalTimeNum(value.getTotalDayTimePer());
+			dayTradingPo.setStartTime(value.getStartTime());
+			dayTradingPo.setTimestamp(value.getTimestamp());
+			dayTradingStorage.addDayTrading(dayTradingPo);
+			
+			
         }
+		
+		
+//		//每日峰值内层Map
+//		DayStatisticObject objectCode = txCodeMap.get(txCode);
+//		if(objectCode == null){
+//			objectCode = new DayStatisticObject();
+//			objectCode.setTotalTimeNum(1);
+//			txCodeMap.put(txCode, objectCode);
+//		}else{
+//			objectCode.setTotalTimeNum(objectCode.getTotalTimeNum()+1);
+//			txCodeMap.put(txCode, objectCode);
+//		}
+//		//每日峰值外层Map
+//		dayTradingMap.put(nowTime, txCodeMap);
+		
+		
+		
+//		//遍历每日峰值Map
+//		for(String keys : dayTradingMap.keySet())
+//		{
+//			Map<String, DayStatisticObject> values = dayTradingMap.get(keys);
+//			DayTradingPo dayTradingPo = new DayTradingPo();
+//			dayTradingPo.setStartTime(keys);
+//			
+//			for(String key : txCodeMap.keySet()){
+//				DayStatisticObject value = txCodeMap.get(key);
+//				dayTradingPo.setTxCode(key);
+//				dayTradingPo.setStartTime(value.getStartTime());
+//				DayTradingPo dataDayPo = dayTradingStorage.selectDayTradingByTxCode(dayTradingPo);
+//				if(dataDayPo == null){
+//					BeanUtils.copyProperties(value, dayTradingPo);
+//					dayTradingPo.setTxCode(key);
+//					dayTradingStorage.addDayTrading(dayTradingPo);
+//				}else{
+//					dayTradingPo.setTotalTimeNum(dataDayPo.getTotalTimeNum()+value.getTotalTimeNum());
+//					dayTradingStorage.updateDayTradingByTxCode(dayTradingPo);
+//				}
+//				
+//			}
+//			
+//		}
+		
+
 	
 
 	}
-	
+	//遍历每日峰值Map
+//	private static void entrySet(Map<String, Map<String, DayStatisticObject>> dayTradingMap) {
+//	      Set<Map.Entry<String, Map<String, DayStatisticObject>>> entry =  dayTradingMap.entrySet();
+//	      Iterator<Map.Entry<String, Map<String, DayStatisticObject>>>  it = entry.iterator();
+//	      while (it.hasNext()){
+//	          Map.Entry<String, Map<String, DayStatisticObject>> day = it.next();
+//	          String startTime = day.getKey();
+//	          Map<String, DayStatisticObject> map = day.getValue();
+//	          Set<Map.Entry<String ,DayStatisticObject >> entryTxCode = map.entrySet();
+//	          Iterator<Map.Entry<String,DayStatisticObject >> itTxCode = entryTxCode.iterator();
+//	          while (itTxCode.hasNext()){
+//	              Map.Entry<String ,DayStatisticObject > byTxCode = itTxCode.next();
+//	              String txCode = byTxCode.getKey();
+//	              DayStatisticObject totalTimeNum  = byTxCode.getValue();
+//	          }                                                                                                                                                     
+//	      }                                                                                                                                                         
+//	}                                                                                
+	//求平均耗时
 	private double TimeAvg(String txCode,int totalNum,long totalTimePerTime,int oldTotal,double oleTimeAvg){
 		double totalNum1 = oldTotal+totalNum;
 		double duration1 = oleTimeAvg*oldTotal+totalTimePerTime;
 		double avg = (duration1/totalNum1);
 		return avg;
 	}
+	
 }
 

@@ -9,13 +9,34 @@ public class StatisticObject {
 	private int success;
 	private int fail;
 	private String nowTime;
+	private String startTime;
 	private long totalTimePerTime;
+	private int totalDayTimePer;
+	private long timestamp;
 
+	public long getTimestamp() {
+		return timestamp;
+	}
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+	public int getTotalDayTimePer() {
+		return totalDayTimePer;
+	}
+	public void setTotalDayTimePer(int totalDayTimePer) {
+		this.totalDayTimePer = totalDayTimePer;
+	}
 	public String getNowTime() {
 		return nowTime;
 	}
 	public void setNowTime(String nowTime) {
 		this.nowTime = nowTime;
+	}
+	public String getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
 	}
 	public String getTxCode() {
 		return txCode;

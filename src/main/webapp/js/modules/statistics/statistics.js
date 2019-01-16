@@ -68,6 +68,7 @@ statistics._generatePieOption=function(data,title,name){
 statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb,$menu,$routeParams){
     $breadcrumb.pushCrumb("Home","首页","statisticsIndex");
     $menu.switchMenu(menu.HOME);
+
     $scope.currentTab='tradingStatistic';
     $scope.switchTab=function(tabName){
         $scope.currentTab=tabName;
@@ -181,10 +182,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                             			        }
                             			    ]
                             			};
-                            			                    
-                            			              
-                            			                    
-
+                            			    
                                   var myChart = echarts.init(document.getElementById('dayTrading'));
                                   myChart.setTheme(curTheme)
                                   myChart.setOption(option);
@@ -293,7 +291,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                       var myChart = echarts.init(document.getElementById('dayTrading'));
                                       myChart.setTheme(curTheme)
                                       myChart.setOption(option);
-                                      window.onresize = myChart.resize;
+                                      
                                   });
                               });
                     }
@@ -381,7 +379,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById("total"));
                                 myChart.setTheme(curTheme)
                                 myChart.setOption(option);
-                                window.onresize = myChart.resize;
+                                
                             });
                         });
                     }
@@ -446,7 +444,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     var myChart = echarts.init(document.getElementById("time1"));
                                     myChart.setTheme(curTheme)
                                     myChart.setOption(option);
-                                    window.onresize = myChart.resize;
+                                    
                                 });
                             });
                         }
@@ -510,7 +508,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     var myChart = echarts.init(document.getElementById('success'));
                                     myChart.setTheme(curTheme)
                                     myChart.setOption(option);
-                                    window.onresize = myChart.resize;
+                                    
                                 });
                             });
                         }
@@ -574,12 +572,16 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     var myChart = echarts.init(document.getElementById('fail'));
                                     myChart.setTheme(curTheme);
                                     myChart.setOption(option);
-                                    window.onresize = myChart.resize;
+                                   
                                 });
                             });
                         }
                     });
+            		
         		}
+        		
+	        	    
+	        	
         	    break; 
         	}
             case 'apps':{
@@ -596,7 +598,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById('statisticsAppsTypes'));
                                 myChart.setTheme(curTheme);
                                 myChart.setOption(option);
-                                window.onresize = myChart.resize;
+                                
                             });
                         });
                     }
@@ -614,7 +616,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById('statisticsServiceProtocol'));
                                 myChart.setTheme(curTheme);
                                 myChart.setOption(option);
-                                window.onresize = myChart.resize;
+                                
                             });
                         });
 
@@ -681,7 +683,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById('nodes'));
                                 myChart.setTheme(curTheme)
                                 myChart.setOption(option);
-                                window.onresize = myChart.resize;
+                                
                                 var ecConfig = require('echarts/config');
                                 myChart.on(ecConfig.EVENT.CLICK, function (params) {
                                     location.hash="#/admin/"+params.name+"/nodes";
@@ -758,7 +760,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById('serviceStatus'));
                                 myChart.setTheme(curTheme)
                                 myChart.setOption(option);
-                                window.onresize = myChart.resize;
+                                
                                 var ecConfig = require('echarts/config');
                                 myChart.on(ecConfig.EVENT.CLICK, function (params) {
                                     if(params.seriesIndex==0){

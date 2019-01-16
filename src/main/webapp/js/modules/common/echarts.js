@@ -73,6 +73,7 @@ lineChart.directive('pipChart',function(){
                         $scope.myChart = echarts.init(element.get(0));
                         $scope.myChart.setTheme(curTheme);
                         $scope.myChart.setOption(option);
+                        
                     })
                 });
             });
@@ -184,6 +185,7 @@ lineChart.directive('lineChart', function() {
                         $scope.myChart = echarts.init(element.get(0));
                         $scope.myChart.setTheme(curTheme);
                         $scope.myChart.setOption(option);
+                        
                     });
                 });
             });

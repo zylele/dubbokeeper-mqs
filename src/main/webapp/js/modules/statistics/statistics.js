@@ -291,7 +291,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                       var myChart = echarts.init(document.getElementById('dayTrading'));
                                       myChart.setTheme(curTheme)
                                       myChart.setOption(option);
-                                      
+                                      window.onresize = myChart.resize;
                                   });
                               });
                     }
@@ -376,10 +376,9 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 	        type: 'bar'
                                 	    }]
                                 	};
-                                var myChart = echarts.init(document.getElementById("total"));
-                                myChart.setTheme(curTheme)
-                                myChart.setOption(option);
-                                
+                                myChart3 = echarts.init(document.getElementById("total"));
+                                myChart3.setTheme(curTheme)
+                                myChart3.setOption(option);
                             });
                         });
                     }
@@ -441,10 +440,9 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     	        type: 'bar'
                                     	    }]
                                     	};
-                                    var myChart = echarts.init(document.getElementById("time1"));
-                                    myChart.setTheme(curTheme)
-                                    myChart.setOption(option);
-                                    
+                                    myChart4 = echarts.init(document.getElementById("time1"));
+                                    myChart4.setTheme(curTheme)
+                                    myChart4.setOption(option);
                                 });
                             });
                         }
@@ -505,9 +503,9 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     	        type: 'bar'
                                     	    }]
                                     	};
-                                    var myChart = echarts.init(document.getElementById('success'));
-                                    myChart.setTheme(curTheme)
-                                    myChart.setOption(option);
+                                    myChart5 = echarts.init(document.getElementById('success'));
+                                    myChart5.setTheme(curTheme)
+                                    myChart5.setOption(option);
                                     
                                 });
                             });
@@ -569,17 +567,22 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     	        type: 'bar'
                                     	    }]
                                     	};
-                                    var myChart = echarts.init(document.getElementById('fail'));
-                                    myChart.setTheme(curTheme);
-                                    myChart.setOption(option);
+                                    myChart6 = echarts.init(document.getElementById('fail'));
+                                    myChart6.setTheme(curTheme);
+                                    myChart6.setOption(option);
                                    
                                 });
                             });
                         }
                     });
-            		
+            		window.onresize =function(){
+                    	myChart3.resize();
+                    	myChart4.resize();
+                    	myChart5.resize();
+                    	myChart6.resize();
+                    } 
         		}
-        		
+        		 
 	        	    
 	        	
         	    break; 
@@ -595,9 +598,9 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                         ], function (echarts) {
                             require(['echarts/theme/shine'], function(curTheme){
                                 var option =statistics._generatePieOption({'P':data[0],'C':data[1],'P.AND.C':data[2]},'应用类型分布图','应用类型');
-                                var myChart = echarts.init(document.getElementById('statisticsAppsTypes'));
-                                myChart.setTheme(curTheme);
-                                myChart.setOption(option);
+                                myChart1 = echarts.init(document.getElementById('statisticsAppsTypes'));
+                                myChart1.setTheme(curTheme);
+                                myChart1.setOption(option);
                                 
                             });
                         });
@@ -613,15 +616,19 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                         ], function (echarts) {
                             require(['echarts/theme/blue'], function(curTheme){
                                 var option =statistics._generatePieOption(data,'暴露协议分布图','暴露协议');
-                                var myChart = echarts.init(document.getElementById('statisticsServiceProtocol'));
-                                myChart.setTheme(curTheme);
-                                myChart.setOption(option);
+                                myChart2 = echarts.init(document.getElementById('statisticsServiceProtocol'));
+                                myChart2.setTheme(curTheme);
+                                myChart2.setOption(option);
                                 
                             });
                         });
 
                     }
                 });
+                window.onresize =function(){
+                	myChart1.resize();
+                	myChart2.resize();
+                } 
                 break;
             }
             case 'nodes':{
@@ -683,7 +690,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById('nodes'));
                                 myChart.setTheme(curTheme)
                                 myChart.setOption(option);
-                                
+                                window.onresize = myChart.resize;
                                 var ecConfig = require('echarts/config');
                                 myChart.on(ecConfig.EVENT.CLICK, function (params) {
                                     location.hash="#/admin/"+params.name+"/nodes";
@@ -760,7 +767,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 var myChart = echarts.init(document.getElementById('serviceStatus'));
                                 myChart.setTheme(curTheme)
                                 myChart.setOption(option);
-                                
+                                window.onresize = myChart.resize;
                                 var ecConfig = require('echarts/config');
                                 myChart.on(ecConfig.EVENT.CLICK, function (params) {
                                     if(params.seriesIndex==0){

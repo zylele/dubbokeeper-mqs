@@ -132,7 +132,8 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                             			                   + date.getSeconds();
                             			            return data + '<br/>'
                             			                   + params.value[1] + '次交易'
-                            			        }
+                            			        },
+                            			        enterable: true
                             			    },
                             			    toolbox: {
                             			        show : true,
@@ -143,8 +144,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                             			    },
                             			    dataZoom: {
                             			        show: true,
-                            			        start : 0,
-                            			        end:100
+                            			        start : 0
                             			    },
                             			    legend : {
                             			        data : ['每日交易量']
@@ -152,6 +152,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                             			    grid: {
                             			            y2: 80
                             			    },
+                            			    
                             			    xAxis : [
                             			        {
                             			            type : 'time',
@@ -186,11 +187,14 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                   var myChart = echarts.init(document.getElementById('dayTrading'));
                                   myChart.setTheme(curTheme)
                                   myChart.setOption(option);
-                                  window.onresize = myChart.resize;
+                                  $(window).resize(function(){
+                                    	 myChart.resize();
+                                    	 });
                               });
                           });
                 }
             });
+    			
         		//每日交易量查询
         		$scope.queryDayTrading = function(){
         			var day = new Date($scope.daydate);
@@ -234,7 +238,8 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 			                   + date.getSeconds();
                                 			            return data + '<br/>'
                                 			                   + params.value[1] + '次交易'
-                                			        }
+                                			        },
+                                			        enterable: true
                                 			    },
                                 			    toolbox: {
                                 			        show : true,
@@ -284,19 +289,17 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 			        }
                                 			    ]
                                 			};
-                                			                    
-                                			              
-                                			                    
-
                                       var myChart = echarts.init(document.getElementById('dayTrading'));
                                       myChart.setTheme(curTheme)
                                       myChart.setOption(option);
-                                      window.onresize = myChart.resize;
+                                      
                                   });
                               });
                     }
                 });
+        			
         		}
+        		
         		$scope.queryTrading=function(){
         			Date.prototype.Format = function(fmt) 
         			{ //author: meizz 
@@ -575,16 +578,19 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                             });
                         }
                     });
-            		window.onresize =function(){
-                    	myChart3.resize();
+            		$(window).resize(function(){
+            			myChart3.resize();	
                     	myChart4.resize();
                     	myChart5.resize();
                     	myChart6.resize();
-                    } 
-        		}
-        		 
-	        	    
-	        	
+            		});
+            		window.onresize =function(){
+                    	myChart3.resize();	
+                    	myChart4.resize();
+                    	myChart5.resize();
+                    	myChart6.resize();
+            		}
+        		}      
         	    break; 
         	}
             case 'apps':{

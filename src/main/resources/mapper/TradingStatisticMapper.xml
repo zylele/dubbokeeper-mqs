@@ -48,5 +48,9 @@
    	    	order by fail DESC
    	    </if>
     </select>
+    <delete id="deleteTradingStatisticByPageByCondition" parameterType="TradingStatisticPo">
+    	delete from trading
+    	where now_time &lt; #{nowTime}
+    </delete>
 
 </mapper>

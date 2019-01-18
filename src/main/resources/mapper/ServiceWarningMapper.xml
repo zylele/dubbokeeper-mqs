@@ -56,7 +56,7 @@
     </select>
     <select id="selectServiceWarningByPageByCondition" parameterType="ServiceWarningQuery" resultType="ServiceWarningPo">
     	select host,service_interface as serviceInterface,start_time as startTime,status,content,application,category
-    	from service_Warning 
+    	from service_warning 
     	where 1=1 and start_time between #{serviceStartDate} and #{serviceEndDate}
     </select>
     

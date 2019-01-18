@@ -45,6 +45,14 @@ public class MysqlDayTradingStorage implements DayTradingStorage,InitializingBea
 		return dayTradings;
 	}
 
+	@Override
+	public Integer deleteDayTradingByPageByCondition(DayTradingPo dayTradingPo) {
+		// TODO Auto-generated method stub
+		return dayTradingMapper.deleteDayTradingByPageByCondition(dayTradingPo);
+	}
+
+
+
 
 
 }

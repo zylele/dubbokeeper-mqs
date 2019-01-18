@@ -49,6 +49,12 @@ public class MysqlTradingStatisticStorage implements TradingStatisticStorage,Ini
 		return tradingStatistics;
 	}
 
+	@Override
+	public Integer deleteTradingStatisticByPageByCondition(TradingStatisticPo tradingStatisticPo) {
+		// TODO Auto-generated method stub
+		return tradingStatisticMapper.deleteTradingStatisticByPageByCondition(tradingStatisticPo);
+	}
+
 	
     
 }

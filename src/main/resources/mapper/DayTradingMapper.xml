@@ -5,6 +5,7 @@
     <insert id="addDayTrading" parameterType="DayTradingPo">
     	insert into statistics_day (start_time,timestamp,total_time_num)
     	values (#{startTime},#{timestamp},#{totalTimeNum})
+    	
     </insert>
     <update id="updateDayTradingByTxCode" parameterType="DayTradingPo">
     	update statistics_day set
@@ -13,14 +14,15 @@
     	where 1=1;
     </update>
     <select id="selectDayTradingByTxCode" resultType="DayTradingPo"  parameterType="DayTradingPo">
-       select start_time as startTime,total_time_num as totalTimeNum
+       select start_time as startTime,total_time_num as totalTimeNum,timestamp
        from statistics_day 
        where 1=1 start_time = #{startTime} 
     </select>
     <select id="selectDayTradingByPageByCondition" parameterType="DayTradingQuery" resultType="DayTradingPo">
     	select start_time as startTime,total_time_num as totalTimeNum,timestamp
     	from statistics_day 
-    	where 1=1 and timestamp &gt; #{dayTradingStartDate} and timestamp &lt; #{dayTradingEndDate}
+    	where timestamp &gt; #{dayTradingStartDate} and timestamp &lt; #{dayTradingEndDate}
+    	order by timestamp ASC
     </select>
     <delete id="deleteDayTradingByPageByCondition" parameterType="DayTradingPo">
     	delete from statistics_day

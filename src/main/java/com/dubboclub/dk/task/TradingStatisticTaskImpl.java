@@ -70,7 +70,6 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 		if(jsonTrads == null || jsonTrads.size() == 0){
 			DayTradingPo dayTradingPo = new DayTradingPo();
 			dayTradingPo.setTotalTimeNum(0);
-//			(int)(Math.random()*100)   随机数
 			dayTradingPo.setStartTime(new SimpleDateFormat(ConstantsUtil.DATE_FORMATD).format(new Date()));
 			dayTradingPo.setTimestamp(((new Date()).getTime())/1000);
 			dayTradingStorage.addDayTrading(dayTradingPo);
@@ -97,7 +96,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 						if(txCode != null || txCode !="" && text instanceof JSONObject ){
 							timestamp = ((JSONObject)text).getLong("timestamp");
 							nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(timestamp/1000));
-							startTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date(timestamp/1000000));
+							startTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date(timestamp/1000));
 							if(kind.equalsIgnoreCase("SERVER") && error == null){
 								success = true;
 								

@@ -89,7 +89,7 @@ angular.module('wui.date',[]).directive('wuiDate', function() {
 		function GMTDateInit(date) {
 			date = dateFormat(date);
 			if(date) {
-				if(!SPECIAL_DATE_RULES.includes(date)) {
+				if(SPECIAL_DATE_RULES.indexOf(date)<0) {
 					GMTDate = StrDateToGMT(date);
 				} else {
 					GMTDate = new Date();
@@ -131,7 +131,7 @@ angular.module('wui.date',[]).directive('wuiDate', function() {
 			if(!date) {
 				return null;
 			}
-			if(SPECIAL_DATE_RULES.includes(date)) { // 特殊字符串
+			if(SPECIAL_DATE_RULES.indexOf(date)>=0) { // 特殊字符串
 				return date;
 			}
 			date = date.toString().replace(/[\D]/g, ""); // 清除时间除数字外字符
@@ -168,7 +168,7 @@ angular.module('wui.date',[]).directive('wuiDate', function() {
 		// 标准时间格式化为字符串时间
 		function GMTToStrDate(date) {
 			date = new Date(date);
-			if(date && toString.call(date) == '[object Date]') {
+			if(date && Object.prototype.toString.call(date) == '[object Date]') {
 				return date.getFullYear() + '/' + getDoubleDigit(date.getMonth() + 1) + '/' + getDoubleDigit(date.getDate()) + ' ' + getDoubleDigit(date.getHours()) + ':' + getDoubleDigit(date.getMinutes()) + ':' + getDoubleDigit(date.getSeconds());
 			}
 			return null;

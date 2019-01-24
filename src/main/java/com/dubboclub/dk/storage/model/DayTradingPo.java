@@ -5,6 +5,14 @@ public class DayTradingPo {
 	private String startTime;
 	private int totalTimeNum;
 	private long timestamp;
+	private String txCode;
+	
+	public String getTxCode() {
+		return txCode;
+	}
+	public void setTxCode(String txCode) {
+		this.txCode = txCode;
+	}
 	public long getTimestamp() {
 		return timestamp;
 	}

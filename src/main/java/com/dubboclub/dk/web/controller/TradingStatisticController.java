@@ -50,9 +50,12 @@ public class TradingStatisticController {
         List listDto = new ArrayList<TradingStatisticDto>();
         responseList.setList(listDto);
         for(TradingStatisticPo po: listPo) {
-        	TradingStatisticDto tradingStatisticDto = new TradingStatisticDto();
-            BeanUtils.copyProperties(po, tradingStatisticDto);
-            listDto.add(tradingStatisticDto);
+        	if(po.getTxCode() != null){
+		    	TradingStatisticDto tradingStatisticDto = new TradingStatisticDto();
+		        BeanUtils.copyProperties(po, tradingStatisticDto);
+		        listDto.add(tradingStatisticDto);
+        	}
+        	
         }
         return responseList;
     }

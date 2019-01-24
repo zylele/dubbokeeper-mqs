@@ -35,7 +35,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 	@Autowired
 	@Qualifier("dayTradingStorage")
 	private DayTradingStorage dayTradingStorage;
-	private final static String BIZ_EXCEPTION_URL="/zipkin/api/v2/traces?lookback=10000";
+	private final static String BIZ_EXCEPTION_URL="/zipkin/api/v2/traces?";
 	long lastEndTime = 0;
 	private String zipkinUrl;
 	@PostConstruct
@@ -50,7 +50,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 		if(lastEndTime == 0){
 			lastEndTime = new Date().getTime() -10000;
 			startT = lastEndTime - 10000;
-			endT = lastEndTime;
+			endT = lastEndTime ;
 		} else {
 			startT = lastEndTime + 1;
 			endT = lastEndTime + 10000;
@@ -59,7 +59,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 		RestTemplate restTemplate = new RestTemplate();         
 		String data=null;
 		try {
-			data = restTemplate.getForObject(zipkinUrl + BIZ_EXCEPTION_URL + "&startTs=" + startT + "&endTs=" + endT  , String.class);
+			data = restTemplate.getForObject(zipkinUrl + BIZ_EXCEPTION_URL + "&endTs=" + endT + "&lookback=10000"  , String.class);
 			
 		} catch (Exception e) {
 			logger.warn(zipkinUrl + BIZ_EXCEPTION_URL + "&startTs=" + startT + "&endTs=" + endT);
@@ -69,13 +69,12 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 		JSONArray jsonTrads = JSONArray.parseArray(data);
 		if(jsonTrads == null || jsonTrads.size() == 0){
 			DayTradingPo dayTradingPo = new DayTradingPo();
+			dayTradingPo.setTxCode("Reserved");
 			dayTradingPo.setTotalTimeNum(0);
 			dayTradingPo.setStartTime(new SimpleDateFormat(ConstantsUtil.DATE_FORMATD).format(new Date()));
 			dayTradingPo.setTimestamp(((new Date()).getTime())/1000);
 			dayTradingStorage.addDayTrading(dayTradingPo);
-			
 		}
-		
 		Map<String, StatisticObject> statisticMap = new HashMap<String, StatisticObject>();  //交易量，平均耗时，成功或失败次数Map
 //		Map<String, DayStatisticObject> txCodeMap = new HashMap<String, DayStatisticObject>();  //每日峰值内层Map
 //		Map<String, Map<String, DayStatisticObject>> dayTradingMap = new HashMap<String, Map<String, DayStatisticObject>>();  ////每日峰值外层Map
@@ -87,19 +86,19 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 			boolean success = false;
 			String nowTime = "";
 			String startTime = "";
-			long timestamp = 0;
+			long timestamp1 = 0;
 			if(jsonTrad instanceof JSONArray){
 					for(Object text : (JSONArray)jsonTrad){
 						txCode = ((JSONObject) text).getJSONObject("tags").getString("txCode");
 						String kind = ((JSONObject)text).getString("kind");
 						String error = ((JSONObject) text).getJSONObject("tags").getString("error");
 						if(txCode != null || txCode !="" && text instanceof JSONObject ){
-							timestamp = ((JSONObject)text).getLong("timestamp");
+							long timestamp = ((JSONObject)text).getLong("timestamp");
+							timestamp1 = Integer.parseInt(timestamp/10000000+"0");
 							nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(timestamp/1000));
-							startTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date(timestamp/1000));
+							startTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date().getTime());
 							if(kind.equalsIgnoreCase("SERVER") && error == null){
 								success = true;
-								
 							}else if(kind.equalsIgnoreCase("CLIENT") ){
 								duration = ((JSONObject)text).getLong("duration");
 	
@@ -119,7 +118,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 				object.setTotalNum(1);
 				object.setTotalTimePerTime(duration);
 				object.setNowTime(nowTime);
-				object.setTimestamp(timestamp/1000000);
+				object.setTimestamp(timestamp1);
 				object.setStartTime(startTime);
 				if(success)
 					object.setSuccess(1);
@@ -152,6 +151,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 			tradingStatisticPo.setNowTime(value.getNowTime());
 			TradingStatisticPo dataPo = tradingStatisticStorage.selectTradingStatisticByTxCode(tradingStatisticPo);
 			
+			
 			if(dataPo == null){
 				BeanUtils.copyProperties(value, tradingStatisticPo);
 				tradingStatisticPo.setTimeAvg(value.getTotalTimePerTime()/value.getTotalNum());
@@ -165,15 +165,19 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 				tradingStatisticPo.setTimeAvg(TimeAvg(key,value.getTotalNum(),value.getTotalTimePerTime(),dataPo.getTotalNum(),dataPo.getTimeAvg()));
 				tradingStatisticStorage.updateTradingStatisticByTxCode(tradingStatisticPo);
 			}
-			
+			//每日峰值
 			DayTradingPo dayTradingPo = new DayTradingPo();
+			dayTradingPo.setTxCode(key);
 			dayTradingPo.setTotalTimeNum(value.getTotalDayTimePer());
 			dayTradingPo.setStartTime(value.getStartTime());
 			dayTradingPo.setTimestamp(value.getTimestamp());
 			dayTradingStorage.addDayTrading(dayTradingPo);
 			
-			
+		
         }
+		
+		
+		
 		
 		
 //		//每日峰值内层Map

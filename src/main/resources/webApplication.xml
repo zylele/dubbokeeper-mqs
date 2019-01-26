@@ -58,4 +58,13 @@
     <mvc:resources mapping="/img/**" location="/img/"/>
     <mvc:resources mapping="/js/**" location="/js/"/>
     <mvc:resources mapping="/templates/**" location="/templates/"/>
+    
+    <!-- uiap单点登录拦截器 -->
+<!--    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean class="com.dubboclub.dk.uiap.UiapAuthnProcessor" />
+        </mvc:interceptor>
+    </mvc:interceptors>  -->
+
 </beans>

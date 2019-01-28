@@ -1,6 +1,7 @@
 package com.dubboclub.dk.alarm.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import com.dubboclub.dk.notification.ApplicationEmail;
 import com.dubboclub.dk.notification.ApplicationMailer;
 import com.dubboclub.dk.notification.WarningStatusHolder;
 import com.dubboclub.dk.remote.MsgSystemService;
+import com.dubboclub.dk.remote.esb.dto.SendEmailReq;
 import com.dubboclub.dk.remote.esb.dto.SingleEmailReq;
 import com.dubboclub.dk.storage.NotificationStorage;
 import com.dubboclub.dk.storage.ServiceWarningStorage;
@@ -41,6 +43,7 @@ public class AlarmServiceImpl implements AlarmService {
 	private WarningStatusHolder warningStatusHolder;
 	private static long interval = 300000;//一定时间间隔内不再发送告警
 	private static Map<String, Date> serviceMap = new HashMap<String, Date>();
+	private static List<String> mails = new ArrayList<String>(); 
 
 	@Override
 	public void alarmHandle(URL url,String application) {
@@ -56,11 +59,19 @@ public class AlarmServiceImpl implements AlarmService {
 			serviceWarning.setApplication(application);
 			serviceWarning.setCategory(Constants.PROVIDERS_CATEGORY);
 			serviceWarningStorage.insertServiceWarning(serviceWarning);
+			String warning = serviceWarning.getStartTime() + ": "+application+" 服务异常，请马上处理！";
+			SendEmailReq sendEmailReq = new SendEmailReq();
+			sendEmailReq.setSceneCode("M001");
+			sendEmailReq.setBusType("OutOpenAcc");
+			sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
+			mails.add("865621683@qq.com");
+			sendEmailReq.setMailTo(mails);
+			sendEmailReq.setAttachments(null);
+			sendEmailReq.setMsg(warning);
 			if (isAllowedSend(application)) {
-				String msg = serviceWarning.getStartTime() + ": "+application+" 服务异常，请马上处理！";
-				sendWarningMailAsyc(msg,application);
+				sendWarningMailAsyc(sendEmailReq);
 				warningStatusHolder.setServiceStatus(true);
-				logger.debug(msg);
+				logger.debug(warning);
 			}
 		} else if (Constants.CONSUMERS_CATEGORY.equals(url.getParameter(Constants.CATEGORY_KEY))) {
 			ServiceWarningPo serviceWarning = new ServiceWarningPo();
@@ -72,20 +83,29 @@ public class AlarmServiceImpl implements AlarmService {
 			serviceWarning.setApplication(application);
 			serviceWarning.setCategory(Constants.CONSUMERS_CATEGORY);
 			serviceWarningStorage.insertServiceWarning(serviceWarning);
+			String warning = serviceWarning.getStartTime() + ": "+application+" 服务异常，请马上处理！";
+			SendEmailReq sendEmailReq = new SendEmailReq();
+			sendEmailReq.setSceneCode("M001");
+			sendEmailReq.setBusType("OutOpenAcc");
+			sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
+			mails.add("865621683@qq.com");
+			sendEmailReq.setMailTo(mails);
+			sendEmailReq.setAttachments(null);
+			sendEmailReq.setMsg(warning);
 			if (isAllowedSend(application)) {
-				String msg = serviceWarning.getStartTime() + ": "+application+" 服务异常，请马上处理！";
-				sendWarningMailAsyc(msg,application);
+				sendWarningMailAsyc(sendEmailReq);
 				warningStatusHolder.setServiceStatus(true);
-				logger.debug(msg);
+				logger.debug(warning);
 			}
 		}
+		mails.clear();
 	}
 
-	private void sendWarningMailAsyc(String error,String serviceName) {
+	private void sendWarningMailAsyc(SendEmailReq errormsg) {
 		//		ApplicationEmail email = new ApplicationEmail();
-		NotificationPo po = new NotificationPo();
-		po.setType("01");// 邮件
-		List<NotificationPo> notificationPoList = notificationStorage.selectNotificationByConditions(po);
+		//		NotificationPo po = new NotificationPo();
+		//		po.setType("01");// 邮件
+		//		List<NotificationPo> notificationPoList = notificationStorage.selectNotificationByConditions(po);
 		//		email.setSubject("服务异常_"+serviceName);
 		//		String addresses = "";
 		//		for (NotificationPo notificationPo : notificationPoList) {
@@ -96,7 +116,7 @@ public class AlarmServiceImpl implements AlarmService {
 		//		mailer.sendMailByAsynchronousMode(email);
 		SingleEmailReq singleEmailReq = new SingleEmailReq();
 		singleEmailReq.setSceneCode("M001");
-		singleEmailReq.setContentData(error);
+		singleEmailReq.setContentData(errormsg.getContent());
 		singleEmailReq.setServiceId("120020013");
 		singleEmailReq.setSceneId("01");// 场景码
 		// singleEmailReq.setTranMode("ONLINE");//交易模式

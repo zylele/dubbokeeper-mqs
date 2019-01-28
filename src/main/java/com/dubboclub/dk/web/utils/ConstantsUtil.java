@@ -6,5 +6,5 @@ public interface ConstantsUtil {
 	String DATE_FORMATE = "yyyy-MM-dd";
 	String DATE_FORMATA = "yyyyMMdd";
 	String DATE_FORMATB = "HHmmss";
-	
+	String MAIL_SUBJECT = "北京中关村银行电子回单";
 }

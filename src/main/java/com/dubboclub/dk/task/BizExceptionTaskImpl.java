@@ -1,6 +1,7 @@
 package com.dubboclub.dk.task;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,16 +18,14 @@ import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.common.utils.ConfigUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.dubboclub.dk.notification.ApplicationEmail;
-import com.dubboclub.dk.notification.ApplicationMailer;
 import com.dubboclub.dk.notification.WarningStatusHolder;
 import com.dubboclub.dk.remote.MsgSystemService;
+import com.dubboclub.dk.remote.esb.dto.SendEmailReq;
 import com.dubboclub.dk.remote.esb.dto.SingleEmailReq;
 import com.dubboclub.dk.storage.BizWarningStorage;
 import com.dubboclub.dk.storage.NotificationStorage;
 import com.dubboclub.dk.storage.model.BizWarningPo;
 import com.dubboclub.dk.storage.model.CurrentPage;
-import com.dubboclub.dk.storage.model.NotificationPo;
 import com.dubboclub.dk.web.utils.ConstantsUtil;
 
 @Component
@@ -46,6 +45,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 	private WarningStatusHolder warningStatusHolder;
     private final static String BIZ_EXCEPTION_URL="/zipkin/api/v2/traces?annotationQuery=error&limit=100&lookback=6000000";
 	private String zipkinUrl;
+	private static List<String> mails = new ArrayList<String>(); 
     
     @PostConstruct
     public void init() {
@@ -87,19 +87,30 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 							bizWarningPo.setError(error);
 							bizWarningPo.setTxCode(txCode);
 							bizWarningStorage.addBizWarning(bizWarningPo);
+							
+							SendEmailReq sendEmailReq = new SendEmailReq();
+							sendEmailReq.setSceneCode("M001");
+							sendEmailReq.setBusType("OutOpenAcc");
+							sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
+							mails.add("865621683@qq.com");
+							sendEmailReq.setMailTo(mails);
+							sendEmailReq.setAttachments(null);
+							sendEmailReq.setMsg("新的业务异常，traceId: "+traceId+",error: "+error);
+							
 							logger.debug("新的业务异常，traceId: "+traceId+",error: "+error);
-							sendWarningMailAsyc("time="+bizWarningPo.getTraceDt()+","+error, txCode);
+							sendWarningMailAsyc(sendEmailReq, txCode);
 							warningStatusHolder.setBizStatus(true);
 						}
 						break;
 					}
+					mails.clear();
 				}
 			}
 		}
 
 	}
 	
-	private void sendWarningMailAsyc(String error, String txCode) {
+	private void sendWarningMailAsyc(SendEmailReq error, String txCode) {
 		//		ApplicationEmail email = new ApplicationEmail();
 		//		NotificationPo po = new NotificationPo();
 		//		po.setType("01");//邮件
@@ -114,7 +125,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 		//		mailer.sendMailByAsynchronousMode(email);
 		SingleEmailReq singleEmailReq = new SingleEmailReq();
 		singleEmailReq.setSceneCode("M001");
-		singleEmailReq.setContentData(error);
+		singleEmailReq.setContentData(error.getContent());
 		singleEmailReq.setServiceId("120020013");
 		singleEmailReq.setSceneId("01");// 场景码
 		// singleEmailReq.setTranMode("ONLINE");//交易模式

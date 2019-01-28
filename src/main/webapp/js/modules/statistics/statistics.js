@@ -187,9 +187,10 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                   var myChart = echarts.init(document.getElementById('dayTrading'));
                                   myChart.setTheme(curTheme)
                                   myChart.setOption(option);
-                                  $(window).resize(function(){
-                                    	 myChart.resize();
-                                    	 });
+                                  window.onresize = myChart.resize;
+//                                  $(window).resize(function(){
+//                                    	 myChart.resize();
+//                                    	 });
                               });
                           });
                 }
@@ -292,9 +293,10 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                       var myChart = echarts.init(document.getElementById('dayTrading'));
                                       myChart.setTheme(curTheme)
                                       myChart.setOption(option);
-                                      $(window).resize(function(){
-                                     	 myChart.resize();
-                                     	 });
+                                      window.onresize = myChart.resize;
+//                                      $(window).resize(function(){
+//                                     	 myChart.resize();
+//                                     	 });
                                   });
                               });
                     }

@@ -437,11 +437,6 @@ $scope.refresh=function (){
            	var myChart = document.getElementById('SetPhone');
                break;
            }
-           case 'setqq':{
-           	
-           	var myChart = document.getElementById('Setqq');
-               break;
-           }
            
        }
    };

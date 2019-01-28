@@ -12,7 +12,7 @@
     http://www.springframework.org/schema/aop/spring-aop.xsd
     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
-    <context:component-scan base-package="com.dubboclub.dk.notification,com.dubboclub.dk.task" />
+    <context:component-scan base-package="com.dubboclub.dk.notification,com.dubboclub.dk.task,com.dubboclub.dk.remote" />
     <task:annotation-driven scheduler="warningScheduler"/>
     <task:scheduler id="warningScheduler" pool-size="5"/>
 	<!-- SET default mail properties -->

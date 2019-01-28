@@ -20,6 +20,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.dubboclub.dk.notification.ApplicationEmail;
 import com.dubboclub.dk.notification.ApplicationMailer;
 import com.dubboclub.dk.notification.WarningStatusHolder;
+import com.dubboclub.dk.remote.MsgSystemService;
+import com.dubboclub.dk.remote.esb.dto.SingleEmailReq;
 import com.dubboclub.dk.storage.BizWarningStorage;
 import com.dubboclub.dk.storage.NotificationStorage;
 import com.dubboclub.dk.storage.model.BizWarningPo;
@@ -36,8 +38,10 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
     @Autowired
     @Qualifier("bizWarningStorage")
     private BizWarningStorage bizWarningStorage;
+//    @Autowired
+//    private ApplicationMailer mailer;
     @Autowired
-    private ApplicationMailer mailer;
+	MsgSystemService msgSystemService;
     @Autowired
 	private WarningStatusHolder warningStatusHolder;
     private final static String BIZ_EXCEPTION_URL="/zipkin/api/v2/traces?annotationQuery=error&limit=100&lookback=6000000";
@@ -96,18 +100,38 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 	}
 	
 	private void sendWarningMailAsyc(String error, String txCode) {
-		ApplicationEmail email = new ApplicationEmail();
-		NotificationPo po = new NotificationPo();
-		po.setType("01");//邮件
-		List<NotificationPo> notificationPoList = notificationStorage.selectNotificationByConditions(po);
-		email.setSubject("业务异常_"+txCode);
-		String addresses = "";
-		for(NotificationPo notificationPo : notificationPoList) {
-			addresses += notificationPo.getAddress() + ",";
-		}
-		email.setAddressee(addresses);
-		email.setContent(error);
-		mailer.sendMailByAsynchronousMode(email);
+		//		ApplicationEmail email = new ApplicationEmail();
+		//		NotificationPo po = new NotificationPo();
+		//		po.setType("01");//邮件
+		//		List<NotificationPo> notificationPoList = notificationStorage.selectNotificationByConditions(po);
+		//		email.setSubject("业务异常_"+txCode);
+		//		String addresses = "";
+		//		for(NotificationPo notificationPo : notificationPoList) {
+		//			addresses += notificationPo.getAddress() + ",";
+		//		}
+		//		email.setAddressee(addresses);
+		//		email.setContent(error);
+		//		mailer.sendMailByAsynchronousMode(email);
+		SingleEmailReq singleEmailReq = new SingleEmailReq();
+		singleEmailReq.setSceneCode("M001");
+		singleEmailReq.setContentData(error);
+		singleEmailReq.setServiceId("120020013");
+		singleEmailReq.setSceneId("01");// 场景码
+		// singleEmailReq.setTranMode("ONLINE");//交易模式
+		singleEmailReq.setTranMode("234");// 交易模式
+		singleEmailReq.setSourceType("DK-MQS");// 渠道编号
+		singleEmailReq.setBranchId("90001");// 机构号
+		singleEmailReq.setUserId("CB-IBSM");// 柜员号:核心-内管虚拟柜员
+		singleEmailReq.setTranDate(new SimpleDateFormat(ConstantsUtil.DATE_FORMATA).format(new Date()));// 交易日期
+		singleEmailReq.setTranTimestamp(new SimpleDateFormat(ConstantsUtil.DATE_FORMATB).format(new Date()));// 交易时间
+		// singleEmailReq.setUserLang("CHINESE");//操作员语言
+		singleEmailReq.setUserLang("en");// 操作员语言
+		int i = (int)(Math.random()*900 + 100);
+		singleEmailReq.setSeqNo(System.currentTimeMillis() + i +"" );// 渠道流水号
+		singleEmailReq.setSystemId("IBS");// 发起方系统编码
+		singleEmailReq.setCompany("");// 法人代表
+		singleEmailReq.getSysHead().setSrcSysSvrid("0");// 源发起系统服务器Id
+		msgSystemService.SendSingleEmail(singleEmailReq);
 	}
 
 }

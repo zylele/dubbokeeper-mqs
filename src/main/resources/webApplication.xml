@@ -60,11 +60,11 @@
     <mvc:resources mapping="/templates/**" location="/templates/"/>
     
     <!-- uiap单点登录拦截器 -->
-<!--    <mvc:interceptors>
+<!--<mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**" />
+            <mvc:exclude-mapping path="/*"/>
             <bean class="com.dubboclub.dk.uiap.UiapAuthnProcessor" />
         </mvc:interceptor>
-    </mvc:interceptors>  -->
-
+    </mvc:interceptors> -->
 </beans>

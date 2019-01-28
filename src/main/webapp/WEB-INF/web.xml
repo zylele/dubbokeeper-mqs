@@ -22,4 +22,13 @@
         <servlet-name>springMVC</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>uiap</servlet-name>
+        <servlet-class>com.dubboclub.dk.uiap.UiapAuthnProcessorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>uiap</servlet-name>
+        <url-pattern>/uiap.do</url-pattern>
+    </servlet-mapping>
 </web-app>

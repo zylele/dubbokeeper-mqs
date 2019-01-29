@@ -326,7 +326,7 @@ $scope.refresh=function (){
                  $scope.isEmpty=false;
                	  $httpWrapper.post({
                          url:"notification/getNotificationByPage",
-                         data:'{"currentPage": {"currentPage": "1","pageSize":"50"},"conditions": {"id":"","type": "","receiver": "","address":""}}',
+                         data:'{"currentPage": {"currentPage": "1","pageSize":"50"},"conditions": {"id":"","type": "01","receiver": "","address":""}}',
                          success:function(data){
                              $scope.mails=data.list;
                              if(!data||data.length<0){

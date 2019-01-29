@@ -26,6 +26,7 @@ import com.dubboclub.dk.storage.BizWarningStorage;
 import com.dubboclub.dk.storage.NotificationStorage;
 import com.dubboclub.dk.storage.model.BizWarningPo;
 import com.dubboclub.dk.storage.model.CurrentPage;
+import com.dubboclub.dk.storage.model.NotificationPo;
 import com.dubboclub.dk.web.utils.ConstantsUtil;
 
 @Component
@@ -64,8 +65,6 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 			return;
 		}
 		JSONArray jsonErrors = JSONArray.parseArray(data);
-		List<String> mails = new ArrayList<String>();
-		mails.add("865621683@qq.com");
 		for(Object jsonError : jsonErrors) {
 			String error = "";
 			String txCode = "";
@@ -93,7 +92,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 							sendEmailReq.setSceneCode("M001");
 							sendEmailReq.setBusType("OutOpenAcc");
 							sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-							sendEmailReq.setMailTo(mails);
+							sendEmailReq.setMailTo(queryAddress());
 							sendEmailReq.setAttachments(null);
 							sendEmailReq.setMsg("新的业务异常，traceId: "+traceId+",error: "+error);
 							
@@ -142,6 +141,18 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 		singleEmailReq.setCompany("");// 法人代表
 		singleEmailReq.getSysHead().setSrcSysSvrid("0");// 源发起系统服务器Id
 		msgSystemService.SendSingleEmail(singleEmailReq);
+	}
+	
+	private List<String> queryAddress(){
+		NotificationPo notificationPo = new NotificationPo();
+		notificationPo.setType("01");
+		List<NotificationPo> notificationPos = notificationStorage.selectNotificationByConditions(notificationPo);
+		List<String> mails = new ArrayList<String>();
+		for (NotificationPo notificationPo2 : notificationPos) {
+			mails.add(notificationPo2.getAddress());
+		}
+		return mails;
+		
 	}
 
 }

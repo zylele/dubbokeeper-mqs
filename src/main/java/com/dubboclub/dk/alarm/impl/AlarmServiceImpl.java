@@ -15,8 +15,6 @@ import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.dubboclub.dk.alarm.AlarmService;
-import com.dubboclub.dk.notification.ApplicationEmail;
-import com.dubboclub.dk.notification.ApplicationMailer;
 import com.dubboclub.dk.notification.WarningStatusHolder;
 import com.dubboclub.dk.remote.MsgSystemService;
 import com.dubboclub.dk.remote.esb.dto.SendEmailReq;
@@ -47,10 +45,11 @@ public class AlarmServiceImpl implements AlarmService {
 
 	@Override
 	public void alarmHandle(URL url,String application) {
+		
 		// empty协议的url，category==providers为提供者
 		if (Constants.PROVIDERS_CATEGORY.equals(url.getParameter(Constants.CATEGORY_KEY))) {
 			//提供者不可用时，处理逻辑
-			List<String> mails = new ArrayList<String>(); 
+			
 			ServiceWarningPo serviceWarning = new ServiceWarningPo();
 			serviceWarning.setContent(url.toFullString());
 			serviceWarning.setStartTime(new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date()));
@@ -65,8 +64,7 @@ public class AlarmServiceImpl implements AlarmService {
 			sendEmailReq.setSceneCode("M001");
 			sendEmailReq.setBusType("OutOpenAcc");
 			sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-			mails.add("865621683@qq.com");
-			sendEmailReq.setMailTo(mails);
+			sendEmailReq.setMailTo(queryAddress());
 			sendEmailReq.setAttachments(null);
 			sendEmailReq.setMsg(warning);
 			if (isAllowedSend(application)) {
@@ -75,7 +73,6 @@ public class AlarmServiceImpl implements AlarmService {
 				logger.debug(warning);
 			}
 		} else if (Constants.CONSUMERS_CATEGORY.equals(url.getParameter(Constants.CATEGORY_KEY))) {
-			List<String> mails = new ArrayList<String>(); 
 			ServiceWarningPo serviceWarning = new ServiceWarningPo();
 			serviceWarning.setContent(url.toFullString());
 			serviceWarning.setStartTime(new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date()));
@@ -90,8 +87,7 @@ public class AlarmServiceImpl implements AlarmService {
 			sendEmailReq.setSceneCode("M001");
 			sendEmailReq.setBusType("OutOpenAcc");
 			sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-			mails.add("865621683@qq.com");
-			sendEmailReq.setMailTo(mails);
+			sendEmailReq.setMailTo(queryAddress());
 			sendEmailReq.setAttachments(null);
 			sendEmailReq.setMsg(warning);
 			if (isAllowedSend(application)) {
@@ -151,5 +147,17 @@ public class AlarmServiceImpl implements AlarmService {
 		}
 		return false;
 	}
+	private List<String> queryAddress(){
+		NotificationPo notificationPo = new NotificationPo();
+		notificationPo.setType("01");
+		List<NotificationPo> notificationPos = notificationStorage.selectNotificationByConditions(notificationPo);
+		List<String> mails = new ArrayList<String>();
+		for (NotificationPo notificationPo2 : notificationPos) {
+			mails.add(notificationPo2.getAddress());
+		}
+		return mails;
+		
+	}
+	
 
 }

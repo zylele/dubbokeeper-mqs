@@ -43,13 +43,14 @@ public class AlarmServiceImpl implements AlarmService {
 	private WarningStatusHolder warningStatusHolder;
 	private static long interval = 300000;//一定时间间隔内不再发送告警
 	private static Map<String, Date> serviceMap = new HashMap<String, Date>();
-	private static List<String> mails = new ArrayList<String>(); 
+
 
 	@Override
 	public void alarmHandle(URL url,String application) {
 		// empty协议的url，category==providers为提供者
 		if (Constants.PROVIDERS_CATEGORY.equals(url.getParameter(Constants.CATEGORY_KEY))) {
 			//提供者不可用时，处理逻辑
+			List<String> mails = new ArrayList<String>(); 
 			ServiceWarningPo serviceWarning = new ServiceWarningPo();
 			serviceWarning.setContent(url.toFullString());
 			serviceWarning.setStartTime(new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date()));
@@ -74,6 +75,7 @@ public class AlarmServiceImpl implements AlarmService {
 				logger.debug(warning);
 			}
 		} else if (Constants.CONSUMERS_CATEGORY.equals(url.getParameter(Constants.CATEGORY_KEY))) {
+			List<String> mails = new ArrayList<String>(); 
 			ServiceWarningPo serviceWarning = new ServiceWarningPo();
 			serviceWarning.setContent(url.toFullString());
 			serviceWarning.setStartTime(new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date()));
@@ -98,7 +100,7 @@ public class AlarmServiceImpl implements AlarmService {
 				logger.debug(warning);
 			}
 		}
-		mails.clear();
+		
 	}
 
 	private void sendWarningMailAsyc(SendEmailReq errormsg) {

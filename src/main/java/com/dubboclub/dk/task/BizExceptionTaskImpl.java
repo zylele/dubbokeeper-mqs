@@ -45,7 +45,6 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 	private WarningStatusHolder warningStatusHolder;
     private final static String BIZ_EXCEPTION_URL="/zipkin/api/v2/traces?annotationQuery=error&limit=100&lookback=6000000";
 	private String zipkinUrl;
-	private static List<String> mails = new ArrayList<String>(); 
     
     @PostConstruct
     public void init() {
@@ -65,6 +64,8 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 			return;
 		}
 		JSONArray jsonErrors = JSONArray.parseArray(data);
+		List<String> mails = new ArrayList<String>();
+		mails.add("865621683@qq.com");
 		for(Object jsonError : jsonErrors) {
 			String error = "";
 			String txCode = "";
@@ -92,7 +93,6 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 							sendEmailReq.setSceneCode("M001");
 							sendEmailReq.setBusType("OutOpenAcc");
 							sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-							mails.add("865621683@qq.com");
 							sendEmailReq.setMailTo(mails);
 							sendEmailReq.setAttachments(null);
 							sendEmailReq.setMsg("新的业务异常，traceId: "+traceId+",error: "+error);
@@ -103,7 +103,6 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 						}
 						break;
 					}
-					mails.clear();
 				}
 			}
 		}

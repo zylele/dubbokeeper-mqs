@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
@@ -14,6 +16,7 @@ import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.logger.Logger;
 import com.alibaba.dubbo.common.logger.LoggerFactory;
+import com.alibaba.dubbo.common.utils.ConfigUtils;
 import com.dubboclub.dk.alarm.AlarmService;
 import com.dubboclub.dk.notification.WarningStatusHolder;
 import com.dubboclub.dk.remote.MsgSystemService;
@@ -41,8 +44,11 @@ public class AlarmServiceImpl implements AlarmService {
 	private WarningStatusHolder warningStatusHolder;
 	private static long interval = 300000;//一定时间间隔内不再发送告警
 	private static Map<String, Date> serviceMap = new HashMap<String, Date>();
-
-
+	private String sendMail;
+	@PostConstruct
+    public void init() {
+		sendMail = ConfigUtils.getProperty("sendMail.url");
+    }
 	@Override
 	public void alarmHandle(URL url,String application) {
 		
@@ -131,7 +137,8 @@ public class AlarmServiceImpl implements AlarmService {
 		singleEmailReq.setSystemId("IBS");// 发起方系统编码
 		singleEmailReq.setCompany("");// 法人代表
 		singleEmailReq.getSysHead().setSrcSysSvrid("0");// 源发起系统服务器Id
-		msgSystemService.SendSingleEmail(singleEmailReq);
+		if(sendMail.equals("true"))
+			msgSystemService.SendSingleEmail(singleEmailReq);
 	}
 
 	private boolean isAllowedSend(String application) {

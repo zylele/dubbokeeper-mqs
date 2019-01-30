@@ -46,10 +46,12 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 	private WarningStatusHolder warningStatusHolder;
     private final static String BIZ_EXCEPTION_URL="/zipkin/api/v2/traces?annotationQuery=error&limit=100&lookback=6000000";
 	private String zipkinUrl;
+	private String sendMail;
     
     @PostConstruct
     public void init() {
     	zipkinUrl = ConfigUtils.getProperty("zipkin.url");
+    	sendMail = ConfigUtils.getProperty("sendMail.url");
     }
     
     @Scheduled(cron="0/10 * *  * * ? ")   //每10秒执行一次    
@@ -140,7 +142,8 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 		singleEmailReq.setSystemId("IBS");// 发起方系统编码
 		singleEmailReq.setCompany("");// 法人代表
 		singleEmailReq.getSysHead().setSrcSysSvrid("0");// 源发起系统服务器Id
-		msgSystemService.SendSingleEmail(singleEmailReq);
+		if(sendMail.equals("true"))
+			msgSystemService.SendSingleEmail(singleEmailReq);
 	}
 	
 	private List<String> queryAddress(){

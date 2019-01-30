@@ -8,7 +8,7 @@ details.controller('modalCtrl', function($scope, $modalInstance, data,$httpWrapp
           $scope.addMail=function(){
 	         	 $httpWrapper.post({
 	         		url:"notification/addNotification",
-	         		data:'{"type": "'+$scope.addMailType+'","receiver": "'+$scope.addMailReceiver+'","address": "'+$scope.addMailAddress+'"}',
+	         		data:'{"type": "01","receiver": "'+$scope.addMailReceiver+'","address": "'+$scope.addMailAddress+'"}',
 	         		success:function(){
 	         			$modalInstance.close();
 	         			//alert("保存成功");
@@ -28,7 +28,7 @@ details.controller('updateMailCtrl', function($scope, $modalInstance, id,type,re
   	  $scope.updateMail=function(){
          	 $httpWrapper.post({
          		url:"notification/updateNotificationById",
-         		data:'{"id":"'+$scope.updateMailId+'","type": "'+$scope.updateMailType+'","receiver": "'+$scope.updateMailReceiver+'","address": "'+$scope.updateMailAddress+'"}',
+         		data:'{"id":"'+$scope.updateMailId+'","type": "01","receiver": "'+$scope.updateMailReceiver+'","address": "'+$scope.updateMailAddress+'"}',
          		success:function(){
          			$modalInstance.close();
          			//alert("已修改");

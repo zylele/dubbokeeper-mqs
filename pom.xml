@@ -15,6 +15,7 @@
 		<zipkin.url>http://127.0.0.1:9411</zipkin.url>
 		<reservedDay.url>7</reservedDay.url>
 		<reservedDayTop10.url>30</reservedDayTop10.url>
+		<sendMail.url>false</sendMail.url>
 		<dubbo.monitor.mysql.url><![CDATA[jdbc:mysql://127.0.0.1:3306/dubbox_monitor?useUnicode=true&amp;serverTimezone=UTC]]></dubbo.monitor.mysql.url>
 		<dubbo.monitor.mysql.username>root</dubbo.monitor.mysql.username>
 		<dubbo.monitor.mysql.password>root</dubbo.monitor.mysql.password>

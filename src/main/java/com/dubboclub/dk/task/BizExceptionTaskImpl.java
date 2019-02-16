@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.dubboclub.dk.notification.WarningStatusHolder;
 import com.dubboclub.dk.remote.MsgSystemService;
 import com.dubboclub.dk.remote.esb.dto.SendEmailReq;
+import com.dubboclub.dk.remote.esb.dto.SendSingleMsgIn;
 import com.dubboclub.dk.remote.esb.dto.SingleEmailReq;
 import com.dubboclub.dk.storage.BizWarningStorage;
 import com.dubboclub.dk.storage.NotificationStorage;
@@ -47,11 +48,13 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
     private final static String BIZ_EXCEPTION_URL="/zipkin/api/v2/traces?annotationQuery=error&limit=100&lookback=6000000";
 	private String zipkinUrl;
 	private String sendMail;
+	private String sendPhone;
     
     @PostConstruct
     public void init() {
     	zipkinUrl = ConfigUtils.getProperty("zipkin.url");
     	sendMail = ConfigUtils.getProperty("sendMail.url");
+    	sendPhone = ConfigUtils.getProperty("sendPhone.url");
     }
     
     @Scheduled(cron="0/10 * *  * * ? ")   //每10秒执行一次    
@@ -111,18 +114,18 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 	}
 	
 	private void sendWarningMailAsyc(SendEmailReq error, String txCode) {
-		//		ApplicationEmail email = new ApplicationEmail();
-		//		NotificationPo po = new NotificationPo();
-		//		po.setType("01");//邮件
-		//		List<NotificationPo> notificationPoList = notificationStorage.selectNotificationByConditions(po);
-		//		email.setSubject("业务异常_"+txCode);
-		//		String addresses = "";
-		//		for(NotificationPo notificationPo : notificationPoList) {
-		//			addresses += notificationPo.getAddress() + ",";
-		//		}
-		//		email.setAddressee(addresses);
-		//		email.setContent(error);
-		//		mailer.sendMailByAsynchronousMode(email);
+//				ApplicationEmail email = new ApplicationEmail();
+//				NotificationPo po = new NotificationPo();
+//				po.setType("01");//邮件
+//				List<NotificationPo> notificationPoList = notificationStorage.selectNotificationByConditions(po);
+//				email.setSubject("业务异常_"+txCode);
+//				String addresses = "";
+//				for(NotificationPo notificationPo : notificationPoList) {
+//					addresses += notificationPo.getAddress() + ",";
+//				}
+//				email.setAddressee(addresses);
+//				email.setContent(error);
+//				mailer.sendMailByAsynchronousMode(email);
 		SingleEmailReq singleEmailReq = new SingleEmailReq();
 		singleEmailReq.setSceneCode("M001");
 		singleEmailReq.setContentData(error.getContent());
@@ -144,6 +147,14 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 		singleEmailReq.getSysHead().setSrcSysSvrid("0");// 源发起系统服务器Id
 		if(sendMail.equals("true"))
 			msgSystemService.SendSingleEmail(singleEmailReq);
+		//短信
+		SendSingleMsgIn sendSingleMsgInput = new SendSingleMsgIn();
+		sendSingleMsgInput.setScene_code("0099");
+		sendSingleMsgInput.setMobiles(queryPhoneNum());
+		sendSingleMsgInput.setContent_data(error.getContent());
+		if(sendPhone.equals("true"))
+			msgSystemService.sendSingleMsg(sendSingleMsgInput);
+		
 	}
 	
 	private List<String> queryAddress(){
@@ -156,6 +167,17 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 		}
 		return mails;
 		
+	}
+	//取到数据库中手机号
+	private List<String> queryPhoneNum(){
+		NotificationPo notificationPo = new NotificationPo();
+		notificationPo.setType("02");
+		List<NotificationPo> notificationPos = notificationStorage.selectNotificationByConditions(notificationPo);
+		List<String> PhoneNums = new ArrayList<String>();
+		for(NotificationPo notificationPo2 : notificationPos){
+			PhoneNums.add(notificationPo2.getAddress());
+		}
+		return PhoneNums;
 	}
 
 }

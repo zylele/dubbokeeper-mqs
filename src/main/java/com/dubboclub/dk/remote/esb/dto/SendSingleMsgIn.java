@@ -1,5 +1,7 @@
 package com.dubboclub.dk.remote.esb.dto;
 
+import java.util.List;
+
 import com.dubboclub.dk.remote.esb.base.EsbBaseBO;
 
 /**
@@ -14,7 +16,7 @@ public class SendSingleMsgIn  extends EsbBaseBO{
 	private String cif_type;  //客户类型
 	private String cif_no;  //客户号
 	private String acc_no;   //客户账号
-	private String mobiles;  //手机号
+	private List<String> mobiles;  //手机号
 	private String content_data;  //内容数据
 	private String use; //用途
 	private String send_time;  //发送时间
@@ -43,10 +45,10 @@ public class SendSingleMsgIn  extends EsbBaseBO{
 	public void setAcc_no(String acc_no) {
 		this.acc_no = acc_no;
 	}
-	public String getMobiles() {
+	public List<String> getMobiles() {
 		return mobiles;
 	}
-	public void setMobiles(String mobiles) {
+	public void setMobiles(List<String> mobiles) {
 		this.mobiles = mobiles;
 	}
 	public String getContent_data() {

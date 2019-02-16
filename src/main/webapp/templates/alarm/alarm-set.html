@@ -52,8 +52,45 @@
 
 
 <div class="row" ng-show="currentTab=='setPhone'">
-    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"  id="SetPhone" style="height: 100%;with: 100%;">
-	<p>开发中。。。。。。001页面</p>
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"  >
+	<table class="table-striped table-hover table-condensed table table-condensed table-responsive">
+            <thead>
+            <tr>
+            	<th class="text-center"><strong>#</strong></th>
+                <th class="text-left" >
+                	<strong>接收人姓名</strong>
+                </th>
+                <th class="text-left" >
+                	<strong>接收电话号码</strong>
+                </th>
+                <th class="text-center">
+                	<button type="button" class="btn btn-default btn-sm"  ng-click="addPhone()">
+                		<span class="glyphicon glyphicon-plus"></span> 增加
+                	</button>
+        			
+                </th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            <tr  ng-show="phones&&phones.length>0" ng-repeat="phone in phones" class="ng-animation">
+            	<td class="text-center ">{{$index+1}}</td>
+                <td class="text-left text-warning">{{phone.receiver}}</td>
+                <td class="text-left text-warning">{{phone.address}}</td>
+                <td class="text-center" ng-show="!isConsumer">
+                    <button type="button" class="btn btn-default btn-sm"  ng-click="updatePhone(phone.id,phone.type,phone.receiver,phone.address)">
+                		<span class="glyphicon glyphicon-edit"></span> 修改
+                	</button>
+                    &nbsp;| &nbsp;
+                    <button type="button" class="btn btn-default btn-sm"  ng-click="deletePhone(phone.id)">
+                		<span class="glyphicon glyphicon-remove"></span> 删除
+                	</button> 
+                </td>
+                
+            </tr>
+            
+            </tbody>
+        </table>
     </div>
 </div>
 

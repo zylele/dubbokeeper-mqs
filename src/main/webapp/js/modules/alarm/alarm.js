@@ -304,7 +304,7 @@ function getList(){
 $scope.refresh=function (){
  	  $httpWrapper.post({
            url:"notification/getNotificationByPage",
-           data:'{"currentPage": {"currentPage": "1","pageSize":"50"},"conditions": {"id":"","type": "","receiver": "","address":""}}',
+           data:'{"currentPage": {"currentPage": "1","pageSize":"50"},"conditions": {"id":"","type": "01","receiver": "","address":""}}',
            success:function(data){
                $scope.mails=data.list;
                if(!data||data.length<0){
@@ -314,6 +314,19 @@ $scope.refresh=function (){
            }
        });
    };
+   $scope.refreshPhone=function (){
+	 	  $httpWrapper.post({
+	           url:"notification/getNotificationByPage",
+	           data:'{"currentPage": {"currentPage": "1","pageSize":"50"},"conditions": {"id":"","type": "02","receiver": "","address":""}}',
+	           success:function(data){
+	               $scope.phones=data.list;
+	               if(!data||data.length<0){
+	                   $scope.isEmpty=true;
+	               }
+	               $scope.originData=data;
+	           }
+	       });
+	   };
    $scope.switchTab=function(tabName){
 	$menu.switchMenu("alarm/alarmSet");
 	$breadcrumb.pushCrumb("通知设置","通知设置","alarm/alarmSet");
@@ -326,7 +339,7 @@ $scope.refresh=function (){
                  $scope.isEmpty=false;
                	  $httpWrapper.post({
                          url:"notification/getNotificationByPage",
-                         data:'{"currentPage": {"currentPage": "1","pageSize":"50"},"conditions": {"id":"","type": "01","receiver": "","address":""}}',
+                         data:'{"currentPage": {"currentPage": "1","pageSize":"50"},"conditions": {"type": "01"}}',
                          success:function(data){
                              $scope.mails=data.list;
                              if(!data||data.length<0){
@@ -432,10 +445,105 @@ $scope.refresh=function (){
                
                break;
            }
+           
+           
+           
+           
+           
            case 'setPhone':{
-           	
-           	var myChart = document.getElementById('SetPhone');
-               break;
+            	  var myChart = document.getElementById('setPhone');
+                  $scope.phones=[];
+                  $scope.isEmpty=false;
+                	  $httpWrapper.post({
+                          url:"notification/getNotificationByPage",
+                          data:'{"currentPage": {"currentPage": "1","pageSize":"50"},"conditions": {"type": "02"}}',
+                          success:function(data){
+                              $scope.phones=data.list;
+                              if(!data||data.length<0){
+                                  $scope.isEmpty=true;
+                              }
+                              $scope.originData=data;
+                          }
+                      });
+                  $scope.query={};
+                  $scope.filter=function(){
+                      var filterResult=[];
+                      if($scope.isEmpty){
+                          return ;
+                      }
+                      $scope.phones=$queryFilter($scope.originData,$scope.query);
+                  }
+                 $scope.addPhone=function(add){
+                	 var modaladdPhone = $modal.open({
+                         templateUrl : 'templates/alarm/AddPhone.html',//script标签中定义的id
+                         controller : 'modalCtrlPhone',//modal对应的Controller
+                         resolve : {
+                             data : function() {//data作为modal的controller传入的参数
+                                  return add;//用于传递数据
+                             }
+                         }
+                     })
+                     modaladdPhone.opened.then(function () {// 模态窗口打开之后执行的函数
+                    	 
+                     });
+                	 modaladdPhone.result.then(function (result) {
+                     //这是关闭模态框的回调函数，可以在这里去重新请求父页面的数据
+                		 $scope.refreshPhone();
+                     });
+                     
+                 }
+                 
+                 $scope.updatePhone=function(id,type,receiver,address){
+                	 var modalupdatePhone = $modal.open({
+                         templateUrl : 'templates/alarm/UpdatePhone.html',
+                         controller : 'updatePhoneCtrl',
+                         resolve : {
+                        	 id : function() {
+                                  return  id;
+                             },
+                             type : function() {
+                                 return  type;
+                            },
+                            receiver : function() {
+                                 return  receiver;
+                            },
+                            address : function() {
+                                return  address;
+                           }
+                         }
+                     });
+                	 modalupdatePhone.opened.then(function () {// 模态窗口打开之后执行的函数
+                    	 
+                     });
+                	 modalupdatePhone.result.then(function (result) {
+                     //这是关闭模态框的回调函数，可以在这里去重新请求父页面的数据
+                		 $scope.refreshPhone();
+                     });
+                 }
+                 
+                 $scope.deletePhone=function(id){
+                	 var modaldeletePhone = $modal.open({
+                         templateUrl : 'templates/alarm/DeletePhone.html',//script标签中定义的id
+                         controller : 'deletePhoneCtrl',//modal对应的Controller
+                         resolve : {
+                             id : function() {//data作为modal的controller传入的参数
+                                  return id;//用于传递数据
+                             }
+                         }
+                     });
+                	 modaldeletePhone.opened.then(function () {// 模态窗口打开之后执行的函数
+                    	 
+                     });
+                	 modaldeletePhone.result.then(function (result) {
+                     //这是关闭模态框的回调函数，可以在这里去重新请求父页面的数据
+                		 $scope.refreshPhone();
+                     });
+                 }
+                 
+                  
+                 
+                
+                break;
            }
            
        }

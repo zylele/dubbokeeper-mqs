@@ -29,11 +29,8 @@
     	where id = #{id};
     </update>
     <select id="selectNotificationByPage" parameterType="NotificationPo" resultType="NotificationPo">
-    	select id,type,receiver,address  from notification where 1=1
-    	<if test="type != null and type != ''">
-		  and type = #{type}
-		</if>
-		<if test="receiver != null and receiver != ''">
+    	select id,type,receiver,address  from notification where 1=1 and type = #{type}
+    	<if test="receiver != null and receiver != ''">
 		  and receiver = #{receiver}
 		</if>
 		<if test="address != null and address != ''">

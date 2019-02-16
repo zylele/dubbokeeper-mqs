@@ -6,8 +6,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.alibaba.dubbo.common.logger.Logger;
+import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.common.utils.ConfigUtils;
+import com.dubboclub.dk.Interceptor.TradeInterceptor;
 import com.zgcbank.uiap.ClientSsoVerifyToken;
 import com.zgcbank.uiap.bean.SsoUser;
 
@@ -20,6 +24,7 @@ import com.zgcbank.uiap.bean.SsoUser;
 public class UiapAuthnProcessorServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
+	private static final Logger log = LoggerFactory.getLogger(UiapAuthnProcessorServlet.class);
 	private String uiapUrl = ConfigUtils.getProperty("uiap.url");
 
 	@Override
@@ -32,10 +37,17 @@ public class UiapAuthnProcessorServlet extends HttpServlet {
 			falg=ClientSsoVerifyToken.verifyToken(request,uiapUrl);		// 验证token
 		} catch (Exception e) {
 			e.printStackTrace();
-		}			
-		if(falg){	// 验证成功，进入主页
+		}
+		if(falg){	
+			// 将用户信息存储到session中
+			request.getSession().setAttribute("user",user);
+			//打印用户信息
+			log.info("=============================================");
+			log.info(user.getIdmUsrName()+"   登入系统！");
+			log.info("=============================================");
 			request.getRequestDispatcher("index.htm").forward(request, response);
-		}else{		// 验证失败，返登录页				
+		}else{						
+			// 验证失败，返登录页
 			response.sendRedirect("forward.jsp");
 		}
 	}

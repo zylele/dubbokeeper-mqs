@@ -58,13 +58,18 @@
     <mvc:resources mapping="/img/**" location="/img/"/>
     <mvc:resources mapping="/js/**" location="/js/"/>
     <mvc:resources mapping="/templates/**" location="/templates/"/>
-    
-    <!-- uiap单点登录拦截器 -->
-<!--<mvc:interceptors>
+ 
+     <!--日志打印及登录判断-->  
+<!--     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**" />
-            <mvc:exclude-mapping path="/*"/>
-            <bean class="com.dubboclub.dk.uiap.UiapAuthnProcessor" />
+            <mvc:exclude-mapping path="/css/**"/>
+            <mvc:exclude-mapping path="/img/**"/>
+            <mvc:exclude-mapping path="/js/**"/>
+            <mvc:exclude-mapping path="/templates/**"/>
+            <mvc:exclude-mapping path="/uiap.do"/>
+            <mvc:exclude-mapping path="/notification//getWarningStatus"/>
+            <bean class="com.dubboclub.dk.Interceptor.TradeInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors> -->
 </beans>

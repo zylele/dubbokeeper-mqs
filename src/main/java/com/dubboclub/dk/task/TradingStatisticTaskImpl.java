@@ -1,4 +1,4 @@
-﻿package com.dubboclub.dk.task;
+package com.dubboclub.dk.task;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

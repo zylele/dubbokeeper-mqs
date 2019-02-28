@@ -101,7 +101,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 							nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE)
 									.format(new Date(timestamp / 1000));
 							startTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date().getTime());
-							if (kind.equalsIgnoreCase("SERVER") && error.equals("normal")) {
+							if (kind.equalsIgnoreCase("SERVER") && error==null) {
 								success = true;
 							} else if (kind.equalsIgnoreCase("CLIENT")) {
 								duration = ((JSONObject) text).getLong("duration");

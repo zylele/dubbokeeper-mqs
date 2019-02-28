@@ -93,7 +93,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 								bizWarningPo.setTraceDt(new SimpleDateFormat(ConstantsUtil.DATE_FORMAT)
 										.format(new Date(timestamp / 1000)));
 								error = ((JSONObject) span).getJSONObject("tags").getString("error");
-								if (!error.equals("normal")) {
+								if (error != null) {
 									bizWarningPo.setError(error);
 									bizWarningPo.setTxCode(txCode);
 									bizWarningStorage.addBizWarning(bizWarningPo);

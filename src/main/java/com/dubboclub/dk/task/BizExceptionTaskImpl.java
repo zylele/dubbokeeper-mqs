@@ -1,4 +1,4 @@
-package com.dubboclub.dk.task;
+﻿package com.dubboclub.dk.task;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,9 +60,9 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
     @Scheduled(cron="0/10 * *  * * ? ")   //每10秒执行一次    
     @Override  
 	public void getBizExceptionTask() {
-		//String zipkinUrl = ConfigUtils.getProperty("zipkin.url");
-		RestTemplate restTemplate = new RestTemplate();         
-		String data=null;
+		// String zipkinUrl = ConfigUtils.getProperty("zipkin.url");
+		RestTemplate restTemplate = new RestTemplate();
+		String data = null;
 		try {
 			data = restTemplate.getForObject(zipkinUrl + BIZ_EXCEPTION_URL, String.class);
 		} catch (Exception e) {
@@ -70,48 +70,56 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 			return;
 		}
 		JSONArray jsonErrors = JSONArray.parseArray(data);
-		for(Object jsonError : jsonErrors) {
+		for (Object jsonError : jsonErrors) {
 			String error = "";
 			String txCode = "";
-			if(jsonError instanceof JSONArray) {
-				for(Object span : (JSONArray)jsonError) {
-					if(span instanceof JSONObject) {
-						String traceId = ((JSONObject)span).getString("traceId");
-						Long timestamp = ((JSONObject)span).getLong("timestamp");
-						BizWarningPo bizWarningPo = new BizWarningPo();
-						bizWarningPo.setTraceId(traceId);
-						CurrentPage currentPage = new CurrentPage();
-						currentPage.setCurrentPage(1);
-						currentPage.setPageSize(10);
-						List<BizWarningPo> result = bizWarningStorage.selectBizWarningByPage(bizWarningPo, currentPage);
-						if(result == null || result.size() == 0) {
-							bizWarningPo.setTraceContent(jsonError.toString());
-							bizWarningPo.setTraceDt(new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date(timestamp/1000)));
-							error = ((JSONObject) span).getJSONObject("tags").getString("error");
+			if (jsonError instanceof JSONArray) {
+				for (Object span : (JSONArray) jsonError) {
+					String serviceName = ((JSONObject) span).getJSONObject("localEndpoint").getString("serviceName");
+					if (methodName(serviceName)) {
+						if (span instanceof JSONObject) {
 							txCode = ((JSONObject) span).getJSONObject("tags").getString("txCode");
-							bizWarningPo.setError(error);
-							bizWarningPo.setTxCode(txCode);
-							bizWarningStorage.addBizWarning(bizWarningPo);
-							
-							SendEmailReq sendEmailReq = new SendEmailReq();
-							sendEmailReq.setSceneCode("M001");
-							sendEmailReq.setBusType("OutOpenAcc");
-							sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-							sendEmailReq.setMailTo(queryAddress());
-							sendEmailReq.setAttachments(null);
-							sendEmailReq.setMsg("新的业务异常，traceId: "+traceId+",error: "+error);
-							
-							logger.debug("新的业务异常，traceId: "+traceId+",error: "+error);
-							sendWarningMailAsyc(sendEmailReq, txCode);
-							warningStatusHolder.setBizStatus(true);
+							String traceId = ((JSONObject) span).getString("traceId");
+							Long timestamp = ((JSONObject) span).getLong("timestamp");
+							BizWarningPo bizWarningPo = new BizWarningPo();
+							bizWarningPo.setTraceId(traceId);
+							CurrentPage currentPage = new CurrentPage();
+							currentPage.setCurrentPage(1);
+							currentPage.setPageSize(10);
+							List<BizWarningPo> result = bizWarningStorage.selectBizWarningByPage(bizWarningPo,
+									currentPage);
+							if (result == null || result.size() == 0) {
+								bizWarningPo.setTraceContent(span.toString());
+								bizWarningPo.setTraceDt(new SimpleDateFormat(ConstantsUtil.DATE_FORMAT)
+										.format(new Date(timestamp / 1000)));
+								error = ((JSONObject) span).getJSONObject("tags").getString("error");
+								if (!error.equals("normal")) {
+									bizWarningPo.setError(error);
+									bizWarningPo.setTxCode(txCode);
+									bizWarningStorage.addBizWarning(bizWarningPo);
+
+									SendEmailReq sendEmailReq = new SendEmailReq();
+									sendEmailReq.setSceneCode("M001");
+									sendEmailReq.setBusType("OutOpenAcc");
+									sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
+									sendEmailReq.setMailTo(queryAddress());
+									sendEmailReq.setAttachments(null);
+									sendEmailReq.setMsg("新的业务异常，traceId: " + traceId + ",error: " + error);
+
+									logger.debug("新的业务异常，traceId: " + traceId + ",error: " + error);
+									sendWarningMailAsyc(sendEmailReq, txCode);
+									warningStatusHolder.setBizStatus(true);
+								}
+							}
+							break;
 						}
-						break;
+
 					}
 				}
 			}
 		}
-
 	}
+
 	
 	private void sendWarningMailAsyc(SendEmailReq error, String txCode) {
 //				ApplicationEmail email = new ApplicationEmail();
@@ -178,6 +186,14 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 			PhoneNums.add(notificationPo2.getAddress());
 		}
 		return PhoneNums;
+	}
+	private boolean methodName (String servicename){
+		int server = servicename.indexOf("server");
+		int client = servicename.indexOf("client");
+		if(server != -1 || client != -1){
+			return true;
+		}
+		return false;	
 	}
 
 }

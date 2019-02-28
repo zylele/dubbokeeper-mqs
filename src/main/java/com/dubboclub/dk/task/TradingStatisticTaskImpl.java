@@ -1,4 +1,4 @@
-package com.dubboclub.dk.task;
+﻿package com.dubboclub.dk.task;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -80,65 +80,74 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 //		Map<String, Map<String, DayStatisticObject>> dayTradingMap = new HashMap<String, Map<String, DayStatisticObject>>();  ////每日峰值外层Map
 		
 		
-		for(Object jsonTrad : jsonTrads ){
+		for (Object jsonTrad : jsonTrads) {
 			String txCode = "";
 			long duration = 0;
 			boolean success = false;
 			String nowTime = "";
 			String startTime = "";
+			String kind = "";
 			long timestamp1 = 0;
-			if(jsonTrad instanceof JSONArray){
-					for(Object text : (JSONArray)jsonTrad){
+			if (jsonTrad instanceof JSONArray) {
+				for (Object text : (JSONArray) jsonTrad) {
+					String serviceName = ((JSONObject) text).getJSONObject("localEndpoint").getString("serviceName");
+					if (methodName(serviceName)) {
 						txCode = ((JSONObject) text).getJSONObject("tags").getString("txCode");
-						String kind = ((JSONObject)text).getString("kind");
+						kind = ((JSONObject) text).getString("kind");
 						String error = ((JSONObject) text).getJSONObject("tags").getString("error");
-						if(txCode != null || txCode !="" && text instanceof JSONObject ){
-							long timestamp = ((JSONObject)text).getLong("timestamp");
-							timestamp1 = Integer.parseInt(timestamp/10000000+"0");
-							nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(timestamp/1000));
+						if (txCode != null || txCode != "" && text instanceof JSONObject) {
+							long timestamp = ((JSONObject) text).getLong("timestamp");
+							timestamp1 = Integer.parseInt(timestamp / 10000000 + "0");
+							nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE)
+									.format(new Date(timestamp / 1000));
 							startTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date().getTime());
-							if(kind.equalsIgnoreCase("SERVER") && error == null){
+							if (kind.equalsIgnoreCase("SERVER") && error.equals("normal")) {
 								success = true;
-							}else if(kind.equalsIgnoreCase("CLIENT") ){
-								duration = ((JSONObject)text).getLong("duration");
-	
+							} else if (kind.equalsIgnoreCase("CLIENT")) {
+								duration = ((JSONObject) text).getLong("duration");
+
 							};
-							
+
 						};
-					};
+						if(kind.equalsIgnoreCase("CLIENT")){
+							// 交易量，平均耗时，成功或失败次数Map
+							StatisticObject object = statisticMap.get(txCode);
+							if (object == null) {
+								object = new StatisticObject();
+								object.setTotalNum(1);
+								object.setTotalTimePerTime(duration);
+								object.setNowTime(nowTime);
+								object.setTimestamp(timestamp1);
+								object.setStartTime(startTime);
+								if (success)
+									object.setSuccess(1);
+								else
+									object.setFail(1);
+								statisticMap.put(txCode, object);
+							} else {
+								object.setTotalNum(object.getTotalNum() + 1);
+								object.setTotalTimePerTime(object.getTotalTimePerTime() + duration);
+								if (success)
+									object.setSuccess(object.getSuccess() + 1);
+								else
+									object.setFail(object.getFail() + 1);
+								statisticMap.put(txCode, object);
+
+							}
+							object.setTotalDayTimePer(object.getTotalDayTimePer() + 1);
+							statisticMap.put(txCode, object);
+						}
+					}
 					
-					
-				}
-			
-			
-			//交易量，平均耗时，成功或失败次数Map
-			StatisticObject	object = statisticMap.get(txCode);
-			if(object == null){
-				object = new StatisticObject();
-				object.setTotalNum(1);
-				object.setTotalTimePerTime(duration);
-				object.setNowTime(nowTime);
-				object.setTimestamp(timestamp1);
-				object.setStartTime(startTime);
-				if(success)
-					object.setSuccess(1);
-				else
-					object.setFail(1);
-				statisticMap.put(txCode, object);
-				}					
-			else {
-				object.setTotalNum(object.getTotalNum()+1); 
-				object.setTotalTimePerTime(object.getTotalTimePerTime()+duration);
-				if(success)
-					object.setSuccess(object.getSuccess()+1);
-				else
-					object.setFail(object.getFail()+1);
-				statisticMap.put(txCode, object);
+				};
 				
-				}
-			object.setTotalDayTimePer(object.getTotalDayTimePer()+1);
-			statisticMap.put(txCode, object);
-			}
+			};
+		}
+			
+			
+			
+			
+			
 		
 		
 		//遍历交易量，平均耗时，成功或失败次数Map
@@ -247,6 +256,14 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 		double duration1 = oleTimeAvg*oldTotal+totalTimePerTime;
 		double avg = (duration1/totalNum1);
 		return avg;
+	}
+	private boolean methodName (String servicename){
+		int server = servicename.indexOf("server");
+		int client = servicename.indexOf("client");
+		if(server != -1 || client != -1){
+			return true;
+		}
+		return false;	
 	}
 	
 }

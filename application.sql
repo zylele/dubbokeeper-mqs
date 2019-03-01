@@ -64,3 +64,10 @@ CREATE TABLE `statistics_day`(
 	PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `tx_code_info`(
+	`tx_code` varchar(100) COLLATE utf8_unicode_ci COMMENT '交易编号',
+	`tx_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '交易名称',
+	`tx_type` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '交易类型',
+	PRIMARY KEY (`tx_code`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

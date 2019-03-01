@@ -344,7 +344,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 for(var x in arrs){
                                 	var arr = arrs[x];
                                 	for(var key in arr){
-                                    	if(key == "txCode")
+                                    	if(key == "txName")
                                     		xAxisData.push(arr[key]);
                                     	if(key == "totalNum")
                                     		totalNum.push(arr[key]);
@@ -372,7 +372,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 	    xAxis: {
                                 	        type: 'category',
                                 	        data: xAxisData,
-                                	        show:true
+                                	        show:false
                                 	    },
                                 	    yAxis: {
                                 	        type: 'value'
@@ -408,7 +408,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     for(var x in arrs){
                                     	var arr = arrs[x];
                                     	for(var key in arr){
-                                        	if(key == "txCode")
+                                        	if(key == "txName")
                                         		xAxisData.push(arr[key]);
                                         	if(key == "timeAvg")
                                         		timeAvg.push(arr[key]);
@@ -436,7 +436,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     	    xAxis: {
                                     	        type: 'category',
                                     	        data: xAxisData,
-                                    	        show:true
+                                    	        show:false
                                     	    },
                                     	    yAxis: {
                                     	        type: 'value'
@@ -472,7 +472,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     for(var x in arrs){
                                     	var arr = arrs[x];
                                     	for(var key in arr){
-                                        	if(key == "txCode")
+                                        	if(key == "txName")
                                         		xAxisData.push(arr[key]);
                                         	if(key == "success")
                                         		success.push(arr[key]);
@@ -499,7 +499,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     	    xAxis: {
                                     	        type: 'category',
                                     	        data: xAxisData,
-                                    	        show:true
+                                    	        show:false
                                     	    },
                                     	    yAxis: {
                                     	        type: 'value'
@@ -536,7 +536,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     for(var x in arrs){
                                     	var arr = arrs[x];
                                     	for(var key in arr){
-                                        	if(key == "txCode")
+                                        	if(key == "txName")
                                         		xAxisData.push(arr[key]);
                                         	if(key == "fail")
                                         		fail.push(arr[key]);
@@ -563,7 +563,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     	    xAxis: {
                                     	        type: 'category',
                                     	        data: xAxisData,
-                                    	        show:true
+                                    	        show:false
                                     	    },
                                     	    yAxis: {
                                     	        type: 'value'

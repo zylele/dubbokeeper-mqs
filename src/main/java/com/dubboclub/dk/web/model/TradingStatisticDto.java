@@ -3,6 +3,7 @@ package com.dubboclub.dk.web.model;
 public class TradingStatisticDto {
 	private int id;
 	private String txCode;
+	private String txName;
 	private String nowTime;
 	private int totalNum;
 	private double timeAvg;
@@ -21,6 +22,12 @@ public class TradingStatisticDto {
 	}
 	public void setTxCode(String txCode) {
 		this.txCode = txCode;
+	}
+	public String getTxName() {
+		return txName;
+	}
+	public void setTxName(String txName) {
+		this.txName = txName;
 	}
 	public String getNowTime() {
 		return nowTime;

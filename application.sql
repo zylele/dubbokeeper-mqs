@@ -71,3 +71,13 @@ CREATE TABLE `tx_code_info`(
 	PRIMARY KEY (`tx_code`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+CREATE TABLE `alarm_service`(
+	`id` int(10) NOT NULL AUTO_INCREMENT,
+	`host` varchar(100) COLLATE utf8_unicode_ci COMMENT 'IP地址',
+	`service_name` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '服务名称',
+	`service_type` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '服务类型',
+	PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+

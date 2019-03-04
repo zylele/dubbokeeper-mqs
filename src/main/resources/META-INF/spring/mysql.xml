@@ -72,5 +72,8 @@
     <bean class="com.dubboclub.dk.storage.mysql.MysqlNotificationStorage" id="notificationStorage"
           autowire="byType">
     </bean>
+    <bean class="com.dubboclub.dk.storage.mysql.MysqlAlarmServiceStorage" id="alarmServiceStorage"
+          autowire="byType">
+    </bean>
     
 </beans>

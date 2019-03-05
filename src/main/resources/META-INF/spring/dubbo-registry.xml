@@ -28,7 +28,8 @@
     </bean>
     <bean class="com.dubboclub.dk.admin.service.impl.ConsumerServiceImpl" id="consumerService" parent="abstractService"/>
     <bean class="com.dubboclub.dk.admin.service.impl.OverrideServiceImpl" id="overrideService" parent="abstractService"/>
-    <bean class="com.dubboclub.dk.admin.service.impl.RouteServiceImpl" id="routeService" parent="abstractService"/>
+    <bean class="com.dubboclub.dk.admin.service.impl.RouteServiceImpl" id="routeService" parent="abstractService"/>    
     
     <bean class="com.dubboclub.dk.alarm.impl.AlarmServiceImpl" id="alarmService"/>
+    <bean class="com.dubboclub.dk.common.SendMessage" id="sendMessage"/>
 </beans>

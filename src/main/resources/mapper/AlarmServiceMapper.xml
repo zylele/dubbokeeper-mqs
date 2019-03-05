@@ -7,7 +7,7 @@
        from alarm_service 
        where serviceName = #{serviceName};
     </select>
-    <delete id="deleteAlarmService" parameterType="AlarmServicePo">
+    <delete id="deleteAlarmService" >
     	delete from alarm_service 
     </delete>
     <insert id="addAlarmService" parameterType="AlarmServicePo">
@@ -16,6 +16,9 @@
             #{serviceName},
             #{serviceType})
     </insert>
+    <select id="selectAlarmServiceAll" resultType="AlarmServicePo">
+    	select host,service_name as serviceName,service_type as serviceType from alarm_service
+    </select>
     
 </mapper>
 	

@@ -1,5 +1,7 @@
 package com.dubboclub.dk.storage.mysql;
 
+import java.util.List;
+
 import org.springframework.beans.factory.InitializingBean;
 
 import com.dubboclub.dk.storage.AlarmServiceStorage;
@@ -31,9 +33,14 @@ public class MysqlAlarmServiceStorage implements AlarmServiceStorage,Initializin
 	}
 
 	@Override
-	public Integer deleteAlarmService(AlarmServicePo alarmServicePo) {
+	public Integer deleteAlarmService() {
 		// TODO Auto-generated method stub
-		return alarmServiceMapper.deleteAlarmService(alarmServicePo);
+		return alarmServiceMapper.deleteAlarmService();
+	}
+	@Override
+	public List<AlarmServicePo> selectAlarmServiceAll() {
+		// TODO Auto-generated method stub
+		return alarmServiceMapper.selectAlarmServiceAll();
 	}
 	
 

@@ -85,7 +85,7 @@ public class SendMessage {
 	public void sendWarningPhoneAsyc(SendEmailReq error, String txCode) {
 		// 短信
 		SendSingleMsgIn sendSingleMsgInput = new SendSingleMsgIn();
-		sendSingleMsgInput.setScene_code("0099");
+		sendSingleMsgInput.setScene_code("M001");
 		sendSingleMsgInput.setMobiles(queryPhoneNum());
 		sendSingleMsgInput.setContent_data(error.getContent());
 		if (sendPhone.equals("true")){

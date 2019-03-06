@@ -73,7 +73,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 			currentPage.setPageSize(10);
 			data = tradingStatisticStorage.selectTradingStatisticByPageByCondition(tradingStatisticQuery,currentPage);
 			SendEmailReq sendEmailReq = new SendEmailReq();
-			sendEmailReq.setSceneCode("");
+			sendEmailReq.setSceneCode("M001");
 			sendEmailReq.setBusType("OutOpenAcc");
 			sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
 			sendEmailReq.setMailTo(queryAddress());

@@ -16,7 +16,7 @@ CREATE TABLE `notification` (
   `receiver` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '接收人',
   `address` varchar(300) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '接收地址',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `notification_un` (`address`)
+  UNIQUE KEY `notification_un` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `biz_warning` (
@@ -52,6 +52,8 @@ CREATE TABLE `trading`(
 	`time_min` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最小耗时',
 	`success` int(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '成功总数',
   	`fail` int(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '失败总数',
+  	`service_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '服务名称',
+  	`source_type` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '渠道号',
 	PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

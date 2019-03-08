@@ -88,9 +88,11 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 			String startTime = "";
 			String kind = "";
 			long timestamp1 = 0;
+			String serviceName = "";
+			String sourceType = "";
 			if (jsonTrad instanceof JSONArray) {
 				for (Object text : (JSONArray) jsonTrad) {
-					String serviceName = ((JSONObject) text).getJSONObject("localEndpoint").getString("serviceName");
+					serviceName = ((JSONObject) text).getJSONObject("localEndpoint").getString("serviceName");
 					if (methodName(serviceName)) {
 						txCode = ((JSONObject) text).getJSONObject("tags").getString("txCode");
 						kind = ((JSONObject) text).getString("kind");
@@ -98,6 +100,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 						if (txCode != null || txCode != "" && text instanceof JSONObject) {
 							long timestamp = ((JSONObject) text).getLong("timestamp");
 							timestamp1 = Integer.parseInt(timestamp / 10000000 + "0");
+							sourceType = ((JSONObject) text).getJSONObject("tags").getString("chnlType");
 							nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE)
 									.format(new Date(timestamp / 1000));
 							startTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date().getTime());
@@ -123,6 +126,8 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 									object.setSuccess(1);
 								else
 									object.setFail(1);
+								object.setServiceName(serviceName);
+								object.setSourceType(sourceType);
 								statisticMap.put(txCode, object);
 							} else {
 								object.setTotalNum(object.getTotalNum() + 1);
@@ -165,6 +170,8 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 				BeanUtils.copyProperties(value, tradingStatisticPo);
 				tradingStatisticPo.setTimeAvg(value.getTotalTimePerTime()/value.getTotalNum());
 				tradingStatisticPo.setTxCode(key);
+				tradingStatisticPo.setServiceName(value.getServiceName());
+				tradingStatisticPo.setSourceType(value.getSourceType());
 				tradingStatisticStorage.addTradingStatistic(tradingStatisticPo);
 				
 			}else{

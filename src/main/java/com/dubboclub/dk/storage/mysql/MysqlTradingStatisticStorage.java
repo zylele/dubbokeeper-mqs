@@ -8,6 +8,7 @@ import com.dubboclub.dk.storage.TradingStatisticStorage;
 import com.dubboclub.dk.storage.model.CurrentPage;
 import com.dubboclub.dk.storage.model.TradingStatisticPo;
 import com.dubboclub.dk.storage.model.TradingStatisticQuery;
+import com.dubboclub.dk.storage.model.TradingStatisticQueryTime;
 import com.dubboclub.dk.storage.mysql.mapper.TradingStatisticMapper;
 import com.github.pagehelper.PageHelper;
 
@@ -53,6 +54,39 @@ public class MysqlTradingStatisticStorage implements TradingStatisticStorage,Ini
 	public Integer deleteTradingStatisticByPageByCondition(TradingStatisticPo tradingStatisticPo) {
 		// TODO Auto-generated method stub
 		return tradingStatisticMapper.deleteTradingStatisticByPageByCondition(tradingStatisticPo);
+	}
+	@Override
+	public List<TradingStatisticPo> selectTradingStatisticByPageByDayFailRate(TradingStatisticQueryTime tradingStatisticQueryTime,
+			CurrentPage currentPage) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(currentPage.getCurrentPage(), currentPage.getPageSize());
+        List<TradingStatisticPo> tradingStatistics = tradingStatisticMapper.selectTradingStatisticByPageByDayFailRate(tradingStatisticQueryTime);
+		return tradingStatistics;
+	}
+
+	@Override
+	public List<TradingStatisticPo> selectTradingStatisticByPageByTxType(TradingStatisticQueryTime tradingStatisticQueryTime,
+			CurrentPage currentPage) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(currentPage.getCurrentPage(), currentPage.getPageSize());
+        List<TradingStatisticPo> tradingStatistics = tradingStatisticMapper.selectTradingStatisticByPageByTxType(tradingStatisticQueryTime);
+		return tradingStatistics;
+	}
+	@Override
+	public List<TradingStatisticPo> selectTradingStatisticByPageByFail(TradingStatisticQueryTime tradingStatisticQueryTime,
+			CurrentPage currentPage) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(currentPage.getCurrentPage(), currentPage.getPageSize());
+        List<TradingStatisticPo> tradingStatistics = tradingStatisticMapper.selectTradingStatisticByPageByFail(tradingStatisticQueryTime);
+		return tradingStatistics;
+	}
+	@Override
+	public List<TradingStatisticPo> selectTradingStatisticByType(TradingStatisticQueryTime tradingStatisticQueryTime,
+			CurrentPage currentPage) {
+		// TODO Auto-generated method stub
+		PageHelper.startPage(currentPage.getCurrentPage(), currentPage.getPageSize());
+        List<TradingStatisticPo> tradingStatistics = tradingStatisticMapper.selectTradingStatisticByType(tradingStatisticQueryTime);
+		return tradingStatistics;
 	}
 
 	

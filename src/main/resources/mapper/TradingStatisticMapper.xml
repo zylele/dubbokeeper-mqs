@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dubboclub.dk.storage.mysql.mapper.TradingStatisticMapper">
     <insert id="addTradingStatistic" parameterType="TradingStatisticPo">
-    	insert into trading (tx_code,now_time,total_num, time_avg, time_max,time_min,success,fail)
+    	insert into trading (tx_code,now_time,total_num, time_avg, time_max,time_min,success,fail,service_name,source_type)
     	values (#{txCode},
             #{nowTime},
             #{totalNum},
@@ -11,7 +11,9 @@
             #{tiemMax},
             #{timeMin},
             #{success},
-            #{fail})
+            #{fail},
+            #{serviceName},
+            #{sourceType})
     </insert>
     <update id="updateTradingStatisticByTxCode" parameterType="TradingStatisticPo">
     	update trading set
@@ -20,20 +22,22 @@
     		time_max = #{tiemMax},
     		time_min = #{timeMin},
     		success = #{success},
-    		fail = #{fail} 		
+    		fail = #{fail},
+            #{serviceName},
+            #{sourceType} 		
     	where 1=1 and tx_code = #{txCode} and now_time = #{nowTime};
     </update>
     <select id="selectTradingStatisticByTxCode" resultType="TradingStatisticPo"  parameterType="TradingStatisticPo">
        select tx_code as txCode,now_time as nowTime,total_num as totalNum, time_avg as timeAvg, time_max as timeMax,
-       time_min as timeMin,success,fail
+       time_min as timeMin,success,fail,service_name as serviceName,source_type as sourceType
        from trading 
        where tx_code = #{txCode} and now_time = #{nowTime};
     </select>
     <select id="selectTradingStatisticByPageByCondition" parameterType="TradingStatisticQuery" resultType="TradingStatisticPo">
-    	select b.tx_name as txName,a.tx_code as txCode,SUM(a.total_num) as totalNum, AVG(a.time_avg) as timeAvg,SUM(a.success) as success,
-		SUM(a.fail) as fail
+    	select b.tx_name as txName,b.tx_type as txType,a.tx_code as txCode,SUM(a.total_num) as totalNum, AVG(a.time_avg) as timeAvg,SUM(a.success) as success,
+		SUM(a.fail) as fail,service_name as serviceName,source_type as sourceType
        	from trading a join tx_code_info b on a.tx_code = b.tx_code
-    	where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate}
+    	where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate} 
     	GROUP BY a.tx_code
     	<if test="type == '01'" >
     		order by totalNum DESC
@@ -52,5 +56,31 @@
     	delete from trading
     	where now_time &lt; #{nowTime}
     </delete>
+    <select id="selectTradingStatisticByPageByDayFailRate" parameterType="TradingStatisticQueryTime" resultType="TradingStatisticPo">
+    	select SUM(total_num) as totalNum,SUM(success) as success,SUM(fail) as fail,SUM(fail)/SUM(total_num) as failRate
+    	from trading 
+    	where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate} 
+    </select>
+    <select id="selectTradingStatisticByPageByTxType" parameterType="TradingStatisticQueryTime" resultType="TradingStatisticPo">
+    	select SUM(a.total_num) as totalNum,SUM(a.fail) as fail
+       	from trading a join tx_code_info b on a.tx_code = b.tx_code
+    	where 1=1 and b.tx_type=1 and now_time between #{tradingStartDate} and #{tradingEndDate}
+    </select>
+    <select id="selectTradingStatisticByPageByFail" parameterType="TradingStatisticQueryTime" resultType="TradingStatisticPo">
+		select b.tx_name as txName,a.tx_code as txCode,SUM(a.total_num) as totalNum,
+		SUM(a.fail) as fail,SUM(a.fail)/SUM(a.total_num) as failRate
+		from trading a join tx_code_info b on a.tx_code = b.tx_code
+		where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate}
+		GROUP BY a.tx_code
+		order by failRate DESC
+	</select>
+	<select id="selectTradingStatisticByType" parameterType="TradingStatisticQueryTime" resultType="TradingStatisticPo">
+		select b.tx_name as txName,a.tx_code as txCode,SUM(a.total_num) as totalNum, AVG(a.time_avg) as timeAvg,SUM(a.success) as success,
+		SUM(a.fail) as fail
+		from trading a join tx_code_info b on a.tx_code = b.tx_code
+		where 1=1 and b.tx_type=1 and now_time between #{tradingStartDate} and #{tradingEndDate}
+		GROUP BY a.tx_code
+		order by totalNum DESC
+	</select>
 
 </mapper>

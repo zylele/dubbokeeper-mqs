@@ -13,7 +13,21 @@ public class StatisticObject {
 	private long totalTimePerTime;
 	private int totalDayTimePer;
 	private long timestamp;
+	private String serviceName;
+	private String sourceType;
 
+	public String getServiceName() {
+		return serviceName;
+	}
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+	public String getSourceType() {
+		return sourceType;
+	}
+	public void setSourceType(String sourceType) {
+		this.sourceType = sourceType;
+	}
 	public long getTimestamp() {
 		return timestamp;
 	}

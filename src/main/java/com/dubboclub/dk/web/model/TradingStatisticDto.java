@@ -4,6 +4,7 @@ public class TradingStatisticDto {
 	private int id;
 	private String txCode;
 	private String txName;
+	private String txType;
 	private String nowTime;
 	private int totalNum;
 	private double timeAvg;
@@ -11,6 +12,28 @@ public class TradingStatisticDto {
 	private String timeMin;
 	private int success;
 	private int fail;
+	private String serviceName;
+	private String sourceType;
+	private String failRate;
+	
+	public String getFailRate() {
+		return failRate;
+	}
+	public void setFailRate(String failRate) {
+		this.failRate = failRate;
+	}
+	public String getServiceName() {
+		return serviceName;
+	}
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+	public String getSourceType() {
+		return sourceType;
+	}
+	public void setSourceType(String sourceType) {
+		this.sourceType = sourceType;
+	}
 	public int getId() {
 		return id;
 	}
@@ -28,6 +51,12 @@ public class TradingStatisticDto {
 	}
 	public void setTxName(String txName) {
 		this.txName = txName;
+	}
+	public String getTxType() {
+		return txType;
+	}
+	public void setTxType(String txType) {
+		this.txType = txType;
 	}
 	public String getNowTime() {
 		return nowTime;

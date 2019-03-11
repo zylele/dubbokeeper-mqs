@@ -38,15 +38,17 @@ import com.dubboclub.dk.web.utils.ConstantsUtil;
 @Component
 public class StatisticsMailTaskImpl implements StatisticsMailTask {
 	private static final Logger logger = LoggerFactory.getLogger(StatisticsMailTaskImpl.class);
+	
     @Autowired
     @Qualifier("tradingStatisticStorage")
     private TradingStatisticStorage tradingStatisticStorage;
+    
     @Autowired
     @Qualifier("notificationStorage")
     private NotificationStorage notificationStorage;
+    
     @Autowired
 	MsgSystemService msgSystemService;
-    
 	private String sendMailStatistic;
     
     @PostConstruct
@@ -54,7 +56,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     	sendMailStatistic = ConfigUtils.getProperty("sendMailStatistic.url");
     }
 //  统计信息的邮件功能
-    @Scheduled(cron="0 0 1 * * ?")   //每天凌晨1点执行一次     
+    @Scheduled(cron="0/10 * *  * * ? ")   //每天凌晨1点执行一次     0 0 1 * * ?
     @Override 
 	public void getStatisticsMailTask(){
     	RestTemplate restTemplate = new RestTemplate();  
@@ -75,13 +77,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 			currentPage.setCurrentPage(1);
 			currentPage.setPageSize(10);
 			data = tradingStatisticStorage.selectTradingStatisticByPageByCondition(tradingStatisticQuery,currentPage);
-			SendEmailReq sendEmailReq = new SendEmailReq();
-			sendEmailReq.setSceneCode("M001");
-			sendEmailReq.setBusType("OutOpenAcc");
-			sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-			sendEmailReq.setMailTo(queryAddress());
-			sendEmailReq.setAttachments(null);
-			sendEmailReq.setMsg("昨天数据统计");
+			
 //			遍历返回的数据
 			for(TradingStatisticPo po : data){
 				if(i == "01"){
@@ -101,6 +97,13 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     	 				+ "\n" + DayStatistics() + "\n" + WeekStatistic() +  weekStatistics();
     	logger.debug("统计类邮件内容-->" + msg);
     	System.out.println("统计类邮件内容-->" + msg);
+    	SendEmailReq sendEmailReq = new SendEmailReq();
+		sendEmailReq.setSceneCode("M001");
+		sendEmailReq.setBusType("OutOpenAcc");
+		sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
+		sendEmailReq.setMailTo(queryAddress());
+		sendEmailReq.setAttachments(null);
+		sendEmailReq.setMsg("昨天数据统计");
     	SingleEmailReq singleEmailReq = new SingleEmailReq();
     	singleEmailReq.setContentData(msg);
 		if(sendMailStatistic.equals("true"))
@@ -129,14 +132,24 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 		String msgx = "";
 		List<TradingStatisticPo> data = new ArrayList<TradingStatisticPo>();
     	data = tradingStatisticStorage.selectTradingStatisticByPageByDayFailRate(tradingStatisticQueryTime,currentPage);
-    	for(TradingStatisticPo po : data){
-			msg.append(msgx = "交易总笔数:" + po.getTotalNum() + "\t\t" + "成功总笔数:" + po.getSuccess() + "\t\t" + "失败总笔数:" + po.getFail() + "" +  "\t\t" + "失败率:" + po.getFailRate() + "\n");
-    	}
+    	try {
+			for(TradingStatisticPo po : data){
+				msg.append(msgx = "交易总笔数:" + po.getTotalNum() + "\t\t" + "成功总笔数:" + po.getSuccess() + "\t\t" + "失败总笔数:" + po.getFail() + "" +  "\t\t" + "失败率:" + po.getFailRate() + "\n");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			 System.out.println("统计数据库中数据为空: " + e);
+		}
     	List<TradingStatisticPo> data1 = new ArrayList<TradingStatisticPo>();
     	data1 = tradingStatisticStorage.selectTradingStatisticByPageByTxType(tradingStatisticQueryTime,currentPage);
-    	for(TradingStatisticPo po : data1){
-			msg.append(msgx = "金融类交易笔数:" + po.getTotalNum() + "\t\t" + "金融类交易失败笔数:" + po.getFail() + "\n");
-    	}
+    	try {
+			for(TradingStatisticPo po : data1){
+				msg.append(msgx = "金融类交易笔数:" + po.getTotalNum() + "\t\t" + "金融类交易失败笔数:" + po.getFail() + "\n");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("统计数据库中数据为空: " + e);
+		}
     	
 		return msg.toString();
 	}
@@ -153,14 +166,24 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 		String msgx = "";
 		List<TradingStatisticPo> data = new ArrayList<TradingStatisticPo>();
     	data = tradingStatisticStorage.selectTradingStatisticByType(tradingStatisticQueryTime,currentPage);
-    	for(TradingStatisticPo po : data){
-			msg.append(msgx =  "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
-    	}
+    	try {
+			for(TradingStatisticPo po : data){
+				msg.append(msgx =  "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("统计数据库中数据为空: " + e);
+		}
     	List<TradingStatisticPo> data1 = new ArrayList<TradingStatisticPo>();
     	data1 = tradingStatisticStorage.selectTradingStatisticByPageByFail(tradingStatisticQueryTime,currentPage);
-    	for(TradingStatisticPo po : data1){
-			msg1.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
-    	}
+    	try {
+			for(TradingStatisticPo po : data1){
+				msg1.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("统计数据库中数据为空: " + e);
+		}
     	
 		return "昨日金融类TOP10:" + "\n" + msg.toString()+ "昨日交易失败率TOP10:" + "\n" + msg1.toString();
 	}
@@ -177,8 +200,13 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 		currentPage.setCurrentPage(1);
 		currentPage.setPageSize(10);
 		weekData = tradingStatisticStorage.selectTradingStatisticByPageByCondition(tradingStatisticQuery,currentPage);
-		for(TradingStatisticPo po : weekData){
-			msgWeek.append(msgx ="交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
+		try {
+			for(TradingStatisticPo po : weekData){
+				msgWeek.append(msgx ="交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("统计数据库中数据为空: " + e);
 		}
 		return "近七天交易量TOP10:" + "\n" + msgWeek.toString();
 
@@ -197,12 +225,22 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 		currentPage.setCurrentPage(1);
 		currentPage.setPageSize(10);
 		weekData = tradingStatisticStorage.selectTradingStatisticByType(tradingStatisticQueryTime,currentPage);
-		for(TradingStatisticPo po : weekData){
-			msgWeek.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
+		try {
+			for(TradingStatisticPo po : weekData){
+				msgWeek.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("统计数据库中数据为空: " + e);
 		}
 		weekData2 = tradingStatisticStorage.selectTradingStatisticByPageByFail(tradingStatisticQueryTime,currentPage);
-		for(TradingStatisticPo po : weekData2){
-			msgWeek1.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
+		try {
+			for(TradingStatisticPo po : weekData2){
+				msgWeek1.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("统计数据库中数据为空: " + e);
 		}
 		return "近七天金融TOP10:" + "\n" + msgWeek.toString() + "近七天交易失败率TOP10:" + "\n" + msgWeek1.toString();
 

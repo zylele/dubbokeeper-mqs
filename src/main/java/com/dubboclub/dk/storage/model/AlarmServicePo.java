@@ -3,7 +3,7 @@ package com.dubboclub.dk.storage.model;
     /**  
     * @ClassName: AlarmServicePo  
     * @Description: alarm_service表实体
-    * @author jinxiaolei and zhangpengfei  
+    * @author jinxiaolei 
     * @date 2019年3月5日   
     */  
 public class AlarmServicePo {

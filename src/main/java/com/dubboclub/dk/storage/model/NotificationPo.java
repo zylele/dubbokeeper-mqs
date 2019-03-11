@@ -2,6 +2,12 @@ package com.dubboclub.dk.storage.model;
 
 import java.math.BigInteger;
 
+/**  
+* @ClassName: NotificationPo  
+* @Description:notification表实体   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 public class NotificationPo {
 	private BigInteger id;
     private String type;

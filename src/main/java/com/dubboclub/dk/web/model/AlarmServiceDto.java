@@ -1,5 +1,11 @@
 package com.dubboclub.dk.web.model;
 
+/**  
+* @ClassName: AlarmServiceDto  
+* @Description:   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 public class AlarmServiceDto {
 
 	private String host;

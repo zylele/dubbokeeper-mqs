@@ -2,6 +2,12 @@ package com.dubboclub.dk.web.model;
 
 import java.math.BigInteger;
 
+/**  
+* @ClassName: NotificationDto  
+* @Description:邮箱地址   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 public class NotificationDto {
 	private BigInteger id;
     private String type;

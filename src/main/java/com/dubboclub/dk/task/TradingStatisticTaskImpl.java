@@ -26,6 +26,12 @@ import com.dubboclub.dk.storage.model.StatisticObject;
 import com.dubboclub.dk.storage.model.TradingStatisticPo;
 import com.dubboclub.dk.web.utils.ConstantsUtil;
 
+/**  
+* @ClassName: TradingStatisticTaskImpl  
+* @Description:定时从zipkin获取数据并统计   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 @Component
 public class TradingStatisticTaskImpl implements TradingStatisticTask {
 	private static final Logger logger = LoggerFactory.getLogger(TradingStatisticTaskImpl.class);
@@ -44,6 +50,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
     }
 	@Scheduled(cron="0/10 * *  * * ? ")   //每10秒执行一次    
 	@Override 
+	//解决时间重叠问题 
     public void getTradingStatisticTask(){
 		Long startT;
 		Long endT;
@@ -65,8 +72,8 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 			logger.warn(zipkinUrl + BIZ_EXCEPTION_URL + "&startTs=" + startT + "&endTs=" + endT);
 			return;
 		}
-		
 		JSONArray jsonTrads = JSONArray.parseArray(data);
+//		如果没有交易定时向每日峰值表中插入数据
 		if(jsonTrads == null || jsonTrads.size() == 0){
 			DayTradingPo dayTradingPo = new DayTradingPo();
 			dayTradingPo.setTxCode("Reserved");
@@ -79,7 +86,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 //		Map<String, DayStatisticObject> txCodeMap = new HashMap<String, DayStatisticObject>();  //每日峰值内层Map
 //		Map<String, Map<String, DayStatisticObject>> dayTradingMap = new HashMap<String, Map<String, DayStatisticObject>>();  ////每日峰值外层Map
 		
-		
+		//遍历返回的数据并put到statisticMap中，以txCode为Key
 		for (Object jsonTrad : jsonTrads) {
 			String txCode = "";
 			long duration = 0;

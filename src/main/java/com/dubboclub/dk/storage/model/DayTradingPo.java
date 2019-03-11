@@ -1,5 +1,11 @@
 package com.dubboclub.dk.storage.model;
 
+/**  
+* @ClassName: DayTradingPo  
+* @Description:statistic_day表实体   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 public class DayTradingPo {
 	
 	private String startTime;

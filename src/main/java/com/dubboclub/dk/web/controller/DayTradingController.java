@@ -19,6 +19,12 @@ import com.dubboclub.dk.web.model.BasicListResponse;
 import com.dubboclub.dk.web.model.DayTradingDto;
 import com.dubboclub.dk.web.model.TradingStatisticDto;
 
+/**  
+* @ClassName: DayTradingController  
+* @Description:每日峰值统计Controller   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 @Controller
 @RequestMapping("/dayTrading")
 public class DayTradingController {

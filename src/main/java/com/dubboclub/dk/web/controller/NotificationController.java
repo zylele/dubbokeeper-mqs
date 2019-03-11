@@ -22,6 +22,12 @@ import com.dubboclub.dk.web.model.NotificationResultDto;
 import com.dubboclub.dk.web.model.WarningStatusDto;
 import com.github.pagehelper.PageInfo;
 
+/**  
+* @ClassName: NotificationController  
+* @Description:增、删、改、查邮箱地址的Controller   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 @Controller
 @RequestMapping("/notification")
 public class NotificationController {
@@ -30,7 +36,7 @@ public class NotificationController {
     private NotificationStorage notificationStorage;
 	@Autowired
 	private WarningStatusHolder warningStatusHolder;
-	//查询单条语句并返回
+	//查询单个邮箱地址
     @RequestMapping(value = {"/getNotificationById"},method = {RequestMethod.POST})
     public @ResponseBody NotificationDto getNotificationById(@RequestBody NotificationDto notification){
     	NotificationPo notificationPo = new NotificationPo();
@@ -40,7 +46,7 @@ public class NotificationController {
     	BeanUtils.copyProperties(notificationPoResult, notificationDto);
         return notificationDto;
     }
-    
+    //删除单条邮箱地址
     @RequestMapping(value = {"/deleteNotificationById"},method = {RequestMethod.POST})
     public @ResponseBody NotificationResultDto deleteNotificationById(@RequestBody NotificationDto notification){
     	NotificationPo notificationPo =new NotificationPo();
@@ -48,7 +54,7 @@ public class NotificationController {
     	Integer notificationPoResult = notificationStorage.deleteNotificationById(notificationPo);
     	return new NotificationResultDto(notificationPoResult);	
     }
-    
+    //添加单个邮箱地址
     @RequestMapping(value = {"/addNotification"},method = {RequestMethod.POST})
     public @ResponseBody NotificationResultDto addNotification(@RequestBody NotificationDto notification){
     	NotificationPo notificationPo = new NotificationPo();
@@ -56,7 +62,7 @@ public class NotificationController {
     	Integer notificationPoResult = notificationStorage.addNotification(notificationPo);
         return new NotificationResultDto(notificationPoResult);
     }
-    
+    //更新单个邮箱地址
     @RequestMapping(value = {"/updateNotificationById"},method = {RequestMethod.POST})
     public @ResponseBody NotificationResultDto updateNotificationById(@RequestBody NotificationDto notification){
     	NotificationPo notificationPo = new NotificationPo();
@@ -65,7 +71,7 @@ public class NotificationController {
         return new NotificationResultDto(notificationPoResult);
     }
     
-    //多条查询
+    //查询多个邮箱地址
     @RequestMapping(value = {"/getNotificationByPage"},method = {RequestMethod.POST})
     public @ResponseBody BasicListResponse<NotificationDto>  getNotificationByPage(@RequestBody BaseQueryConditions<NotificationDto>  conditions) {
     	NotificationPo notificationPo = new NotificationPo();

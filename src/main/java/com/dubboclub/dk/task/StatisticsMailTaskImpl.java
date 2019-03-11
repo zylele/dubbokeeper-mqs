@@ -53,7 +53,8 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     public void init() {
     	sendMailStatistic = ConfigUtils.getProperty("sendMailStatistic.url");
     }
-    @Scheduled(cron="0/10 * *  * * ? ")   //每天凌晨1点执行一次     
+//  统计信息的邮件功能
+    @Scheduled(cron="0 0 1 * * ?")   //每天凌晨1点执行一次     
     @Override 
 	public void getStatisticsMailTask(){
     	RestTemplate restTemplate = new RestTemplate();  
@@ -66,6 +67,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     	StringBuilder msgTimeAvg = new StringBuilder();
     	StringBuilder msgSuccess = new StringBuilder();
     	StringBuilder msgFail = new StringBuilder();
+//    	向接口传type值，根据type值去排序查询数据
     	String[] x = {"01","02","03","04"};
     	for(String i : x){
     		tradingStatisticQuery.setType(i);
@@ -80,7 +82,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 			sendEmailReq.setMailTo(queryAddress());
 			sendEmailReq.setAttachments(null);
 			sendEmailReq.setMsg("昨天数据统计");
-			
+//			遍历返回的数据
 			for(TradingStatisticPo po : data){
 				if(i == "01"){
 					msgTxCode.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
@@ -94,17 +96,17 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 				
 			}
     	}
-    	String dayAllStatistics = DayAllStatistics();
-    	String dayStatistics = DayStatistics();
-    	String weekStatistic = WeekStatistic();
-    	String weekStatistics = weekStatistics();
-    	String msg = "昨日交易情况统计" + "\n" + dayAllStatistics + "昨日交易量TOP10:" + "\n" + msgTxCode.toString() + "\n" + "昨日平均耗时TOP10:" + "\n" +  msgTimeAvg.toString() + "\n" + "昨日交易成功TOP10:" + "\n" +  msgSuccess.toString() + "\n" + "昨日交易失败TOP10:" + "\n" + msgFail.toString()
-    	 				+ "\n" +  dayStatistics + "\n" + "七天前交易量TOP10:" + "\n" + weekStatistic +  weekStatistics;
+//    	最终的邮件内容字符串
+    	String msg = "昨日交易情况统计" + "\n" + DayAllStatistics() + "昨日交易量TOP10:" + "\n" + msgTxCode.toString() + "\n" + "昨日平均耗时TOP10:" + "\n" +  msgTimeAvg.toString() + "\n" + "昨日交易成功率TOP10:" + "\n" +  msgSuccess.toString() + "\n" + "昨日交易失败率TOP10:" + "\n" + msgFail.toString()
+    	 				+ "\n" + DayStatistics() + "\n" + WeekStatistic() +  weekStatistics();
+    	logger.debug("统计类邮件内容-->" + msg);
+    	System.out.println("统计类邮件内容-->" + msg);
     	SingleEmailReq singleEmailReq = new SingleEmailReq();
     	singleEmailReq.setContentData(msg);
 		if(sendMailStatistic.equals("true"))
 			msgSystemService.SendSingleEmail(singleEmailReq);
 	}
+//    获取邮箱地址
     private List<String> queryAddress(){
 		NotificationPo notificationPo = new NotificationPo();
 		notificationPo.setType("01");
@@ -115,6 +117,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 		}
 		return mails;
 	};
+//	部分邮件内容获取
 	private String DayAllStatistics(){
 		TradingStatisticQueryTime tradingStatisticQueryTime = new TradingStatisticQueryTime();
 		tradingStatisticQueryTime.setTradingStartDate(new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24)));
@@ -137,6 +140,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     	
 		return msg.toString();
 	}
+//	部分邮件内容获取
 	private String DayStatistics(){
 		TradingStatisticQueryTime tradingStatisticQueryTime = new TradingStatisticQueryTime();
 		tradingStatisticQueryTime.setTradingStartDate(new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24)));
@@ -150,16 +154,17 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 		List<TradingStatisticPo> data = new ArrayList<TradingStatisticPo>();
     	data = tradingStatisticStorage.selectTradingStatisticByType(tradingStatisticQueryTime,currentPage);
     	for(TradingStatisticPo po : data){
-			msg.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
+			msg.append(msgx =  "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
     	}
     	List<TradingStatisticPo> data1 = new ArrayList<TradingStatisticPo>();
     	data1 = tradingStatisticStorage.selectTradingStatisticByPageByFail(tradingStatisticQueryTime,currentPage);
     	for(TradingStatisticPo po : data1){
-			msg1.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "失败率:" + po.getFailRate() + "" + "\n");
+			msg1.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
     	}
     	
-		return "昨日金融类TOP10:" + "\n" + msg.toString() + "昨日交易失败率TOP10:" + "\n" + msg1.toString();
+		return "昨日金融类TOP10:" + "\n" + msg.toString()+ "昨日交易失败率TOP10:" + "\n" + msg1.toString();
 	}
+//	部分邮件内容获取
 	private String WeekStatistic(){
 		TradingStatisticQuery tradingStatisticQuery = new TradingStatisticQuery();
 		tradingStatisticQuery.setTradingStartDate(new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24*7)));
@@ -175,9 +180,10 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 		for(TradingStatisticPo po : weekData){
 			msgWeek.append(msgx ="交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
 		}
-		return msgWeek.toString();
+		return "近七天交易量TOP10:" + "\n" + msgWeek.toString();
 
 	}
+//	部分邮件内容获取
 	private String weekStatistics(){
 		TradingStatisticQueryTime tradingStatisticQueryTime = new TradingStatisticQueryTime();
 		tradingStatisticQueryTime.setTradingStartDate(new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24*7)));
@@ -196,9 +202,9 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 		}
 		weekData2 = tradingStatisticStorage.selectTradingStatisticByPageByFail(tradingStatisticQueryTime,currentPage);
 		for(TradingStatisticPo po : weekData2){
-			msgWeek1.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "失败率:" + po.getFailRate() + "" + "\n");
+			msgWeek1.append(msgx = "交易码:" + po.getTxCode() + "\t\t" + "交易名称:" + po.getTxName() + "\t\t" + "交易量:" + po.getTotalNum() + "" + "\n");
 		}
-		return "七天前金融TOP10:" + "\n" + msgWeek.toString() + "七天前交易失败率TOP10:" + "\n" + msgWeek1.toString();
+		return "近七天金融TOP10:" + "\n" + msgWeek.toString() + "近七天交易失败率TOP10:" + "\n" + msgWeek1.toString();
 
 	}
 

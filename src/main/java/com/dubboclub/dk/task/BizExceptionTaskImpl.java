@@ -73,6 +73,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 			return;
 		}
 		JSONArray jsonErrors = JSONArray.parseArray(data);
+//		遍历zipkin返回的josn串
 		for (Object jsonError : jsonErrors) {
 			String error = "";
 			String txCode = "";
@@ -108,7 +109,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 									sendEmailReq.setMailTo(sendMessage.queryAddress());
 									sendEmailReq.setAttachments(null);
 									sendEmailReq.setMsg("新的业务异常，traceId: " + traceId + ",error: " + error);
-
+									//业务异常邮件发送
 									logger.debug("新的业务异常，traceId: " + traceId + ",error: " + error);
 									sendMessage.sendWarningMailAsyc(sendEmailReq, txCode);
 									sendMessage.sendWarningPhoneAsyc(sendEmailReq, txCode);
@@ -191,6 +192,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 //		}
 //		return PhoneNums;
 //	}
+    
 	private boolean methodName (String servicename){
 		int server = servicename.indexOf("server");
 		int client = servicename.indexOf("client");

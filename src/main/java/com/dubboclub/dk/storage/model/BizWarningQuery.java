@@ -1,5 +1,11 @@
 package com.dubboclub.dk.storage.model;
 
+/**  
+* @ClassName: BizWarningQuery  
+* @Description:Biz_warning表查询实体   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 public class BizWarningQuery {
 	private String bizStartDate;
 	private String bizEndDate;

@@ -1,5 +1,11 @@
 package com.dubboclub.dk.storage.model;
 
+/**  
+* @ClassName: TradingStatisticQuery  
+* @Description:   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 public class TradingStatisticQuery {
 	private String tradingStartDate;
 	private String tradingEndDate;

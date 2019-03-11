@@ -20,6 +20,12 @@ import com.dubboclub.dk.web.model.BasicListResponse;
 import com.dubboclub.dk.web.model.TradingStatisticDto;
 import com.github.pagehelper.PageInfo;
 
+/**  
+* @ClassName: TradingStatisticController  
+* @Description:主要数据统计的Controller   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 @Controller
 @RequestMapping("/tradingStatistic")
 public class TradingStatisticController {

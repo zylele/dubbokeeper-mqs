@@ -1,5 +1,11 @@
 package com.dubboclub.dk.storage.model;
 
+/**  
+* @ClassName: DayTradingQuery  
+* @Description:statistic_day表查询实体   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 public class DayTradingQuery {
 	private long dayTradingStartDate;
 	private long dayTradingEndDate;

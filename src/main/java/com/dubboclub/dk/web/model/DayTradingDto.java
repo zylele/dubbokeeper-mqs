@@ -1,5 +1,11 @@
 package com.dubboclub.dk.web.model;
 
+/**  
+* @ClassName: DayTradingDto  
+* @Description:日交易量峰值统计   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 public class DayTradingDto {
 	
 	private String startTime;

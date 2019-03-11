@@ -1,5 +1,11 @@
 package com.dubboclub.dk.web.model;
 
+/**  
+* @ClassName: TradingStatisticDto  
+* @Description:交易量等的统计   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 public class TradingStatisticDto {
 	private int id;
 	private String txCode;

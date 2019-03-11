@@ -1,5 +1,5 @@
 package com.dubboclub.dk.task;
-
+ 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,6 +19,12 @@ import com.dubboclub.dk.storage.model.DayTradingPo;
 import com.dubboclub.dk.storage.model.TradingStatisticPo;
 import com.dubboclub.dk.web.utils.ConstantsUtil;
 
+/**  
+* @ClassName: TradingDeleteTaskImpl  
+* @Description:定是删除统计数据任务，删除天数可以在pom.xml中配置   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 @Component
 public class TradingDeleteTaskImpl implements TradingDeleteTask {
 	
@@ -35,6 +41,9 @@ public class TradingDeleteTaskImpl implements TradingDeleteTask {
 		reservedDay = ConfigUtils.getProperty("reservedDay.url");
 		reservedDayTop10 = ConfigUtils.getProperty("reservedDayTop10.url");
     }
+	/**
+	 * 根据POM中传来的值定期删除每日峰值数据和每月统计数据
+	 */
 	@Scheduled(cron="0 0 0/1 * * ? ")   //每小时执行一次  
 	@Override 
     public void deleteTradingDayTask(){

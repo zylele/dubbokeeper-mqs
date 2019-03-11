@@ -1,5 +1,11 @@
 package com.dubboclub.dk.storage.model;
 
+/**  
+* @ClassName: StatisticObject  
+* @Description:   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 public class StatisticObject {
 	private String txCode;
 	private int totalNum;

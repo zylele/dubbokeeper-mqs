@@ -1,5 +1,11 @@
 package com.dubboclub.dk.storage.model;
 
+/**  
+* @ClassName: TradingStatisticPo  
+* @Description:trading_Statistic表实体   
+* @author zhangpengfei  
+* @date 2019年3月11日   
+*/
 public class TradingStatisticPo {
 	private int id;
 	private String txCode;

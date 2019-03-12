@@ -122,7 +122,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 //						if(kind.equalsIgnoreCase("CLIENT")){
 							// 交易量，平均耗时，成功或失败次数Map
 							StatisticObject object = statisticMap.get(txCode);
-							if (object == null) {
+							if (object == null || !serviceName.equals(object.getServiceName()) || !sourceType.equals(object.getSourceType())) {
 								object = new StatisticObject();
 								object.setTotalNum(1);
 								object.setTotalTimePerTime(duration);
@@ -134,19 +134,18 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 								else
 									object.setFail(1);
 								object.setServiceName(serviceName);
-								object.setSourceType(sourceType==null?"0000":sourceType);
+								object.setSourceType(sourceType==null?sourceType="0000":sourceType);
 								statisticMap.put(txCode, object);
-							} else if(serviceName.equals(object.getServiceName())||sourceType.equals(object.getSourceType())){
-								object.setTotalNum(object.getTotalNum() + 1);
-								object.setTotalTimePerTime(object.getTotalTimePerTime() + duration);
-								if (success)
-									object.setSuccess(object.getSuccess() + 1);
-								else
-									object.setFail(object.getFail() + 1);
-								object.setServiceName(serviceName);
-								object.setSourceType(sourceType==null?"0000":sourceType);
-								statisticMap.put(txCode, object);
-
+							} else {
+									object.setTotalNum(object.getTotalNum() + 1);
+									object.setTotalTimePerTime(object.getTotalTimePerTime() + duration);
+									if (success)
+										object.setSuccess(object.getSuccess() + 1);
+									else
+										object.setFail(object.getFail() + 1);
+									object.setServiceName(serviceName);
+									object.setSourceType(sourceType==null?sourceType="0000":sourceType);
+									statisticMap.put(txCode, object);
 							}
 							object.setTotalDayTimePer(object.getTotalDayTimePer() + 1);
 							statisticMap.put(txCode, object);

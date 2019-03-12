@@ -56,7 +56,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     	sendMailStatistic = ConfigUtils.getProperty("sendMailStatistic.url");
     }
 //  统计信息的邮件功能
-    @Scheduled(cron="0/10 * *  * * ? ")   //每天凌晨1点执行一次     0 0 1 * * ?
+    @Scheduled(cron=" 0 0 1 * * ?")   //每天凌晨1点执行一次     0 0 1 * * ?
     @Override 
 	public void getStatisticsMailTask(){
     	RestTemplate restTemplate = new RestTemplate();  

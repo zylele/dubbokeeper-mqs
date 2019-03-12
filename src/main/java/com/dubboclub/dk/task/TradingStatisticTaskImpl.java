@@ -83,7 +83,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 			dayTradingStorage.addDayTrading(dayTradingPo);
 		}
 		Map<String, StatisticObject> statisticMap = new HashMap<String, StatisticObject>();  //交易量，平均耗时，成功或失败次数Map
-//		Map<String, DayStatisticObject> txCodeMap = new HashMap<String, DayStatisticObject>();  //每日峰值内层Map
+//		Map<String, StatisticObject> statisticDayMap = new HashMap<String, StatisticObject>();  //每日峰值Map
 //		Map<String, Map<String, DayStatisticObject>> dayTradingMap = new HashMap<String, Map<String, DayStatisticObject>>();  ////每日峰值外层Map
 		
 		//遍历返回的数据并put到statisticMap中，以txCode为Key
@@ -119,7 +119,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 							};
 
 						};
-						if(kind.equalsIgnoreCase("CLIENT")){
+//						if(kind.equalsIgnoreCase("CLIENT")){
 							// 交易量，平均耗时，成功或失败次数Map
 							StatisticObject object = statisticMap.get(txCode);
 							if (object == null) {
@@ -134,70 +134,81 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 								else
 									object.setFail(1);
 								object.setServiceName(serviceName);
-								object.setSourceType(sourceType);
+								object.setSourceType(sourceType==null?"0000":sourceType);
 								statisticMap.put(txCode, object);
-							} else {
+							} else if(serviceName.equals(object.getServiceName())||sourceType.equals(object.getSourceType())){
 								object.setTotalNum(object.getTotalNum() + 1);
 								object.setTotalTimePerTime(object.getTotalTimePerTime() + duration);
 								if (success)
 									object.setSuccess(object.getSuccess() + 1);
 								else
 									object.setFail(object.getFail() + 1);
+								object.setServiceName(serviceName);
+								object.setSourceType(sourceType==null?"0000":sourceType);
 								statisticMap.put(txCode, object);
 
 							}
 							object.setTotalDayTimePer(object.getTotalDayTimePer() + 1);
 							statisticMap.put(txCode, object);
-						}
+							
+							//遍历交易量，平均耗时，成功或失败次数Map
+							for(String key : statisticMap.keySet())
+					        {
+								
+								StatisticObject value = statisticMap.get(key);
+								TradingStatisticPo tradingStatisticPo = new TradingStatisticPo();
+								tradingStatisticPo.setTxCode(key);
+								tradingStatisticPo.setNowTime(value.getNowTime());
+								tradingStatisticPo.setServiceName(value.getServiceName());
+								tradingStatisticPo.setSourceType(value.getSourceType());
+								TradingStatisticPo dataPo = tradingStatisticStorage.selectTradingStatisticByTxCode(tradingStatisticPo);
+								
+								
+								if(dataPo == null){
+									BeanUtils.copyProperties(value, tradingStatisticPo);
+									tradingStatisticPo.setTimeAvg(value.getTotalTimePerTime()/value.getTotalNum());
+									tradingStatisticPo.setTxCode(key);
+									tradingStatisticPo.setServiceName(value.getServiceName());
+									tradingStatisticPo.setSourceType(value.getSourceType());
+									tradingStatisticStorage.addTradingStatistic(tradingStatisticPo);
+									
+								}else{
+									tradingStatisticPo.setTotalNum(dataPo.getTotalNum()+value.getTotalNum());
+									tradingStatisticPo.setFail(dataPo.getFail()+value.getFail());
+									tradingStatisticPo.setSuccess(dataPo.getSuccess()+value.getSuccess());	
+									tradingStatisticPo.setTimeAvg(TimeAvg(key,value.getTotalNum(),value.getTotalTimePerTime(),dataPo.getTotalNum(),dataPo.getTimeAvg()));
+									tradingStatisticStorage.updateTradingStatisticByTxCode(tradingStatisticPo);
+								}
+								
+								
+							
+					        }
+//						}
 					}
 					
 				};
 				
 			};
 		}
-			
+		
+									//每日峰值
+									for(String key : statisticMap.keySet()){
+										
+										StatisticObject value = statisticMap.get(key);
+										DayTradingPo dayTradingPo = new DayTradingPo();
+										dayTradingPo.setTotalTimeNum(value.getTotalDayTimePer());
+										dayTradingPo.setStartTime(value.getStartTime());
+										dayTradingPo.setTimestamp(value.getTimestamp());
+										dayTradingStorage.addDayTrading(dayTradingPo);
+									}
+								
 			
 			
 			
 			
 		
 		
-		//遍历交易量，平均耗时，成功或失败次数Map
-		for(String key : statisticMap.keySet())
-        {
-			
-			StatisticObject value = statisticMap.get(key);
-			TradingStatisticPo tradingStatisticPo = new TradingStatisticPo();
-			tradingStatisticPo.setTxCode(key);
-			tradingStatisticPo.setNowTime(value.getNowTime());
-			TradingStatisticPo dataPo = tradingStatisticStorage.selectTradingStatisticByTxCode(tradingStatisticPo);
-			
-			
-			if(dataPo == null){
-				BeanUtils.copyProperties(value, tradingStatisticPo);
-				tradingStatisticPo.setTimeAvg(value.getTotalTimePerTime()/value.getTotalNum());
-				tradingStatisticPo.setTxCode(key);
-				tradingStatisticPo.setServiceName(value.getServiceName());
-				tradingStatisticPo.setSourceType(value.getSourceType());
-				tradingStatisticStorage.addTradingStatistic(tradingStatisticPo);
-				
-			}else{
-				tradingStatisticPo.setTotalNum(dataPo.getTotalNum()+value.getTotalNum());
-				tradingStatisticPo.setFail(dataPo.getFail()+value.getFail());
-				tradingStatisticPo.setSuccess(dataPo.getSuccess()+value.getSuccess());				
-				tradingStatisticPo.setTimeAvg(TimeAvg(key,value.getTotalNum(),value.getTotalTimePerTime(),dataPo.getTotalNum(),dataPo.getTimeAvg()));
-				tradingStatisticStorage.updateTradingStatisticByTxCode(tradingStatisticPo);
-			}
-			//每日峰值
-			DayTradingPo dayTradingPo = new DayTradingPo();
-			dayTradingPo.setTxCode(key);
-			dayTradingPo.setTotalTimeNum(value.getTotalDayTimePer());
-			dayTradingPo.setStartTime(value.getStartTime());
-			dayTradingPo.setTimestamp(value.getTimestamp());
-			dayTradingStorage.addDayTrading(dayTradingPo);
-			
 		
-        }
 		
 		
 		

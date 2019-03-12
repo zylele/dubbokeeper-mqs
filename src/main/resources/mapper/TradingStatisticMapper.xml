@@ -22,19 +22,17 @@
     		time_max = #{tiemMax},
     		time_min = #{timeMin},
     		success = #{success},
-    		fail = #{fail},
-            #{serviceName},
-            #{sourceType} 		
-    	where 1=1 and tx_code = #{txCode} and now_time = #{nowTime};
+    		fail = #{fail}		
+    	where 1=1 and tx_code = #{txCode} and now_time = #{nowTime} and service_name = #{serviceName} and source_type = #{sourceType} ;
     </update>
     <select id="selectTradingStatisticByTxCode" resultType="TradingStatisticPo"  parameterType="TradingStatisticPo">
        select tx_code as txCode,now_time as nowTime,total_num as totalNum, time_avg as timeAvg, time_max as timeMax,
        time_min as timeMin,success,fail,service_name as serviceName,source_type as sourceType
        from trading 
-       where tx_code = #{txCode} and now_time = #{nowTime};
+       where tx_code = #{txCode} and now_time = #{nowTime} and service_name = #{serviceName}  and source_type = #{sourceType};
     </select>
     <select id="selectTradingStatisticByPageByCondition" parameterType="TradingStatisticQuery" resultType="TradingStatisticPo">
-    	select b.tx_name as txName,b.tx_type as txType,a.tx_code as txCode,SUM(a.total_num) as totalNum, AVG(a.time_avg) as timeAvg,SUM(a.success) as success,
+    	select b.tx_name as txName,b.tx_type as txType,a.tx_code as txCode,SUM(a.total_num) as totalNum, SUM(a.total_num*a.time_avg)/SUM(a.total_num) as timeAvg,SUM(a.success) as success,
 		SUM(a.fail) as fail,service_name as serviceName,source_type as sourceType
        	from trading a join tx_code_info b on a.tx_code = b.tx_code
     	where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate} 

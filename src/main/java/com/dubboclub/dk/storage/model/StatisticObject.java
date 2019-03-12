@@ -10,8 +10,6 @@ public class StatisticObject {
 	private String txCode;
 	private int totalNum;
 	private double timeAvg;
-	private String tiemMax;
-	private String timeMin;
 	private int success;
 	private int fail;
 	private String nowTime;
@@ -75,18 +73,6 @@ public class StatisticObject {
 	}
 	public void setTimeAvg(double timeAvg) {
 		this.timeAvg = timeAvg;
-	}
-	public String getTiemMax() {
-		return tiemMax;
-	}
-	public void setTiemMax(String tiemMax) {
-		this.tiemMax = tiemMax;
-	}
-	public String getTimeMin() {
-		return timeMin;
-	}
-	public void setTimeMin(String timeMin) {
-		this.timeMin = timeMin;
 	}
 	public int getSuccess() {
 		return success;

@@ -48,8 +48,6 @@ CREATE TABLE `trading`(
 	`now_time` date DEFAULT NULL,
 	`total_num` bigint(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '总次数',
 	`time_avg` bigint(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '平均耗时',
-	`time_max` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最大耗时',
-	`time_min` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最小耗时',
 	`success` int(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '成功总数',
   	`fail` int(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '失败总数',
   	`service_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '服务名称',

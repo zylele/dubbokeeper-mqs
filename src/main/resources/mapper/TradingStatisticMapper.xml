@@ -3,13 +3,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dubboclub.dk.storage.mysql.mapper.TradingStatisticMapper">
     <insert id="addTradingStatistic" parameterType="TradingStatisticPo">
-    	insert into trading (tx_code,now_time,total_num, time_avg, time_max,time_min,success,fail,service_name,source_type)
+    	insert into trading (tx_code,now_time,total_num, time_avg,success,fail,service_name,source_type)
     	values (#{txCode},
             #{nowTime},
             #{totalNum},
             #{timeAvg},
-            #{tiemMax},
-            #{timeMin},
             #{success},
             #{fail},
             #{serviceName},
@@ -19,15 +17,12 @@
     	update trading set
     		total_num = #{totalNum},
     		time_avg = #{timeAvg},
-    		time_max = #{tiemMax},
-    		time_min = #{timeMin},
     		success = #{success},
     		fail = #{fail}		
     	where 1=1 and tx_code = #{txCode} and now_time = #{nowTime} and service_name = #{serviceName} and source_type = #{sourceType} ;
     </update>
     <select id="selectTradingStatisticByTxCode" resultType="TradingStatisticPo"  parameterType="TradingStatisticPo">
-       select tx_code as txCode,now_time as nowTime,total_num as totalNum, time_avg as timeAvg, time_max as timeMax,
-       time_min as timeMin,success,fail,service_name as serviceName,source_type as sourceType
+       select tx_code as txCode,now_time as nowTime,total_num as totalNum, time_avg as timeAvg,success,fail,service_name as serviceName,source_type as sourceType
        from trading 
        where tx_code = #{txCode} and now_time = #{nowTime} and service_name = #{serviceName}  and source_type = #{sourceType};
     </select>

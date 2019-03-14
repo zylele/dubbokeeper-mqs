@@ -1,19 +1,19 @@
 package com.dubboclub.dk.uiap;
 
 import java.io.IOException;
-import javax.servlet.ServletConfig;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import com.alibaba.dubbo.common.logger.Logger;
-import com.alibaba.dubbo.common.logger.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.dubbo.common.utils.ConfigUtils;
-import com.dubboclub.dk.Interceptor.TradeInterceptor;
 import com.zgcbank.uiap.ClientSsoVerifyToken;
 import com.zgcbank.uiap.bean.SsoUser;
+
 
 /**
  * @ClassName: UiapAuthnProcessorServlet
@@ -42,13 +42,13 @@ public class UiapAuthnProcessorServlet extends HttpServlet {
 			// 将用户信息存储到session中
 			request.getSession().setAttribute("user",user);
 			//打印用户信息
-			log.info("=============================================");
-			log.info(user.getIdmUsrName()+"   登入系统！");
-			log.info("=============================================");
+			log.info("==========================================================================================");
+			log.info("login-operator:"+user.getIdmUsrName()+",ID:"+user.getIdmUsrId());
+			log.info("==========================================================================================");
 			request.getRequestDispatcher("index.htm").forward(request, response);
 		}else{						
 			// 验证失败，返登录页
-			response.sendRedirect("forward.jsp");
+			response.sendRedirect("http://10.4.0.34:8080/uiap/login");
 		}
 	}
 	

@@ -7,14 +7,15 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.alibaba.dubbo.common.logger.Logger;
-import com.alibaba.dubbo.common.logger.LoggerFactory;
+
 import com.alibaba.dubbo.common.utils.ConfigUtils;
 import com.dubboclub.dk.remote.MsgSystemService;
 import com.dubboclub.dk.remote.esb.dto.SendEmailReq;
@@ -56,7 +57,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     	sendMailStatistic = ConfigUtils.getProperty("sendMailStatistic.url");
     }
 //  统计信息的邮件功能
-    @Scheduled(cron=" 0 0 1 * * ?")   //每天凌晨1点执行一次     0 0 1 * * ?
+    @Scheduled(cron="0/30 * *  * * ? ")   //每天凌晨1点执行一次     0 0 1 * * ?
     @Override 
 	public void getStatisticsMailTask(){
     	RestTemplate restTemplate = new RestTemplate();  
@@ -95,8 +96,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 //    	最终的邮件内容字符串
     	String msg = "昨日交易情况统计" + "\n" + DayAllStatistics() + "昨日交易量TOP10:" + "\n" + msgTxCode.toString() + "\n" + "昨日平均耗时TOP10:" + "\n" +  msgTimeAvg.toString() + "\n" + "昨日交易成功率TOP10:" + "\n" +  msgSuccess.toString() + "\n" + "昨日交易失败率TOP10:" + "\n" + msgFail.toString()
     	 				+ "\n" + DayStatistics() + "\n" + WeekStatistic() +  weekStatistics();
-    	logger.debug("统计类邮件内容-->" + msg);
-    	System.out.println("统计类邮件内容-->" + msg);
+    	logger.info("统计类邮件内容-->" + msg);
     	SendEmailReq sendEmailReq = new SendEmailReq();
 		sendEmailReq.setSceneCode("M001");
 		sendEmailReq.setBusType("OutOpenAcc");

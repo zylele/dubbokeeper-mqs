@@ -6,7 +6,7 @@ import com.dubboclub.dk.storage.model.AlarmServicePo;
 
 /**  
 	* @ClassName: ServiceWarningTask
-	* @Description:检测服务异常接口类   
+	* @Description:检测服务异常接口 
 	* @author jinxiaolei 
 	* @date 2019年3月4日   
 	*/

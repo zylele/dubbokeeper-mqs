@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.alibaba.dubbo.common.logger.Logger;
-import com.alibaba.dubbo.common.logger.LoggerFactory;
+
 import com.dubboclub.dk.admin.model.Application;
 import com.dubboclub.dk.admin.model.Node;
 import com.dubboclub.dk.admin.service.ApplicationService;
@@ -23,7 +24,7 @@ import com.dubboclub.dk.web.utils.ConstantsUtil;
   
 /**  
 * @ClassName: ServiceWarningTaskImpl  
-* @Description: 检测服务异常实现类  
+* @Description: 检测服务节点异常实现  
 * @author jinxiaolei
 * @date 2019年3月5日   
 */  
@@ -39,8 +40,6 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
     private AlarmServiceStorage alarmServiceStorage;
 
     
-	
-  
 	/**
 	 * 定时检查zookeeper中应用节点状态 
 	 */
@@ -154,8 +153,7 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
 		sendEmailReq.setMailTo(sendMessage.queryAddress());
 		sendEmailReq.setAttachments(null);
 		sendEmailReq.setMsg(msg);
-		logger.debug("发送邮件内容 ==>"+msg);
-		System.out.println("发送邮件内容 ==>"+msg);
+		logger.info("发送邮件内容 ==>"+msg);
 		sendMessage.sendWarningMailAsyc(sendEmailReq, "000000");
 	}
  

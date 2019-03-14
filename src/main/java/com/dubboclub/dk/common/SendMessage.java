@@ -7,10 +7,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.alibaba.dubbo.common.logger.Logger;
-import com.alibaba.dubbo.common.logger.LoggerFactory;
+
 import com.alibaba.dubbo.common.utils.ConfigUtils;
 import com.dubboclub.dk.admin.service.ApplicationService;
 import com.dubboclub.dk.remote.MsgSystemService;

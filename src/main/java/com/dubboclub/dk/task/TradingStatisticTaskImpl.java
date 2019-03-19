@@ -122,8 +122,9 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 						};
 //						if(kind.equalsIgnoreCase("CLIENT")){
 							// 交易量，平均耗时，成功或失败次数Map
-							StatisticObject object = statisticMap.get(txCode);
-							if (object == null || !serviceName.equals(object.getServiceName()) || !sourceType.equals(object.getSourceType())) {
+							try{
+								StatisticObject object = statisticMap.get(txCode);
+								if (object == null || !serviceName.equals(object.getServiceName()) || !sourceType.equals(object.getSourceType())) {
 								object = new StatisticObject();
 								object.setTotalNum(1);
 								object.setTotalTimePerTime(duration);
@@ -150,6 +151,11 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 							}
 							object.setTotalDayTimePer(object.getTotalDayTimePer() + 1);
 							statisticMap.put(txCode, object);
+							}catch(Exception e){
+								//异常处理
+								logger.info("Map中无数据");
+								return;
+							}
 							
 							//遍历交易量，平均耗时，成功或失败次数Map
 							for(String key : statisticMap.keySet())

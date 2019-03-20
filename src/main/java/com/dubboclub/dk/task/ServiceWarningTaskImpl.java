@@ -153,7 +153,7 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
 		sendEmailReq.setMailTo(sendMessage.queryAddress());
 		sendEmailReq.setAttachments(null);
 		sendEmailReq.setMsg(msg);
-		logger.info("发送邮件内容 ==>"+msg);
+		logger.info("故障节点邮件内容 ==>"+msg);
 		sendMessage.sendWarningMailAsyc(sendEmailReq, "000000");
 	}
  

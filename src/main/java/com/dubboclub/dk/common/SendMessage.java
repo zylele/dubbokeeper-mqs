@@ -73,7 +73,7 @@ public class SendMessage {
 		singleEmailReq.setCompany("");// 法人代表
 		singleEmailReq.getSysHead().setSrcSysSvrid("0");// 源发起系统服务器Id
 		if (sendMail.equals("true")){
-			logger.debug("sendMail ==>  true,发送邮件！");
+			logger.info("sendMail ==>  true,发送邮件！");
 			msgSystemService.SendSingleEmail(singleEmailReq);
 		}
 			
@@ -90,7 +90,7 @@ public class SendMessage {
 		sendSingleMsgInput.setMobiles(queryPhoneNum());
 		sendSingleMsgInput.setContent_data(error.getContent());
 		if (sendPhone.equals("true")){
-			logger.debug("sendPhone ==>  true,发送短信！");
+			logger.info("sendPhone ==>  true,发送短信！");
 			msgSystemService.sendSingleMsg(sendSingleMsgInput);
 		}
 

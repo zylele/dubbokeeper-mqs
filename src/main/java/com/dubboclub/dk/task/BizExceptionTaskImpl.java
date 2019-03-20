@@ -111,8 +111,10 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 									sendEmailReq.setMsg("新的业务异常，traceId: " + traceId + ",error: " + error);
 									//业务异常邮件发送
 									logger.debug("新的业务异常，traceId: " + traceId + ",error: " + error);
-									sendMessage.sendWarningMailAsyc(sendEmailReq, txCode);
-									sendMessage.sendWarningPhoneAsyc(sendEmailReq, txCode);
+									/*
+									 * sendMessage.sendWarningMailAsyc(sendEmailReq, txCode);
+									 * sendMessage.sendWarningPhoneAsyc(sendEmailReq, txCode);
+									 */
 									warningStatusHolder.setBizStatus(true);
 								}
 							}

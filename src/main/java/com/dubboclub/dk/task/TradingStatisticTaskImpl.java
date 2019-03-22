@@ -44,9 +44,11 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 	private final static String BIZ_EXCEPTION_URL="/zipkin/api/v2/traces?";
 	long lastEndTime = 0;
 	private String zipkinUrl;
+	private String txCodeKey;
 	@PostConstruct
     public void init() {
     	zipkinUrl = ConfigUtils.getProperty("zipkin.url");
+    	txCodeKey = ConfigUtils.getProperty("txCode.Key");
     }
 	@Scheduled(cron="0/10 * *  * * ? ")   //每10秒执行一次    
 	@Override 
@@ -102,61 +104,58 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 					serviceName = ((JSONObject) text).getJSONObject("localEndpoint").getString("serviceName");
 					if (methodName(serviceName)) {
 						txCode = ((JSONObject) text).getJSONObject("tags").getString("txCode");
-						kind = ((JSONObject) text).getString("kind");
-						String error = ((JSONObject) text).getJSONObject("tags").getString("error");
-						if (txCode != null || txCode != "" && text instanceof JSONObject) {
+						if (txCode != null && !txCode.equals(" ") && text instanceof JSONObject) {
+							if(txCodeKey.indexOf(txCode)==-1){
+							kind = ((JSONObject) text).getString("kind");
+							String error = ((JSONObject) text).getJSONObject("tags").getString("error");
 							long timestamp = ((JSONObject) text).getLong("timestamp");
-							timestamp1 = Integer.parseInt(timestamp / 10000000 + "0");
+							timestamp1 = Integer.parseInt(timestamp / 1000000 + "");
 							sourceType = ((JSONObject) text).getJSONObject("tags").getString("chnlType");
 							nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE)
 									.format(new Date(timestamp / 1000));
 							startTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date().getTime());
-							if (kind.equalsIgnoreCase("SERVER") && error==null ) {
+							duration = ((JSONObject) text).getLong("duration");
+							if (error==null ) 
 								success = true;
-								
-							} else if (kind.equalsIgnoreCase("CLIENT")) {
-								duration = ((JSONObject) text).getLong("duration");
-								
-							};
-
-						};
+						
 //						if(kind.equalsIgnoreCase("CLIENT")){
 							// 交易量，平均耗时，成功或失败次数Map
-							try{
-								StatisticObject object = statisticMap.get(txCode);
-								if (object == null || !serviceName.equals(object.getServiceName()) || !sourceType.equals(object.getSourceType())) {
-								object = new StatisticObject();
-								object.setTotalNum(1);
-								object.setTotalTimePerTime(duration);
-								object.setNowTime(nowTime);
-								object.setTimestamp(timestamp1);
-								object.setStartTime(startTime);
-								if (success)
-									object.setSuccess(1);
-								else
-									object.setFail(1);
-								object.setServiceName(serviceName);
-								object.setSourceType(sourceType==null?sourceType="0000":sourceType);
-								statisticMap.put(txCode, object);
-							} else {
-									object.setTotalNum(object.getTotalNum() + 1);
-									object.setTotalTimePerTime(object.getTotalTimePerTime() + duration);
+								try{
+									StatisticObject object = statisticMap.get(txCode);
+									if (object == null || !serviceName.equals(object.getServiceName()) || !sourceType.equals(object.getSourceType())) {
+									object = new StatisticObject();
+									object.setTotalNum(1);
+									object.setTotalTimePerTime(duration);
+									object.setNowTime(nowTime);
+									object.setTimestamp(timestamp1);
+									object.setStartTime(startTime);
 									if (success)
-										object.setSuccess(object.getSuccess() + 1);
+										object.setSuccess(1);
 									else
-										object.setFail(object.getFail() + 1);
+										object.setFail(1);
 									object.setServiceName(serviceName);
 									object.setSourceType(sourceType==null?sourceType="0000":sourceType);
 									statisticMap.put(txCode, object);
-							}
+								} else {
+										object.setTotalNum(object.getTotalNum() + 1);
+										object.setTotalTimePerTime(object.getTotalTimePerTime() + duration);
+										if (success)
+											object.setSuccess(object.getSuccess() + 1);
+										else
+											object.setFail(object.getFail() + 1);
+										object.setServiceName(serviceName);
+										object.setSourceType(sourceType==null?sourceType="0000":sourceType);
+										statisticMap.put(txCode, object);
+								}
 							object.setTotalDayTimePer(object.getTotalDayTimePer() + 1);
 							statisticMap.put(txCode, object);
-							}catch(Exception e){
-								//异常处理
-								logger.info("Map中无数据");
-								return;
+								}catch(Exception e){
+									//异常处理
+									logger.info("Map中无数据");
+									return;
+								}
 							}
-							
+						};
 							//遍历交易量，平均耗时，成功或失败次数Map
 							for(String key : statisticMap.keySet())
 					        {
@@ -289,9 +288,8 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 		return avg;
 	}
 	private boolean methodName (String servicename){
-		int server = servicename.indexOf("server");
 		int client = servicename.indexOf("client");
-		if(server != -1 || client != -1){
+		if(client != -1){
 			return true;
 		}
 		return false;	

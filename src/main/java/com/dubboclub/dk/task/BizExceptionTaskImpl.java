@@ -33,35 +33,34 @@ import com.dubboclub.dk.web.utils.ConstantsUtil;
 
 @Component
 public class BizExceptionTaskImpl implements BizExceptionTask {
-    private static final Logger logger = LoggerFactory.getLogger(BizExceptionTaskImpl.class);
-    @Autowired
-    private SendMessage sendMessage;
-    @Autowired
-    @Qualifier("notificationStorage")
-    private NotificationStorage notificationStorage;
-    @Autowired
-    @Qualifier("bizWarningStorage")
-    private BizWarningStorage bizWarningStorage;
+	private static final Logger logger = LoggerFactory.getLogger(BizExceptionTaskImpl.class);
+	@Autowired
+	private SendMessage sendMessage;
+	@Autowired
+	@Qualifier("notificationStorage")
+	private NotificationStorage notificationStorage;
+	@Autowired
+	@Qualifier("bizWarningStorage")
+	private BizWarningStorage bizWarningStorage;
 //    @Autowired
 //    private ApplicationMailer mailer;
-    @Autowired
+	@Autowired
 	MsgSystemService msgSystemService;
-    @Autowired
+	@Autowired
 	private WarningStatusHolder warningStatusHolder;
-    private final static String BIZ_EXCEPTION_URL="/zipkin/api/v2/traces?annotationQuery=error&limit=100&lookback=6000000";
+	private final static String BIZ_EXCEPTION_URL = "/zipkin/api/v2/traces?annotationQuery=error&limit=100&lookback=6000000";
 	private String zipkinUrl;
-//	private String sendMail;
-//	private String sendPhone;
-    
-    @PostConstruct
-    public void init() {
-    	zipkinUrl = ConfigUtils.getProperty("zipkin.url");
-//    	sendMail = ConfigUtils.getProperty("sendMail.url");
-//    	sendPhone = ConfigUtils.getProperty("sendPhone.url");
-    }
-    
-    @Scheduled(cron="0/10 * *  * * ? ")   //每10秒执行一次    
-    @Override  
+	private String sendBizException;
+
+
+	@PostConstruct
+	public void init() {
+		zipkinUrl = ConfigUtils.getProperty("zipkin.url");
+		sendBizException = ConfigUtils.getProperty("sendBizException.url");
+	}
+
+	@Scheduled(cron = "0/10 * *  * * ? ") // 每10秒执行一次
+	@Override
 	public void getBizExceptionTask() {
 		// String zipkinUrl = ConfigUtils.getProperty("zipkin.url");
 		RestTemplate restTemplate = new RestTemplate();
@@ -109,12 +108,14 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 									sendEmailReq.setMailTo(sendMessage.queryAddress());
 									sendEmailReq.setAttachments(null);
 									sendEmailReq.setMsg("新的业务异常，traceId: " + traceId + ",error: " + error);
-									//业务异常邮件发送
+									// 业务异常邮件发送
 									logger.debug("新的业务异常，traceId: " + traceId + ",error: " + error);
-									/*
-									 * sendMessage.sendWarningMailAsyc(sendEmailReq, txCode);
-									 * sendMessage.sendWarningPhoneAsyc(sendEmailReq, txCode);
-									 */
+									
+									if(sendBizException.equals("true"))
+										sendMessage.sendWarningMailAsyc(sendEmailReq, txCode);
+									
+//									  	sendMessage.sendWarningPhoneAsyc(sendEmailReq, txCode);
+									 								 
 									warningStatusHolder.setBizStatus(true);
 								}
 							}
@@ -127,7 +128,6 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 		}
 	}
 
-	
 //	private void sendWarningMailAsyc(SendEmailReq error, String txCode) {
 ////				ApplicationEmail email = new ApplicationEmail();
 ////				NotificationPo po = new NotificationPo();
@@ -171,7 +171,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 //			msgSystemService.sendSingleMsg(sendSingleMsgInput);
 //		
 //	}
-	
+
 //	private List<String> queryAddress(){
 //		NotificationPo notificationPo = new NotificationPo();
 //		notificationPo.setType("01");
@@ -183,7 +183,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 //		return mails;
 //		
 //	}
-	//取到数据库中手机号
+	// 取到数据库中手机号
 //	private List<String> queryPhoneNum(){
 //		NotificationPo notificationPo = new NotificationPo();
 //		notificationPo.setType("02");
@@ -194,14 +194,14 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 //		}
 //		return PhoneNums;
 //	}
-    
-	private boolean methodName (String servicename){
+
+	private boolean methodName(String servicename) {
 		int server = servicename.indexOf("server");
 		int client = servicename.indexOf("client");
-		if(server != -1 || client != -1){
+		if (server != -1 || client != -1) {
 			return true;
 		}
-		return false;	
+		return false;
 	}
 
 }

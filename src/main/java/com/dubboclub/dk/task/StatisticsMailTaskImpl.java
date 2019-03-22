@@ -98,16 +98,9 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     					+ DayStatistics() + ""
     					+ WeekStatistic()  + ""
     					+  weekStatistics();
-    	logger.info("统计类邮件内容-->" + msg);
-    	SendEmailReq sendEmailReq = new SendEmailReq();
-		sendEmailReq.setSceneCode("M001");
-		sendEmailReq.setBusType("OutOpenAcc");
-		sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-		sendEmailReq.setMailTo(sendMessage.queryAddress());
-		sendEmailReq.setAttachments(null);
-		sendEmailReq.setMsg(msg);
+    	   	
 		if(sendMailStatistic.equals("true"))
-			sendMessage.sendWarningMailAsyc(sendEmailReq, "昨日数据统计");
+			setMailObj(msg);
 	}
 
 //	部分邮件内容获取

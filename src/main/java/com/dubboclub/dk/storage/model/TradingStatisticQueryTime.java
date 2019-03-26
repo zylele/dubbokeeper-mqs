@@ -3,7 +3,15 @@ package com.dubboclub.dk.storage.model;
 public class TradingStatisticQueryTime {
 	private String tradingStartDate;
 	private String tradingEndDate;
+	private String chnlCode;
 
+	
+	public String getChnlCode() {
+		return chnlCode;
+	}
+	public void setChnlCode(String chnlCode) {
+		this.chnlCode = chnlCode;
+	}
 	public String getTradingStartDate() {
 		return tradingStartDate;
 	}

@@ -10,6 +10,13 @@ public class TradingStatisticQuery {
 	private String tradingStartDate;
 	private String tradingEndDate;
 	private String type;
+	private String chnlCode;
+	public String getChnlCode() {
+		return chnlCode;
+	}
+	public void setChnlCode(String chnlCode) {
+		this.chnlCode = chnlCode;
+	}
 	public String getType() {
 		return type;
 	}

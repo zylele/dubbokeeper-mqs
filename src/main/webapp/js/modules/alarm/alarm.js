@@ -304,7 +304,7 @@ function getList(){
 $scope.refresh=function (){
  	  $httpWrapper.post({
            url:"notification/getNotificationByPage",
-           data:'{"currentPage": {"currentPage": "1","pageSize":"50"},"conditions": {"id":"","type": "01","receiver": "","address":""}}',
+           data:'{"currentPage": {"currentPage": "1","pageSize":"50"},"conditions": {"id":"","type": "01","receiver": "","address":"","chnlCode":"","chnlName":""}}',
            success:function(data){
                $scope.mails=data.list;
                if(!data||data.length<0){
@@ -356,23 +356,6 @@ $scope.refresh=function (){
                      }
                      $scope.mails=$queryFilter($scope.originData,$scope.query);
                  }
-//                                                 $scope.mailSetQuery=function(){
-//                                                 	if($scope.myPage.currentPage===0){
-//                                                 		$scope.myPage.currentPage = 1;
-//                                                 	}
-//                                                 	$httpWrapper.post({
-//                                                         url:"notification/getNotificationByPage",
-//                                                         data:'{"currentPage": {"currentPage": '+$scope.myPage.currentPage+',"pageSize":'+$scope.myPage.itemsPerPage+'},"conditions": {"id":"","type": "","receiver": "","address":""}}',
-//                                                         success:function(data){
-//                                                             $scope.mails=data.list;
-//                                                             if(!data||data.length<0){
-//                                                                 $scope.isEmpty=true;
-//                                                             }
-//                                                             $scope.myPage.totalItems=data.totalCount;
-//                                                             $scope.originData=data;
-//                                                         }
-//                                                     });
-//                                                 }
                 $scope.addMail=function(add){
                	 var modaladdMail = $modal.open({
                         templateUrl : 'templates/alarm/AddMail.html',//script标签中定义的id
@@ -393,7 +376,7 @@ $scope.refresh=function (){
                     
                 }
                 
-                $scope.updateMail=function(id,type,receiver,address){
+                $scope.updateMail=function(id,type,receiver,address,chnlCode,chnlName){
                	 var modalupdateMail = $modal.open({
                         templateUrl : 'templates/alarm/UpdateMail.html',
                         controller : 'updateMailCtrl',
@@ -409,7 +392,13 @@ $scope.refresh=function (){
                            },
                            address : function() {
                                return  address;
-                          }
+                          },
+                           chnlCode : function() {
+                               return  chnlCode;
+                          },
+                          chnlName : function() {
+                              return  chnlName;
+                         }
                         }
                     });
                	 modalupdateMail.opened.then(function () {// 模态窗口打开之后执行的函数
@@ -493,7 +482,7 @@ $scope.refresh=function (){
                      
                  }
                  
-                 $scope.updatePhone=function(id,type,receiver,address){
+                 $scope.updatePhone=function(id,type,receiver,address,chnlCode,chnlName){
                 	 var modalupdatePhone = $modal.open({
                          templateUrl : 'templates/alarm/UpdatePhone.html',
                          controller : 'updatePhoneCtrl',
@@ -509,7 +498,13 @@ $scope.refresh=function (){
                             },
                             address : function() {
                                 return  address;
-                           }
+                           },
+                           chnlCode : function() {
+                               return  chnlCode;
+                          },
+                          chnlName : function() {
+                              return  chnlName;
+                         }
                          }
                      });
                 	 modalupdatePhone.opened.then(function () {// 模态窗口打开之后执行的函数

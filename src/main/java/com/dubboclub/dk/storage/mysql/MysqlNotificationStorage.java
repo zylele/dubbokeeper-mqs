@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.dubboclub.dk.storage.NotificationStorage;
+import com.dubboclub.dk.storage.model.ChnlDefPo;
 import com.dubboclub.dk.storage.model.CurrentPage;
 import com.dubboclub.dk.storage.model.NotificationPo;
 import com.dubboclub.dk.storage.mysql.mapper.NotificationMapper;
@@ -64,6 +65,13 @@ public class MysqlNotificationStorage implements NotificationStorage,Initializin
         List<NotificationPo> notifications = notificationMapper.selectNotificationByConditions(notificationPo);
         return notifications;
 	}
+	
+	@Override
+	public List<ChnlDefPo> getChnlDef(ChnlDefPo chnlDefPo) {
+        List<ChnlDefPo> chnlDefPos = notificationMapper.getChnlDef(chnlDefPo);
+        return chnlDefPos;
+	}
+
 
 	
 

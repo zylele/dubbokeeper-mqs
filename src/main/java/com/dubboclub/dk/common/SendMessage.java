@@ -111,6 +111,21 @@ public class SendMessage {
 		return mails;		
 	}
 	
+	/**
+	 * 根据渠道号查询邮件地址 
+	 */
+	public List<String> queryAddressByChnlCode(String chnlCode){
+		NotificationPo notificationPo = new NotificationPo();
+		notificationPo.setType("01");
+		notificationPo.setChnlCode(chnlCode);
+		List<NotificationPo> notificationPos = notificationStorage.selectNotificationByConditions(notificationPo);
+		List<String> mails = new ArrayList<String>();
+		for (NotificationPo notificationPo2 : notificationPos) {
+			mails.add(notificationPo2.getAddress());
+		}
+		return mails;		
+	}
+	
 	
 	/**
 	 * 查询手机号码

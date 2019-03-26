@@ -13,8 +13,16 @@
                   <label for="MailAddress">接收地址</label>
                   <input type="type" class="form-control" id="addMailAddress" placeholder="请输入接收地址" ng-model="addMailAddress">
               </div>
-          </div>
-	<div class="modal-footer">
+			<div class="form-group">
+				<label class="control-label">渠道</label>
+				<div>
+					<select id="usertype" name="usertype" class="selectpicker show-tick form-control" multiple data-max-options="1" data-live-search="true" ng-model="addMailChnlCode">
+					<option id="addMailChnlCode" ng-show="chnlDefs&&chnlDefs.length>0" ng-repeat="chnlDef in chnlDefs" value="{{chnlDef.chnlCode}}">{{chnlDef.chnlCode}},{{chnlDef.chnlName}}</option>
+					</select>
+				</div>
+
+			</div>
+		<div class="modal-footer">
 	    <button class="btn btn-primary" ng-click="addMail()">
 	        保存
 	    </button>

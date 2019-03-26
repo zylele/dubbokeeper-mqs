@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.dubboclub.dk.storage.model.ChnlDefPo;
 import com.dubboclub.dk.storage.model.NotificationPo;
 
 /**
@@ -25,5 +26,5 @@ public interface NotificationMapper {
 	public Integer updateNotificationById(NotificationPo notificationPo);
 	public List<NotificationPo> selectNotificationByPage(NotificationPo notificationPo);
 	public List<NotificationPo> selectNotificationByConditions(NotificationPo notificationPo);
-	
+	public List<ChnlDefPo> getChnlDef(ChnlDefPo chnlDefPo);
 }

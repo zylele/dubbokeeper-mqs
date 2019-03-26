@@ -13,9 +13,27 @@ public class NotificationDto {
     private String type;
     private String receiver;
     private String address;
+    private String chnlCode;
+    private String chnlName;
     
     
-    public String getType() {
+    public String getChnlCode() {
+		return chnlCode;
+	}
+
+	public void setChnlCode(String chnlCode) {
+		this.chnlCode = chnlCode;
+	}
+
+	public String getChnlName() {
+		return chnlName;
+	}
+
+	public void setChnlName(String chnlName) {
+		this.chnlName = chnlName;
+	}
+
+	public String getType() {
 		return type;
 	}
 

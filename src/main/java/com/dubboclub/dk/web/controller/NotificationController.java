@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dubboclub.dk.notification.WarningStatusHolder;
 import com.dubboclub.dk.storage.NotificationStorage;
+import com.dubboclub.dk.storage.model.ChnlDefPo;
 import com.dubboclub.dk.storage.model.NotificationPo;
 import com.dubboclub.dk.web.model.BaseQueryConditions;
 import com.dubboclub.dk.web.model.BasicListResponse;
+import com.dubboclub.dk.web.model.ChnlDefDto;
 import com.dubboclub.dk.web.model.NotificationDto;
 import com.dubboclub.dk.web.model.NotificationResultDto;
 import com.dubboclub.dk.web.model.WarningStatusDto;
@@ -86,6 +88,20 @@ public class NotificationController {
         	NotificationDto NotificationDto = new NotificationDto();
             BeanUtils.copyProperties(po, NotificationDto);
             listDto.add(NotificationDto);
+        }
+        return responseList;
+    }
+    @RequestMapping(value = {"/getChnlDef"},method = {RequestMethod.POST})
+    public @ResponseBody BasicListResponse<ChnlDefDto>  getChnlDef() {
+    	ChnlDefPo chnlDefPo = new ChnlDefPo();
+        List<ChnlDefPo> listPo = notificationStorage.getChnlDef(chnlDefPo);
+        BasicListResponse<ChnlDefDto> responseList = new BasicListResponse<ChnlDefDto>();
+        List listDto = new ArrayList<NotificationDto>();
+        responseList.setList(listDto);
+        for(ChnlDefPo po: listPo) {
+        	ChnlDefDto chnlDefDto = new ChnlDefDto();
+            BeanUtils.copyProperties(po, chnlDefDto);
+            listDto.add(chnlDefDto);
         }
         return responseList;
     }

@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dubboclub.dk.storage.TradingStatisticStorage;
+import com.dubboclub.dk.storage.model.DayTradingPo;
+import com.dubboclub.dk.storage.model.DayTradingQuery;
 import com.dubboclub.dk.storage.model.TradingStatisticPo;
 import com.dubboclub.dk.storage.model.TradingStatisticQuery;
 import com.dubboclub.dk.web.model.BaseQueryConditions;
 import com.dubboclub.dk.web.model.BasicListResponse;
+import com.dubboclub.dk.web.model.DayTradingDto;
 import com.dubboclub.dk.web.model.TradingStatisticDto;
 import com.github.pagehelper.PageInfo;
 
@@ -65,5 +68,6 @@ public class TradingStatisticController {
         }
         return responseList;
     }
+
 
 }

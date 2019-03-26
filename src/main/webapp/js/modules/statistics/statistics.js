@@ -147,7 +147,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                             			        start : 0
                             			    },
                             			    legend : {
-                            			        data : ['每日交易量']
+                            			        data : ['每日交易量(单位/笔)']
                             			    },
                             			    grid: {
                             			            y2: 80
@@ -176,7 +176,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                             			    ],
                             			    series : [
                             			        {
-                            			            name: '每日交易量',
+                            			            name: '每日交易量(单位/笔)',
                             			            type: 'line',
                             			            showAllSymbol: true,
                             			            data:xAxisData
@@ -255,7 +255,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 			        end:100
                                 			    },
                                 			    legend : {
-                                			        data : ['每日交易量']
+                                			        data : ['每日交易量(单位/笔)']
                                 			    },
                                 			    grid: {
                             			            y2: 80
@@ -283,7 +283,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 			    ],
                                 			    series : [
                                 			        {
-                                			            name: '每日交易量',
+                                			            name: '每日交易量(单位/笔)',
                                 			            type: 'line',
                                 			            showAllSymbol: true,
                                 			            data:xAxisData
@@ -359,7 +359,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                             trigger: 'axis'
                                         },
                                         legend: {
-                                            data:['交易量']
+                                            data:['交易量(单位/笔)']
                                         },
                                         toolbox: {
                                             show : true,
@@ -408,7 +408,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 	    },
                                 	    
                                 	    series: [{
-                                	    	name: '交易量',
+                                	    	name: '交易量(单位/笔)',
                                 	        data: totalNum,
                                 	        type: 'bar'
                                 	    }]
@@ -513,10 +513,196 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                             });
                         }
                     });
-            		//成功次数
+//            		//成功次数
+//            		$httpWrapper.post({
+//            			url:"tradingStatistic/getTradingStatisticByPageByCondition",
+//            			data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"tradingStartDate": "'+$scope.startdate+'","tradingEndDate": "'+$scope.enddate+'","type":"03"}}',
+//                        success:function(data){
+//                            require( [
+//                                'echarts',
+//                                'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+//                                'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+//                            ], function (echarts) {
+//                                require(['echarts/theme/macarons'], function(curTheme){
+//                                	var arrs = data.list;
+//                                    var xAxisData=[];     //交易码数据
+//                                    var success=[];      //成功次数
+//                                    
+//                                    for(var x in arrs){
+//                                    	var arr = arrs[x];
+//                                    	for(var key in arr){
+//                                        	if(key == "txName")
+//                                        		xAxisData.push(arr[key]);
+//                                        	if(key == "success")
+//                                        		success.push(arr[key]);
+//                                        }
+//                                    }
+//                                    var option = {
+//                                    		title : {
+//                                                text: '成功次数TOP10'
+//                                            },
+//                                            tooltip : {
+//                                                trigger: 'axis'
+//                                            },
+//                                            legend: {
+//                                                data:['成功次数(单位/笔)']
+//                                            },
+//                                            toolbox: {
+//                                                show : true,
+//                                                feature : {
+//                                                    magicType : {show: true, type: ['line', 'bar']},
+//                                                    restore : {show: true},
+//                                                    saveAsImage : {show: true}
+//                                                }
+//                                            },
+//                                    	    xAxis: {
+//                                    	        type: 'category',
+//                                    	        data: xAxisData,
+//                                    	        axisLabel: {  
+//                                                    interval: 0,  
+//                                                    formatter:function(value)  
+//                                                    {  
+//                                                        debugger  
+//                                                        var ret = "";//拼接加\n返回的类目项  
+//                                                        var maxLength = 5;//每项显示文字个数  
+//                                                        var valLength = value.length;//X轴类目项的文字个数  
+//                                                        var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数  
+//                                                        if (rowN > 1)//如果类目项的文字大于3,  
+//                                                        {  
+//                                                            for (var i = 0; i < rowN; i++) {  
+//                                                                var temp = "";//每次截取的字符串  
+//                                                                var start = i * maxLength;//开始截取的位置  
+//                                                                var end = start + maxLength;//结束截取的位置  
+//                                                                //这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧  
+//                                                                temp = value.substring(start, end) + "\n";  
+//                                                                ret += temp; //凭借最终的字符串  
+//                                                            }  
+//                                                            return ret;  
+//                                                        }  
+//                                                        else {  
+//                                                            return value;  
+//                                                        }  
+//                                                    },
+//                                                    textStyle: {
+//                                                        fontSize : 9      //更改坐标轴文字大小
+//                                                      }
+//                                                },
+//                                    	        show:true
+//                                    	    },
+//                                    	    yAxis: {
+//                                    	        type: 'value'
+//                                    	    },
+//                                    	    series: [{
+//                                    	    	name: '成功次数',
+//                                    	        data: success,
+//                                    	        type: 'bar'
+//                                    	    }]
+//                                    	};
+//                                    myChart5 = echarts.init(document.getElementById('success'));
+//                                    myChart5.setTheme(curTheme)
+//                                    myChart5.setOption(option);
+//                                    
+//                                });
+//                            });
+//                        }
+//                    });
+//            		//失败次数
+//            		$httpWrapper.post({
+//            			url:"tradingStatistic/getTradingStatisticByPageByCondition",
+//            			data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"tradingStartDate": "'+$scope.startdate+'","tradingEndDate": "'+$scope.enddate+'","type":"04"}}',
+//                        success:function(data){
+//                            require( [
+//                                'echarts',
+//                                'echarts/chart/bar', // 使用柱状图就加载bar模块，按需加载
+//                                'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+//                            ], function (echarts) {
+//                                require(['echarts/theme/macarons'], function(curTheme){
+//                                	var arrs = data.list;
+//                                    var xAxisData=[];     //交易码数据
+//                                    var fail=[];      //失败次数
+//                                    
+//                                    for(var x in arrs){
+//                                    	var arr = arrs[x];
+//                                    	for(var key in arr){
+//                                        	if(key == "txName")
+//                                        		xAxisData.push(arr[key]);
+//                                        	if(key == "fail")
+//                                        		fail.push(arr[key]);
+//                                        }
+//                                    }
+//                                    var option = {
+//                                    		title : {
+//                                                text: '失败次数TOP10'
+//                                            },
+//                                            tooltip : {
+//                                                trigger: 'axis'
+//                                            },
+//                                            legend: {
+//                                                data:['失败次数(单位/笔)']
+//                                            },
+//                                            toolbox: {
+//                                                show : true,
+//                                                feature : {
+//                                                    magicType : {show: true, type: ['line', 'bar']},
+//                                                    restore : {show: true},
+//                                                    saveAsImage : {show: true}
+//                                                }
+//                                            },
+//                                    	    xAxis: {
+//                                    	        type: 'category',
+//                                    	        data: xAxisData,
+//                                    	        axisLabel: {  
+//                                                    interval: 0,  
+//                                                    formatter:function(value)  
+//                                                    {  
+//                                                        debugger  
+//                                                        var ret = "";//拼接加\n返回的类目项  
+//                                                        var maxLength = 5;//每项显示文字个数  
+//                                                        var valLength = value.length;//X轴类目项的文字个数  
+//                                                        var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数  
+//                                                        if (rowN > 1)//如果类目项的文字大于3,  
+//                                                        {  
+//                                                            for (var i = 0; i < rowN; i++) {  
+//                                                                var temp = "";//每次截取的字符串  
+//                                                                var start = i * maxLength;//开始截取的位置  
+//                                                                var end = start + maxLength;//结束截取的位置  
+//                                                                //这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧  
+//                                                                temp = value.substring(start, end) + "\n";  
+//                                                                ret += temp; //凭借最终的字符串  
+//                                                            }  
+//                                                            return ret;  
+//                                                        }  
+//                                                        else {  
+//                                                            return value;  
+//                                                        }  
+//                                                    },
+//                                                    textStyle: {
+//                                                        fontSize : 9      //更改坐标轴文字大小
+//                                                      }
+//                                                },
+//                                    	        show:true
+//                                    	    },
+//                                    	    yAxis: {
+//                                    	        type: 'value'
+//                                    	    },
+//                                    	    series: [{
+//                                    	    	name: '失败次数(单位/笔)',
+//                                    	        data: fail,
+//                                    	        type: 'bar'
+//                                    	    }]
+//                                    	};
+//                                    myChart6 = echarts.init(document.getElementById('fail'));
+//                                    myChart6.setTheme(curTheme);
+//                                    myChart6.setOption(option);
+//                                   
+//                                });
+//                            });
+//                        }
+//                    });
+            		//成功率
             		$httpWrapper.post({
             			url:"tradingStatistic/getTradingStatisticByPageByCondition",
-            			data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"tradingStartDate": "'+$scope.startdate+'","tradingEndDate": "'+$scope.enddate+'","type":"03"}}',
+            			data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"tradingStartDate": "'+$scope.startdate+'","tradingEndDate": "'+$scope.enddate+'","type":"05"}}',
                         success:function(data){
                             require( [
                                 'echarts',
@@ -526,26 +712,29 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 require(['echarts/theme/macarons'], function(curTheme){
                                 	var arrs = data.list;
                                     var xAxisData=[];     //交易码数据
-                                    var success=[];      //成功次数
+                                    var successRate=[];      //成功率
                                     
                                     for(var x in arrs){
                                     	var arr = arrs[x];
                                     	for(var key in arr){
                                         	if(key == "txName")
                                         		xAxisData.push(arr[key]);
+                                        	if(key == "totalNum")
+                                        		var totalNum = arr[key];
                                         	if(key == "success")
-                                        		success.push(arr[key]);
+                                        		successRate.push((arr[key]/totalNum).toFixed(4)*100);
                                         }
                                     }
                                     var option = {
                                     		title : {
-                                                text: '成功次数TOP10'
+                                                text: '成功率TOP10'
                                             },
                                             tooltip : {
-                                                trigger: 'axis'
+                                                trigger: 'axis',
+                                                formatter:'{c}%'
                                             },
                                             legend: {
-                                                data:['成功次数']
+                                                data:['成功率']
                                             },
                                             toolbox: {
                                                 show : true,
@@ -590,26 +779,37 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     	        show:true
                                     	    },
                                     	    yAxis: {
-                                    	        type: 'value'
+                                    	        type: 'value',
+                                    	        axisLabel: {  
+                                                    show: true,  
+                                                    interval: 'auto',  
+                                                    formatter: '{value} %'  
+                                                    }
+                                    	
                                     	    },
                                     	    series: [{
-                                    	    	name: '成功次数',
-                                    	        data: success,
+                                    	    	name: '成功率',
+                                    	        data: successRate,
+                                    	        label: {
+            	        	                        show: true,
+            	        	                        position: 'top',
+            	        	                        formatter: '{b}\n{c}%'
+                    	        	                     },
                                     	        type: 'bar'
                                     	    }]
                                     	};
-                                    myChart5 = echarts.init(document.getElementById('success'));
-                                    myChart5.setTheme(curTheme)
-                                    myChart5.setOption(option);
+                                    myChart7 = echarts.init(document.getElementById('successRate'));
+                                    myChart7.setTheme(curTheme)
+                                    myChart7.setOption(option);
                                     
                                 });
                             });
                         }
                     });
-            		//失败次数
+            		//失败率
             		$httpWrapper.post({
             			url:"tradingStatistic/getTradingStatisticByPageByCondition",
-            			data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"tradingStartDate": "'+$scope.startdate+'","tradingEndDate": "'+$scope.enddate+'","type":"04"}}',
+            			data:'{"currentPage": {"currentPage": 1,"pageSize": 10},"conditions": {"tradingStartDate": "'+$scope.startdate+'","tradingEndDate": "'+$scope.enddate+'","type":"06"}}',
                         success:function(data){
                             require( [
                                 'echarts',
@@ -619,26 +819,29 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 require(['echarts/theme/macarons'], function(curTheme){
                                 	var arrs = data.list;
                                     var xAxisData=[];     //交易码数据
-                                    var fail=[];      //失败次数
+                                    var failRate=[];      //失败率
                                     
                                     for(var x in arrs){
                                     	var arr = arrs[x];
                                     	for(var key in arr){
                                         	if(key == "txName")
                                         		xAxisData.push(arr[key]);
+                                        	if(key == "totalNum")
+                                        		var totalNum = arr[key];
                                         	if(key == "fail")
-                                        		fail.push(arr[key]);
+                                        		failRate.push((arr[key]/totalNum).toFixed(4)*100);
                                         }
                                     }
                                     var option = {
                                     		title : {
-                                                text: '失败次数TOP10'
+                                                text: '失败率TOP10'
                                             },
                                             tooltip : {
-                                                trigger: 'axis'
+                                                trigger: 'axis',
+                                                formatter:'{c}%'
                                             },
                                             legend: {
-                                                data:['失败次数']
+                                                data:['失败率']
                                             },
                                             toolbox: {
                                                 show : true,
@@ -683,17 +886,27 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                     	        show:true
                                     	    },
                                     	    yAxis: {
-                                    	        type: 'value'
+                                    	        type: 'value',
+                                    	        axisLabel: {  
+                                                    show: true,  
+                                                    interval: 'auto',  
+                                                    formatter: '{value} %'  
+                                                    }
                                     	    },
                                     	    series: [{
-                                    	    	name: '失败次数',
-                                    	        data: fail,
+                                    	    	name: '失败率',
+                                    	        data: failRate,
+                                    	        label: {
+            	        	                        show: true,
+            	        	                        position: 'top',
+            	        	                        formatter: '{b}\n{c}%'
+                    	        	                     },
                                     	        type: 'bar'
                                     	    }]
                                     	};
-                                    myChart6 = echarts.init(document.getElementById('fail'));
-                                    myChart6.setTheme(curTheme);
-                                    myChart6.setOption(option);
+                                    myChart8 = echarts.init(document.getElementById('failRate'));
+                                    myChart8.setTheme(curTheme);
+                                    myChart8.setOption(option);
                                    
                                 });
                             });
@@ -702,14 +915,19 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
             		$(window).resize(function(){
             			myChart3.resize();	
                     	myChart4.resize();
-                    	myChart5.resize();
-                    	myChart6.resize();
+//                    	myChart5.resize();
+//                    	myChart6.resize();
+                    	myChart7.resize();
+                    	myChart8.resize();
             		});
             		window.onresize =function(){
                     	myChart3.resize();	
                     	myChart4.resize();
-                    	myChart5.resize();
-                    	myChart6.resize();
+//                    	myChart5.resize();
+//                    	myChart6.resize();
+                    	myChart7.resize();
+                    	myChart8.resize();
+                    	
             		}
         		}      
         	    break; 
@@ -798,7 +1016,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                         {
                                             type : 'category',
                                             data : xAxisData,
-                                            show:false
+                                            show:true
                                         }
                                     ],
                                     yAxis : [
@@ -870,7 +1088,7 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                         {
                                             type : 'category',
                                             data : xAxisData,
-                                            show:false
+                                            show:true
                                         }
                                     ],
                                     yAxis : [

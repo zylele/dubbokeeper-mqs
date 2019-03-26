@@ -15,6 +15,8 @@ CREATE TABLE `notification` (
   `type` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '01-邮件，02-手机，03-微信',
   `receiver` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '接收人',
   `address` varchar(300) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '接收地址',
+  `chnl_code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '渠道号',
+  `chnl_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '渠道名字',
   PRIMARY KEY (`id`),
   UNIQUE KEY `notification_un` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

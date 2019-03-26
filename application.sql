@@ -21,6 +21,13 @@ CREATE TABLE `notification` (
   UNIQUE KEY `notification_un` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+CREATE TABLE `chnl_def` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `chnl_code` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '渠道号',
+  `chnl_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '渠道名字',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 CREATE TABLE `biz_warning` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `trace_id` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '报文ID',

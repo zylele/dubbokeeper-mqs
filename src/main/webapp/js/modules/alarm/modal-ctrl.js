@@ -48,7 +48,7 @@ details.controller('updateMailCtrl', function($scope, $modalInstance, id,type,re
     if(type )$scope.updateMailType = type;
     if(receiver )$scope.updateMailReceiver = receiver;
     if(address )$scope.updateMailAddress = address;
-    if(chnlCode )$scope.usertype = chnlCode;
+    if(chnlCode )$scope.updateMailChnlCode = chnlCode;
     if(chnlName )$scope.updateMailChnlName = chnlName;
     $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
@@ -71,7 +71,7 @@ details.controller('updateMailCtrl', function($scope, $modalInstance, id,type,re
 	            $scope.chnlDefs=data.list;
 	            $(function() {
 	    			$(".selectpicker").selectpicker({
-	    				noneSelectedText: $scope.usertype,
+	    				noneSelectedText: $scope.updateMailChnlCode,
 	    				countSelectedText: function(){}
 	    			});
 	    		});
@@ -148,7 +148,7 @@ details.controller('updatePhoneCtrl', function($scope, $modalInstance, id,type,r
     if(type )$scope.updatePhoneType = type;
     if(receiver )$scope.updatePhoneReceiver = receiver;
     if(address )$scope.updatePhoneAddress = address;
-    if(chnlCode )$scope.usertypePhone = chnlCode;
+    if(chnlCode )$scope.updatePhoneChnlCode = chnlCode;
     if(chnlName )$scope.updatePhoneChnlName = chnlName;
     $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
@@ -171,7 +171,7 @@ details.controller('updatePhoneCtrl', function($scope, $modalInstance, id,type,r
              $scope.chnlDefs=data.list;
              $(function() {
      			$(".selectpicker").selectpicker({
-     				noneSelectedText: $scope.usertypePhone,
+     				noneSelectedText: $scope.updatePhoneChnlCode,
      				countSelectedText: function(){}
      			});
      		});

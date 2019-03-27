@@ -59,7 +59,7 @@ CREATE TABLE `trading`(
 	`time_avg` bigint(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '平均耗时',
 	`success` int(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '成功总数',
   	`fail` int(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '失败总数',
-  	`service_name` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '服务名称',
+  	`service_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '服务名称',
   	`source_type` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '渠道号',
 	PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

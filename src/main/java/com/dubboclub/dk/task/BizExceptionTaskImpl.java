@@ -48,7 +48,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 	MsgSystemService msgSystemService;
 	@Autowired
 	private WarningStatusHolder warningStatusHolder;
-	private final static String BIZ_EXCEPTION_URL = "/zipkin/api/v2/traces?annotationQuery=error&limit=100&lookback=6000000";
+	private final static String BIZ_EXCEPTION_URL = "/zipkin/api/v2/traces?annotationQuery=error&limit=100&lookback=10000";
 	private String zipkinUrl;
 	private String sendBizException;
 

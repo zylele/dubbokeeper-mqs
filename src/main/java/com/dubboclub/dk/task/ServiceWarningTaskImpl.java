@@ -134,11 +134,11 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
 	private String getDieMessage(List<AlarmServicePo> dieData){
 		StringBuilder sb = new StringBuilder();
 		for (AlarmServicePo alarmServicePo : dieData) {
-			sb.append("节点名称："+alarmServicePo.getServiceName()+",");
-			sb.append("节点地址："+alarmServicePo.getHost()+";");
+			sb.append("服务名称："+alarmServicePo.getServiceName()+"------");
+			sb.append("节点地址："+alarmServicePo.getHost()+";"+"<br>");
 		}
 		
-		return "监控平台：以下应用服务可能出现故障，请及时检查："+sb.toString();		
+		return "以下应用服务可能出现故障，请及时检查："+"<br><br>"+sb.toString();		
 	}
 	
 	

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,7 @@ import com.dubboclub.dk.admin.service.ApplicationService;
 import com.dubboclub.dk.common.SendMessage;
 import com.dubboclub.dk.remote.esb.dto.SendEmailReq;
 import com.dubboclub.dk.storage.AlarmServiceStorage;
+import com.dubboclub.dk.storage.NotificationStorage;
 import com.dubboclub.dk.storage.model.AlarmServicePo;
 import com.dubboclub.dk.web.utils.ConstantsUtil;
 
@@ -38,6 +40,8 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
     private ApplicationService applicationService;   
     @Autowired
     private AlarmServiceStorage alarmServiceStorage;
+    @Autowired
+    private NotificationStorage notificationStorage;
 
     
 	/**
@@ -54,14 +58,14 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
     	if(newData.size()>oldData.size()){
     		updatetAppData(newData);
     	}
-    	else if(newData.size()<oldData.size()){
+    	if(newData.size()<oldData.size()){
     		List<AlarmServicePo> dieData =  getDiffrent(oldData,newData);
     		updatetAppData(newData);
     		// 获取dieService信息发邮件
     		String dieMes =  getDieMessage(dieData);
-    		setMailObj(dieMes);
-    	
+    		setMailObj(dieMes);    	
     	}
+    	
 	}
     
 
@@ -146,11 +150,17 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
 	 * 组装发邮件实体
 	 */
 	private void setMailObj(String msg){
+		// IBS 为全渠道(系统异常发送这个渠道)，
+		List<String> mails = notificationStorage.getMailByChnlcode("IBS");
+		List<String> maildatas = new ArrayList<String>();
+		for (String str : mails) {
+			maildatas.add(str+",");
+		}
 		SendEmailReq sendEmailReq = new SendEmailReq();
 		sendEmailReq.setSceneCode("M001");
 		sendEmailReq.setBusType("OutOpenAcc");
 		sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-		sendEmailReq.setMailTo(sendMessage.queryAddress());
+		sendEmailReq.setMailTo(maildatas);
 		sendEmailReq.setAttachments(null);
 		sendEmailReq.setMsg(msg);
 		logger.info("故障节点邮件内容 ==>"+msg);

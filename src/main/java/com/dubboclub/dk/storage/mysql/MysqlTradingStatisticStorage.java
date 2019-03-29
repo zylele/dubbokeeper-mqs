@@ -56,19 +56,16 @@ public class MysqlTradingStatisticStorage implements TradingStatisticStorage,Ini
 		return tradingStatisticMapper.deleteTradingStatisticByPageByCondition(tradingStatisticPo);
 	}
 	@Override
-	public List<TradingStatisticPo> selectTradingStatisticByPageByDayFailRate(TradingStatisticQueryTime tradingStatisticQueryTime,
-			CurrentPage currentPage) {
+	public List<TradingStatisticPo> selectTradingStatisticByPageByDayFailRate(TradingStatisticQueryTime tradingStatisticQueryTime) {
 		// TODO Auto-generated method stub
-		PageHelper.startPage(currentPage.getCurrentPage(), currentPage.getPageSize());
         List<TradingStatisticPo> tradingStatistics = tradingStatisticMapper.selectTradingStatisticByPageByDayFailRate(tradingStatisticQueryTime);
 		return tradingStatistics;
 	}
 
 	@Override
-	public List<TradingStatisticPo> selectTradingStatisticByPageByTxType(TradingStatisticQueryTime tradingStatisticQueryTime,
-			CurrentPage currentPage) {
+	public List<TradingStatisticPo> selectTradingStatisticByPageByTxType(TradingStatisticQueryTime tradingStatisticQueryTime
+			) {
 		// TODO Auto-generated method stub
-		PageHelper.startPage(currentPage.getCurrentPage(), currentPage.getPageSize());
         List<TradingStatisticPo> tradingStatistics = tradingStatisticMapper.selectTradingStatisticByPageByTxType(tradingStatisticQueryTime);
 		return tradingStatistics;
 	}

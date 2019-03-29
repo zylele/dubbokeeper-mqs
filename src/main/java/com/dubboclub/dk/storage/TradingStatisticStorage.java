@@ -14,10 +14,10 @@ public interface TradingStatisticStorage {
 	public TradingStatisticPo selectTradingStatisticByTxCode(TradingStatisticPo tradingStatisticPo);
 	public List<TradingStatisticPo> selectTradingStatisticByPageByCondition(TradingStatisticQuery tradingStatisticQuery,
 			CurrentPage currentPage);
-	public List<TradingStatisticPo> selectTradingStatisticByPageByDayFailRate(TradingStatisticQueryTime tradingStatisticQueryTime,
-			CurrentPage currentPage);
-	public List<TradingStatisticPo> selectTradingStatisticByPageByTxType(TradingStatisticQueryTime tradingStatisticQueryTime,
-			CurrentPage currentPage);
+	public List<TradingStatisticPo> selectTradingStatisticByPageByDayFailRate(TradingStatisticQueryTime tradingStatisticQueryTime
+			);
+	public List<TradingStatisticPo> selectTradingStatisticByPageByTxType(TradingStatisticQueryTime tradingStatisticQueryTime
+			);
 	public List<TradingStatisticPo> selectTradingStatisticByPageByFail(TradingStatisticQueryTime tradingStatisticQueryTime,
 			CurrentPage currentPage);
 	public List<TradingStatisticPo> selectTradingStatisticByType(TradingStatisticQueryTime tradingStatisticQueryTime,

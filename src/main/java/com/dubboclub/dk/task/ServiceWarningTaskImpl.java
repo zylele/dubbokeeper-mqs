@@ -45,7 +45,7 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
 
     
 	/**
-	 * 定时检查zookeeper中应用节点状态 
+	  * 定时检查zookeeper中应用节点状态 
 	 */
     @Scheduled(cron="0/10 * *  * * ? ")   //每10秒执行一次  
   	@Override
@@ -70,7 +70,7 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
     
 
     /**
-     * 获取zookeeper中最新节点信息
+             * 获取zookeeper中最新节点信息
      */
 	private List<AlarmServicePo> selectAppdata() {
 		List<AlarmServicePo> serviceData = new ArrayList<AlarmServicePo>();
@@ -93,7 +93,7 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
 	
 	
 	/**
-	 * 更新数据库节点信息
+	  * 更新数据库节点信息
 	 */
 	private void updatetAppData(List<AlarmServicePo> list) {
 		// 删除原有数据并更新最新数据
@@ -105,7 +105,7 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
 	
 	 
 	/**
-     * 筛选少掉的的节点信息
+            * 筛选少掉的的节点信息
 	 */
 	private List<AlarmServicePo> getDiffrent(List<AlarmServicePo> bigCol, List<AlarmServicePo> smallCol){
 		List<AlarmServicePo> dieResult = new ArrayList<>();

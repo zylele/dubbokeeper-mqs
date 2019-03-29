@@ -128,29 +128,28 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 		TradingStatisticQueryTime tradingStatisticQueryTime = new TradingStatisticQueryTime();
 		tradingStatisticQueryTime.setTradingStartDate(new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24)));
 		tradingStatisticQueryTime.setTradingEndDate(new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24)));
-		tradingStatisticQueryTime.setChnlCode(chnlCode);
-    	CurrentPage currentPage = new CurrentPage();
-		currentPage.setCurrentPage(1);
-		currentPage.setPageSize(1);
+		tradingStatisticQueryTime.setChnlCode(chnlCode);   	
 		StringBuilder msg = new StringBuilder();
 		String msgx = "";
 		List<TradingStatisticPo> data = new ArrayList<TradingStatisticPo>();
-    	data = tradingStatisticStorage.selectTradingStatisticByPageByDayFailRate(tradingStatisticQueryTime,currentPage);
+    	data = tradingStatisticStorage.selectTradingStatisticByPageByDayFailRate(tradingStatisticQueryTime);
     	try {
 			for(TradingStatisticPo po : data){
-				msg.append(msgx = "交易总笔数:" + po.getTotalNum() + "    " + "成功总笔数:" + po.getSuccess() + "    " + "失败总笔数:" + po.getFail() + "" +  "    " + "失败率:" + po.getFailRate() + "<br>");			}
+				if(null!=po) {
+					msg.append(msgx = "交易总笔数:" + po.getTotalNum() + "    " + "成功总笔数:" + po.getSuccess() + "    " + "失败总笔数:" + po.getFail() + "" +  "    " + "失败率:" + po.getFailRate() + "<br>");			}
+				}			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("统计数据库中数据为空: " + e);
+			logger.info("统计数据库中数据为空: " + e.getMessage());
 		}
     	List<TradingStatisticPo> data1 = new ArrayList<TradingStatisticPo>();
-    	data1 = tradingStatisticStorage.selectTradingStatisticByPageByTxType(tradingStatisticQueryTime,currentPage);
+    	data1 = tradingStatisticStorage.selectTradingStatisticByPageByTxType(tradingStatisticQueryTime);
     	try {
 			for(TradingStatisticPo po : data1){
-				msg.append(msgx = "金融类交易笔数:" + po.getTotalNum() + "    " + "金融类交易失败笔数:" + po.getFail() + "<br>");			}
+				if(null!=po) {
+					msg.append(msgx = "金融类交易笔数:" + po.getTotalNum() + "    " + "金融类交易失败笔数:" + po.getFail() + "<br>");			}
+				}				
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("统计数据库中数据为空: " + e);
+			logger.info("统计数据库中数据为空: " + e.getMessage());
 		}
     	
 		return msg.toString();
@@ -171,23 +170,26 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     	data = tradingStatisticStorage.selectTradingStatisticByType(tradingStatisticQueryTime,currentPage);
     	try {
 			for(TradingStatisticPo po : data){
-				msg1.append(msgx = "<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
+				if(null!=po) {
+					msg1.append(msgx = "<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
+				}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("统计数据库中数据为空: " + e);
+			logger.info("统计数据库中数据为空: " + e.getMessage());
 		}
     	List<TradingStatisticPo> data1 = new ArrayList<TradingStatisticPo>();
     	data1 = tradingStatisticStorage.selectTradingStatisticByPageByFail(tradingStatisticQueryTime,currentPage);
     	try {
 			for(TradingStatisticPo po : data1){
-				msg1.append(msgx = "<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
+				if(null!=po) {
+					msg1.append(msgx = "<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
+				}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("统计数据库中数据为空: " + e);
+			logger.info("统计数据库中数据为空: " + e.getMessage());
 		}
     	
 		return "<caption>"+ "昨日金融类TOP10:" + "</caption><table>" + msg.toString() + "</table>"
-				+ "<caption>" + "昨日交易失败率TOP10:" + "</caption><table>" + msg1.toString() + "</table>";	}
+				+ "<caption>" + "昨日交易失败率TOP10:" + "</caption><table>" + msg1.toString() + "</table>";	
+	}
 //	部分邮件内容获取
 	private String WeekStatistic(String chnlCode){
 		TradingStatisticQuery tradingStatisticQuery = new TradingStatisticQuery();
@@ -204,11 +206,13 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 		weekData = tradingStatisticStorage.selectTradingStatisticByPageByCondition(tradingStatisticQuery,currentPage);
 		try {
 			for(TradingStatisticPo po : weekData){
-				msgWeek.append(msgx ="<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
+				if(null!=po) {
+					msgWeek.append(msgx ="<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
+				}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("统计数据库中数据为空: " + e);
+			logger.info("统计数据库中数据为空: " + e.getMessage());
 		}
+
 		return "<caption>"+ "近七天交易量TOP10:" + "</caption><table>" + msgWeek.toString()+ "</table>";
 	}
 //	部分邮件内容获取
@@ -228,37 +232,24 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 		weekData = tradingStatisticStorage.selectTradingStatisticByType(tradingStatisticQueryTime,currentPage);
 		try {
 			for(TradingStatisticPo po : weekData){
-				msgWeek.append(msgx = "<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
+				if(null!=po) {
+					msgWeek.append(msgx = "<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
+				}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("统计数据库中数据为空: " + e);
+			logger.info("统计数据库中数据为空: " + e.getMessage());
 		}
 		weekData2 = tradingStatisticStorage.selectTradingStatisticByPageByFail(tradingStatisticQueryTime,currentPage);
 		try {
 			for(TradingStatisticPo po : weekData2){
-				msgWeek1.append(msgx = "<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
+				if(null!=po) {
+					msgWeek1.append(msgx = "<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
+				}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			logger.info("统计数据库中数据为空: " + e);
+			logger.info("统计数据库中数据为空: " +  e.getMessage());
 		}
+
 		return  "<caption>"+ "近七天金融TOP10:" + "</caption><table>" + msgWeek.toString() + "</table>" 
 				+"<caption>"+ "近七天交易失败率TOP10:" + "</caption><table>" + msgWeek1.toString() + "</table>" ;
-
-	}
-
-	/**
-	 * 组装发邮件实体
-	 */
-	private void setMailObj(String msg){
-		SendEmailReq sendEmailReq = new SendEmailReq();
-		sendEmailReq.setSceneCode("M001");
-		sendEmailReq.setBusType("OutOpenAcc");
-		sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-		sendEmailReq.setMailTo(sendMessage.queryAddress());
-		sendEmailReq.setAttachments(null);
-		sendEmailReq.setMsg(msg);
-		logger.info("交易量统计邮件内容 ==>"+msg);
-		sendMessage.sendWarningMailAsyc(sendEmailReq, "000000");
 	}
 	
 }

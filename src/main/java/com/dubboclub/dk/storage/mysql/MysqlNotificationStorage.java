@@ -77,6 +77,12 @@ public class MysqlNotificationStorage implements NotificationStorage,Initializin
 		 List<String> address = notificationMapper.getMailByChnlcode(chnlCode);
 		 return address;
 	}
+
+	@Override
+	public ChnlDefPo getChnlDefByChnlcode(String chnlCode) {
+		ChnlDefPo chnlDefPo = notificationMapper.getChnlDefByChnlcode(chnlCode);
+		return chnlDefPo;
+	}
 	
 
 }

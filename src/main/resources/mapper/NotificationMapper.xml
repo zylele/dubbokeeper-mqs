@@ -71,7 +71,9 @@
     </select>
     <select id="getChnlDef" parameterType="ChnlDefPo" resultType="ChnlDefPo">
     	select chnl_code as chnlCode,chnl_name as chnlName  from chnl_def where 1=1
-    	
+    </select>
+    <select id="getChnlDefByChnlcode" parameterType="java.lang.String" resultType="ChnlDefPo">
+    	select chnl_code as chnlCode,chnl_name as chnlName  from chnl_def where chnl_code =  #{chnlCode};
     </select>
     <select id="getMailByChnlcode" parameterType="java.lang.String" resultType="java.lang.String">
     	select address from notification  where chnl_code =  #{chnlCode};	

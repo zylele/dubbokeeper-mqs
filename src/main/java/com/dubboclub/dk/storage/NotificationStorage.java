@@ -14,6 +14,7 @@ public interface NotificationStorage {
 	public List<NotificationPo> selectNotificationByPage(NotificationPo notificationPo, CurrentPage currentPage);
 	public List<NotificationPo> selectNotificationByConditions(NotificationPo notificationPo);
 	public List<ChnlDefPo> getChnlDef(ChnlDefPo chnlDefPo);
+	public ChnlDefPo getChnlDefByChnlcode(String chnlCode);
 	public List<String> getMailByChnlcode(String chnlCode);
 
 }

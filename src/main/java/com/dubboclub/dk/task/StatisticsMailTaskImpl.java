@@ -21,6 +21,7 @@ import com.dubboclub.dk.remote.MsgSystemService;
 import com.dubboclub.dk.remote.esb.dto.SendEmailReq;
 import com.dubboclub.dk.storage.NotificationStorage;
 import com.dubboclub.dk.storage.TradingStatisticStorage;
+import com.dubboclub.dk.storage.model.ChnlDefPo;
 import com.dubboclub.dk.storage.model.CurrentPage;
 import com.dubboclub.dk.storage.model.NotificationPo;
 import com.dubboclub.dk.storage.model.TradingStatisticPo;
@@ -66,6 +67,12 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     	notificationPo.setType("01");
     	dataMails = notificationStorage.selectNotificationByConditions(notificationPo);
     	for(NotificationPo dataMail : dataMails){
+    		// 全渠道邮箱信息仅接受系统异常信息故跳出循环
+    		if (dataMail.getChnlCode().equals("IBS")) {
+    			return ;
+    		}
+    		// 获取渠道相信信息
+    		ChnlDefPo chnlDef = notificationStorage.getChnlDefByChnlcode(dataMail.getChnlCode());
     		
     		RestTemplate restTemplate = new RestTemplate();  
         	TradingStatisticQuery tradingStatisticQuery = new TradingStatisticQuery();
@@ -99,7 +106,11 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     			}
         	}
 //        	最终的邮件内容字符串
-        	String msg = "昨日交易情况统计:"  + DayAllStatistics(dataMail.getChnlCode()) + "<br>"
+//        	String msg = "昨日交易情况统计:"  + DayAllStatistics(dataMail.getChnlCode()) + "<br>"
+//        	String chnlType = "<div class='text' style='text-align:center';>"+chnlDef.getChnlName()+"("+chnlDef.getChnlCode()+")业务信息统计"+"</div><br><br>" ;
+        	String nbsp = "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+chnlDef.getChnlName()+"("+chnlDef.getChnlCode()+")业务信息统计<br><br>";
+        	String msg = 	nbsp
+        					+"昨日交易情况统计:"+ DayAllStatistics(dataMail.getChnlCode()) + "<br>"
         					+"<caption>"+ "昨日交易量TOP10:" + "</caption><table>" + msgTxCode.toString() + "</table>"
         					+ "<caption>"+ "昨日平均耗时TOP10:" + "</caption><table>" +  msgTimeAvg.toString() + "</table>" 
         					+ "<caption>"+ "昨日交易成功率TOP10:" + "</caption><table>" +  msgSuccess.toString() + "</table>"

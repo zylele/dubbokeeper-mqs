@@ -1,6 +1,8 @@
 package com.dubboclub.dk.task;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -141,8 +143,11 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
 			sb.append("服务名称："+alarmServicePo.getServiceName()+"------");
 			sb.append("节点地址："+alarmServicePo.getHost()+";"+"<br>");
 		}
+		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		String time = sd.format(new Date());
 		
-		return "以下应用服务可能出现故障，请及时检查："+"<br><br>"+sb.toString();		
+		return "以下应用服务于 "+time+" 出现异常，请及时检查:"
+		+"<br><br>"+sb.toString();		
 	}
 	
 	

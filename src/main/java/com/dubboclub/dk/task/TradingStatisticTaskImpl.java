@@ -68,7 +68,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 		RestTemplate restTemplate = new RestTemplate();         
 		String data=null;
 		try {
-			data = restTemplate.getForObject(zipkinUrl + BIZ_EXCEPTION_URL + "&endTs=" + endT + "&lookback=10000"  , String.class);
+			data = restTemplate.getForObject(zipkinUrl + BIZ_EXCEPTION_URL + "&endTs=" + endT + "&lookback=20000"  , String.class);
 			
 		} catch (Exception e) {
 			logger.warn(zipkinUrl + BIZ_EXCEPTION_URL + "&startTs=" + startT + "&endTs=" + endT);
@@ -125,7 +125,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 									if (object == null || !serviceName.equals(object.getServiceName()) || !sourceType.equals(object.getSourceType())) {
 									object = new StatisticObject();
 									object.setTotalNum(1);
-									object.setTotalTimePerTime(duration);
+									object.setTotalTimePerTime(duration/1000);
 									object.setNowTime(nowTime);
 									object.setTimestamp(timestamp1);
 									object.setStartTime(startTime);
@@ -138,7 +138,7 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 									statisticMap.put(txCode, object);
 								} else {
 										object.setTotalNum(object.getTotalNum() + 1);
-										object.setTotalTimePerTime(object.getTotalTimePerTime() + duration);
+										object.setTotalTimePerTime(object.getTotalTimePerTime() + (duration/1000));
 										if (success)
 											object.setSuccess(object.getSuccess() + 1);
 										else

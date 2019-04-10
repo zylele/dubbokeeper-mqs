@@ -3,7 +3,21 @@
 		<wui-date format="yyyy-mm-dd hh:mm:ss" placeholder="请选择或输入开始日期" id="startdate" btns="{'ok':'确定','now':'此刻'}" ng-model="startdate"></wui-date>
 		--
 		<wui-date format="yyyy-mm-dd hh:mm:ss" placeholder="请选择或输入结束日期" id="enddate" btns="{'ok':'确定','now':'此刻'}" ng-model="enddate"></wui-date>
-		<button type="button" class="btn" ng-click="queryBizWarning()">查询</button>
+		
+		&nbsp<strong>交易码:</strong>
+		<div style="width:200px;display:inline-block;">
+			<select "id="txCode" name="txCode" class="selectpicker show-tick form-control" multiple data-max-options="1" data-live-search="true" ng-model="txCode">
+				<option id="selectTxCode" ng-show="txDefs&&txDefs.length>0" ng-repeat="txDef in txDefs" value="{{txDef.txCode}}">{{txDef.txCode}}----{{txDef.txName}}</option>
+			</select>
+		</div>
+		
+		&nbsp<strong>渠道号:</strong>
+		<div style="width:200px;display:inline-block;">
+			<select "id="chnlType" name="chnlType" class="selectpicker show-tick form-control" multiple data-max-options="1" data-live-search="true" ng-model="chnlType">
+				<option id="selectChnlType" ng-show="chnlDefs&&chnlDefs.length>0" ng-repeat="chnlDef in chnlDefs" value="{{chnlDef.chnlCode}}">{{chnlDef.chnlCode}}----{{chnlDef.chnlName}}</option>
+			</select>
+		</div>
+		&nbsp<button type="button" class="btn" ng-click="queryBizWarning()">查询</button>
 </div>
 <div class="panel panel-default">
     <div class="panel-heading">

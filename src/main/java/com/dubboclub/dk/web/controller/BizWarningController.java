@@ -107,6 +107,19 @@ public class BizWarningController {
     public @ResponseBody BasicListResponse<BizWarningDto>  getBizWarningByPageByCondition(@RequestBody BaseQueryConditions<BizWarningQuery>  conditions) {
 		BizWarningQuery bizWarningQuery = new BizWarningQuery();
 		BeanUtils.copyProperties(conditions.getConditions(), bizWarningQuery);
+		if(bizWarningQuery.getTxCode()!=null) {
+			if(bizWarningQuery.getTxCode().equals("undefined")) {
+				bizWarningQuery.setTxCode(null);
+			}		
+		}
+		if(bizWarningQuery.getChnlType()!=null) {
+			if(bizWarningQuery.getChnlType().equals("undefined")) {
+				bizWarningQuery.setChnlType(null);
+			}else {
+				String chnltype = bizWarningQuery.getChnlType();
+				bizWarningQuery.setChnlType("\"chnlType\":\""+chnltype+"\"");
+			}
+		}
 		List<BizWarningPo> listPo = bizWarningStorage.selectBizWarningByPageByCondition(bizWarningQuery, conditions.getCurrentPage());
 		PageInfo<BizWarningPo> pageInfo = new PageInfo<>(listPo);
         BasicListResponse<BizWarningDto> responseList = new BasicListResponse<BizWarningDto>();

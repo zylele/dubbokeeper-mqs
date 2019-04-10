@@ -8,6 +8,7 @@ import com.dubboclub.dk.storage.NotificationStorage;
 import com.dubboclub.dk.storage.model.ChnlDefPo;
 import com.dubboclub.dk.storage.model.CurrentPage;
 import com.dubboclub.dk.storage.model.NotificationPo;
+import com.dubboclub.dk.storage.model.TxCodePo;
 import com.dubboclub.dk.storage.mysql.mapper.NotificationMapper;
 import com.github.pagehelper.PageHelper;
 
@@ -82,6 +83,12 @@ public class MysqlNotificationStorage implements NotificationStorage,Initializin
 	public ChnlDefPo getChnlDefByChnlcode(String chnlCode) {
 		ChnlDefPo chnlDefPo = notificationMapper.getChnlDefByChnlcode(chnlCode);
 		return chnlDefPo;
+	}
+
+	@Override
+	public List<TxCodePo> getTxcode(TxCodePo txCodePo) {
+		List<TxCodePo> txCodePos = notificationMapper.getTxcode(txCodePo);
+		return txCodePos;
 	}
 	
 

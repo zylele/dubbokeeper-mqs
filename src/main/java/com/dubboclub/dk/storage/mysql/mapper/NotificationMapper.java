@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.dubboclub.dk.storage.model.ChnlDefPo;
 import com.dubboclub.dk.storage.model.NotificationPo;
+import com.dubboclub.dk.storage.model.TxCodePo;
 
 /**
  * Copyright: Copyright (c) 2018 东华软件股份公司
@@ -29,4 +30,5 @@ public interface NotificationMapper {
 	public List<ChnlDefPo> getChnlDef(ChnlDefPo chnlDefPo);
 	public ChnlDefPo getChnlDefByChnlcode(String chnlCode);
 	public List<String> getMailByChnlcode(String chnlCode);
+	public List<TxCodePo> getTxcode(TxCodePo txCodePo);
 }

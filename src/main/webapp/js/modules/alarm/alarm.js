@@ -174,7 +174,8 @@ alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$
     	}
     	$httpWrapper.post({
             url:"bizwarning/getBizWarningByPageByCondition",
-            data:'{"currentPage": {"currentPage": '+$scope.myPage.currentPage+',"pageSize":'+$scope.myPage.itemsPerPage+'},"conditions": {"bizStartDate": "'+$scope.startdate+'","bizEndDate": "'+$scope.enddate+'"}}',
+//            data:'{"currentPage": {"currentPage": '+$scope.myPage.currentPage+',"pageSize":'+$scope.myPage.itemsPerPage+'},"conditions": {"bizStartDate": "'+$scope.startdate+'","bizEndDate": "'+$scope.enddate+'"}}',
+            data:'{"currentPage": {"currentPage": '+$scope.myPage.currentPage+',"pageSize":'+$scope.myPage.itemsPerPage+'},"conditions": {"bizStartDate": "'+$scope.startdate+'","bizEndDate": "'+$scope.enddate+'","txCode": "'+$scope.txCode+'","chnlType": "'+$scope.chnlType+'"}}',
             success:function(data){
                 $scope.alarms=data.list;
                 if(!data||data.length<0){
@@ -205,6 +206,51 @@ alarm.controller("alarmBusinessTable",function($scope,$breadcrumb,$httpWrapper,$
                 }
             })
         };
+    
+        $scope.chnlDefs=[];
+        $httpWrapper.post({
+            url:"notification/getChnlDef",
+            success:function(data){
+                $scope.chnlDefs=data.list;
+                $(function() {
+        			$(".selectpicker").selectpicker({
+        				noneSelectedText: '请选择',
+        				countSelectedText: function(){}
+        			});
+        		});
+        	   function selectValue() {
+               //获取选择的值
+                    alert($('#chnlType').selectpicker('val'));
+                }
+                if(!data||data.length<0){
+                    $scope.isEmpty=true;
+                }
+                $scope.originData=data;
+            }
+        });
+        
+        $scope.txDefs=[];
+        $httpWrapper.post({
+            url:"notification/getTxCode",
+            success:function(data){
+                $scope.txDefs=data.list;
+                $(function() {
+        			$(".selectpicker").selectpicker({
+        				noneSelectedText: '请选择',
+        				countSelectedText: function(){}
+        			});
+        		});
+        	   function selectValue() {
+               //获取选择的值
+                    alert($('#txCode').selectpicker('val'));
+                }
+                if(!data||data.length<0){
+                    $scope.isEmpty=true;
+                }
+                $scope.originData=data;
+            }
+        });
+
         
         // 工具方法
         $scope.formatjson = function(json, options) {

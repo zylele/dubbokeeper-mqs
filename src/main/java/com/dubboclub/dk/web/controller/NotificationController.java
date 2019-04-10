@@ -16,11 +16,13 @@ import com.dubboclub.dk.notification.WarningStatusHolder;
 import com.dubboclub.dk.storage.NotificationStorage;
 import com.dubboclub.dk.storage.model.ChnlDefPo;
 import com.dubboclub.dk.storage.model.NotificationPo;
+import com.dubboclub.dk.storage.model.TxCodePo;
 import com.dubboclub.dk.web.model.BaseQueryConditions;
 import com.dubboclub.dk.web.model.BasicListResponse;
 import com.dubboclub.dk.web.model.ChnlDefDto;
 import com.dubboclub.dk.web.model.NotificationDto;
 import com.dubboclub.dk.web.model.NotificationResultDto;
+import com.dubboclub.dk.web.model.TxCodeDto;
 import com.dubboclub.dk.web.model.WarningStatusDto;
 import com.github.pagehelper.PageInfo;
 
@@ -102,6 +104,20 @@ public class NotificationController {
         	ChnlDefDto chnlDefDto = new ChnlDefDto();
             BeanUtils.copyProperties(po, chnlDefDto);
             listDto.add(chnlDefDto);
+        }
+        return responseList;
+    }
+    @RequestMapping(value = {"/getTxCode"},method = {RequestMethod.POST})
+    public @ResponseBody BasicListResponse<TxCodeDto>  getTxcode() {
+    	TxCodePo txCodePo = new TxCodePo();
+        List<TxCodePo> listPo = notificationStorage.getTxcode(txCodePo);
+        BasicListResponse<TxCodeDto> responseList = new BasicListResponse<TxCodeDto>();
+        List listDto = new ArrayList<NotificationDto>();
+        responseList.setList(listDto);
+        for(TxCodePo po: listPo) {
+        	TxCodeDto txCodeDto = new TxCodeDto();
+            BeanUtils.copyProperties(po, txCodeDto);
+            listDto.add(txCodeDto);
         }
         return responseList;
     }

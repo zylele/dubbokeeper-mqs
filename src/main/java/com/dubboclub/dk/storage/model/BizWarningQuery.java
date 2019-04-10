@@ -9,6 +9,8 @@ package com.dubboclub.dk.storage.model;
 public class BizWarningQuery {
 	private String bizStartDate;
 	private String bizEndDate;
+	private String txCode;
+	private String chnlType;
 	public String getBizStartDate() {
 		return bizStartDate;
 	}
@@ -21,10 +23,17 @@ public class BizWarningQuery {
 	public void setBizEndDate(String bizEndDate) {
 		this.bizEndDate = bizEndDate;
 	}
-
-	
-	
-	
-	
+	public String getChnlType() {
+		return chnlType;
+	}
+	public void setChnlType(String chnlType) {
+		this.chnlType = chnlType;
+	}
+	public String getTxCode() {
+		return txCode;
+	}
+	public void setTxCode(String txCode) {
+		this.txCode = txCode;
+	}
 
 }

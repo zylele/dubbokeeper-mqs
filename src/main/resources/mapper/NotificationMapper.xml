@@ -72,6 +72,9 @@
     <select id="getChnlDef" parameterType="ChnlDefPo" resultType="ChnlDefPo">
     	select chnl_code as chnlCode,chnl_name as chnlName  from chnl_def where 1=1
     </select>
+        <select id="getTxcode" parameterType="TxCodePo" resultType="TxCodePo">
+    	select tx_code as txCode,tx_name as txName  from tx_code_info where 1=1
+    </select>
     <select id="getChnlDefByChnlcode" parameterType="java.lang.String" resultType="ChnlDefPo">
     	select chnl_code as chnlCode,chnl_name as chnlName  from chnl_def where chnl_code =  #{chnlCode};
     </select>

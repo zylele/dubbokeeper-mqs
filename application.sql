@@ -67,6 +67,7 @@ CREATE TABLE `trading`(
 CREATE TABLE `statistics_day`(
 	`id` int(10) NOT NULL AUTO_INCREMENT,
 	`tx_code` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '交易编号',
+	`chnl_code` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '交易渠道',
 	`start_time` datetime(6) DEFAULT NULL COMMENT '开始时间',
 	`timestamp` bigint(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '时间戳',
 	`total_time_num` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '交易量',

@@ -9,9 +9,13 @@ package com.dubboclub.dk.storage.model;
 public class DayTradingPo {
 	
 	private String startTime;
+	private String nowTime;
 	private int totalTimeNum;
+	private int success;
+	private int fail;
 	private long timestamp;
 	private String txCode;
+	private String chnlCode;
 	
 	public String getTxCode() {
 		return txCode;
@@ -36,6 +40,30 @@ public class DayTradingPo {
 	}
 	public void setTotalTimeNum(int totalTimeNum) {
 		this.totalTimeNum = totalTimeNum;
+	}
+	public String getChnlCode() {
+		return chnlCode;
+	}
+	public void setChnlCode(String chnlCode) {
+		this.chnlCode = chnlCode;
+	}
+	public int getSuccess() {
+		return success;
+	}
+	public void setSuccess(int success) {
+		this.success = success;
+	}
+	public int getFail() {
+		return fail;
+	}
+	public void setFail(int fail) {
+		this.fail = fail;
+	}
+	public String getNowTime() {
+		return nowTime;
+	}
+	public void setNowTime(String nowTime) {
+		this.nowTime = nowTime;
 	}
 
 }

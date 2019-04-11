@@ -69,7 +69,10 @@ CREATE TABLE `statistics_day`(
 	`tx_code` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '交易编号',
 	`chnl_code` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '交易渠道',
 	`start_time` datetime(6) DEFAULT NULL COMMENT '开始时间',
+	`now_time` date DEFAULT NULL COMMENT '日时间',
 	`timestamp` bigint(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '时间戳',
+	`success` int(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '成功总数',
+  	`fail` int(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '失败总数',
 	`total_time_num` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '交易量',
 	PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;

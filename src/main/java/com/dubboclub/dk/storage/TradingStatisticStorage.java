@@ -22,6 +22,8 @@ public interface TradingStatisticStorage {
 			CurrentPage currentPage);
 	public List<TradingStatisticPo> selectTradingStatisticByType(TradingStatisticQueryTime tradingStatisticQueryTime,
 			CurrentPage currentPage);
+	public List<TradingStatisticPo> selectTradingStatisticBydate(TradingStatisticQuery tradingStatisticQuery
+			);
 	
 	
 }

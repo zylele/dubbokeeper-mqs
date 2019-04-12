@@ -86,6 +86,12 @@ public class MysqlTradingStatisticStorage implements TradingStatisticStorage,Ini
 		return tradingStatistics;
 	}
 
+	@Override
+	public List<TradingStatisticPo> selectTradingStatisticBydate(TradingStatisticQuery tradingStatisticQuery) {
+		List<TradingStatisticPo> tradingStatistics = tradingStatisticMapper.selectTradingStatisticBydate(tradingStatisticQuery);
+		return tradingStatistics;
+	}
+
 	
     
 }

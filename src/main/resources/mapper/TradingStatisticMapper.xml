@@ -28,7 +28,7 @@
     </select>
     <select id="selectTradingStatisticByPageByCondition" parameterType="TradingStatisticQuery" resultType="TradingStatisticPo">
     	select b.tx_name as txName,b.tx_type as txType,a.tx_code as txCode,SUM(a.total_num) as totalNum, SUM(a.total_num*a.time_avg)/SUM(a.total_num) as timeAvg,SUM(a.success) as success,
-		SUM(a.fail) as fail,service_name as serviceName,source_type as sourceType,SUM(a.success)/SUM(a.total_num) as successRate,SUM(a.fail)/SUM(a.total_num) as failRate
+		SUM(a.fail) as fail,service_name as serviceName,source_type as sourceType,SUM(a.success)/SUM(a.total_num) as successRate,(SUM(a.fail)/SUM(a.total_num))*100 as failRate
        	from trading a join tx_code_info b on a.tx_code = b.tx_code
     	where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate} 
     	<if test="chnlCode != null and chnlCode != ''">
@@ -84,5 +84,16 @@
 		GROUP BY a.tx_code
 		order by totalNum DESC
 	</select>
+	
+	<select id="selectTradingStatisticBydate" parameterType="TradingStatisticQuery" resultType="TradingStatisticPo">
+    	select b.tx_name as txName,b.tx_type as txType,a.tx_code as txCode,SUM(a.total_num) as totalNum, SUM(a.total_num*a.time_avg)/SUM(a.total_num) as timeAvg,SUM(a.success) as success,
+		SUM(a.fail) as fail,service_name as serviceName,source_type as sourceType,SUM(a.success)/SUM(a.total_num) as successRate,(SUM(a.fail)/SUM(a.total_num))*100 as failRate
+       	from trading a join tx_code_info b on a.tx_code = b.tx_code
+    	where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate} 
+    	<if test="chnlCode != null and chnlCode != ''">
+    		and source_type = #{chnlCode}
+    	</if>
+    	GROUP BY a.tx_code order by totalNum DESC
+    </select>
 
 </mapper>

@@ -21,5 +21,6 @@ public interface TradingStatisticMapper {
 			TradingStatisticQueryTime tradingStatisticQueryTime);
 	public List<TradingStatisticPo> selectTradingStatisticByType(
 			TradingStatisticQueryTime tradingStatisticQueryTime);
-	
+	public List<TradingStatisticPo> selectTradingStatisticBydate(
+			TradingStatisticQuery tradingStatisticQuery);
 }

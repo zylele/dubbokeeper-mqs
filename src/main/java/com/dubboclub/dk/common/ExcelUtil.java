@@ -328,7 +328,9 @@ public class ExcelUtil {
 	 */
 	public void writeExcel_xls(List<Map<String, Object>> rowList, String src_xlsPath, String dist_xlsPath)
 			throws IOException {
-
+		
+		int flag = 0;
+		
 		// 判断文件路径是否为空
 		if (dist_xlsPath == null || dist_xlsPath.equals("")) {
 			out("文件路径不能为空");
@@ -376,7 +378,7 @@ public class ExcelUtil {
 			}
 
 			// 将rowlist的内容写到Excel中
-			writeExcel(wb, rowList, dist_xlsPath);
+			writeExcel(wb, rowList, dist_xlsPath,flag);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -406,7 +408,8 @@ public class ExcelUtil {
 	 */
 	public void writeExcel_xlsx(List<Map<String, Object>> rowList, String src_xlsPath, String dist_xlsPath)
 			throws IOException {
-
+		
+		int flag = 0;
 		// 判断文件路径是否为空
 		if (dist_xlsPath == null || dist_xlsPath.equals("")) {
 			out("文件路径不能为空");
@@ -451,7 +454,7 @@ public class ExcelUtil {
 				wb = new XSSFWorkbook(new FileInputStream(src_xlsPath));
 			}
 			// 将rowlist的内容添加到Excel中
-			writeExcel(wb, rowList, dist_xlsPath);
+			writeExcel(wb, rowList, dist_xlsPath,flag);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -775,7 +778,7 @@ public class ExcelUtil {
 	 * @Title: WriteExcel
 	 * @Date : 2016-7-27 下午01:33:59
 	 */
-	private void writeExcel(Workbook wb, List<Map<String, Object>> rowList, String xlsPath) {
+	private void writeExcel(Workbook wb, List<Map<String, Object>> rowList, String xlsPath, int flag) {
 
 		if (wb == null) {
 			out("操作文档不能为空！");
@@ -789,6 +792,9 @@ public class ExcelUtil {
 		// 如果每次重写，那么则从开始读取的位置写，否则果获取源文件最新的行。
 		// int t = 0;//记录最新添加的行数
 		int lastRowNum = isOverWrite ? startReadPos : sheet.getLastRowNum() + 1;
+		if(flag==0) {
+			lastRowNum=0;
+		}
 		out("要添加的数据总条数为：" + rowList.size());
 		String[] headers = null;
 		for (int t = 0; t < rowList.size(); t++) {

@@ -59,7 +59,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     	sendMailStatistic = ConfigUtils.getProperty("sendMailStatistic.url");
     }
 //  统计信息的邮件功能
-    @Scheduled(cron="0/30 * *  * * ? ")   //每天凌晨1点执行一次     0 0 1 * * ?
+//    @Scheduled(cron="0/30 * *  * * ? ")   //每天凌晨1点执行一次     0 0 1 * * ?
     @Override 
 	public void getStatisticsMailTask(){
     	List<NotificationPo> dataMails = new ArrayList<NotificationPo>();
@@ -98,11 +98,13 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
 //    			遍历返回的数据
     			for(TradingStatisticPo po : data){
     				if(i == "01"){
-    					msgTxCode.append(msgx = "<tr><td>" + "交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "    " +"</td><td>"+ "交易量:" + po.getTotalNum()  +"</td></tr>");				}else if(i == "02"){
-    					msgTimeAvg.append(msgx = "<tr><td>" + "交易码:" + po.getTxCode() + "    " + "——" +  po.getTxName() + "    " + "</td><td>"+ "平均耗时(ms):" + po.getTimeAvg() +"</td></tr>");				}else if(i == "03"){
-    					msgSuccess.append(msgx = "<tr><td>" + "交易码:" + po.getTxCode() + "    " + "——" +  po.getTxName() + "    " + "</td><td>"+ "成功次数:" + po.getSuccess() +"</td></tr>");				}else if(i == "04"){
+    					msgTxCode.append(msgx = "<tr><td>" + "交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "    " +"</td><td>"+ "交易量:" + po.getTotalNum()  +"</td></tr>");				}
+    				else if(i == "02"){
+    					msgTimeAvg.append(msgx = "<tr><td>" + "交易码:" + po.getTxCode() + "    " + "——" +  po.getTxName() + "    " + "</td><td>"+ "平均耗时(ms):" + po.getTimeAvg() +"</td></tr>");				}
+    				else if(i == "03"){
+    					msgSuccess.append(msgx = "<tr><td>" + "交易码:" + po.getTxCode() + "    " + "——" +  po.getTxName() + "    " + "</td><td>"+ "成功次数:" + po.getSuccess() +"</td></tr>");				}
+    				else if(i == "04"){
     					msgFail.append(msgx = "<tr><td>" + "交易码:" + po.getTxCode() + "    " + "——" +  po.getTxName() + "    " + "</td><td>"+ "失败次数:" + po.getFail() +"</td></tr>");				}
-    				
     			}
         	}
 //        	最终的邮件内容字符串
@@ -182,7 +184,7 @@ public class StatisticsMailTaskImpl implements StatisticsMailTask {
     	try {
 			for(TradingStatisticPo po : data){
 				if(null!=po) {
-					msg1.append(msgx = "<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
+					msg.append(msgx = "<tr><td>"+"交易码:" + po.getTxCode() + "    " + "——" + po.getTxName() + "</td><td>" + "交易量:" + po.getTotalNum() + "</td><tr>");			}
 				}
 		} catch (Exception e) {
 			logger.info("统计数据库中数据为空: " + e.getMessage());

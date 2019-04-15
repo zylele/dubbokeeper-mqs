@@ -9,8 +9,29 @@ package com.dubboclub.dk.web.model;
 public class DayTradingDto {
 	
 	private String startTime;
+	private String nowTime;
 	private int totalTimeNum;
+	private int success;
+	private int fail;
 	private long timestamp;
+	public String getNowTime() {
+		return nowTime;
+	}
+	public void setNowTime(String nowTime) {
+		this.nowTime = nowTime;
+	}
+	public int getSuccess() {
+		return success;
+	}
+	public void setSuccess(int success) {
+		this.success = success;
+	}
+	public int getFail() {
+		return fail;
+	}
+	public void setFail(int fail) {
+		this.fail = fail;
+	}
 	private String txCode;
 	public String getTxCode() {
 		return txCode;

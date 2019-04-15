@@ -31,22 +31,54 @@ public class DayTradingController {
 	@Autowired
     @Qualifier("dayTradingStorage")
 	private DayTradingStorage dayTradingStorage;
-	//查询当天多条数据
-		@RequestMapping(value = {"/getDayTradingByPageByCondition"},method = {RequestMethod.POST})
-	    public @ResponseBody BasicListResponse<DayTradingDto>  getDayTradingByPageByCondition(@RequestBody DayTradingQuery conditions) {
-			DayTradingQuery dayTradingQuery = new DayTradingQuery();
-	        BeanUtils.copyProperties(conditions, dayTradingQuery);
-	        List<DayTradingPo> listPo = dayTradingStorage.selectDayTradingByPageByCondition(dayTradingQuery);
-	        BasicListResponse<DayTradingDto> responseList = new BasicListResponse<DayTradingDto>();
-	        List listDto = new ArrayList<TradingStatisticDto>();
-	        responseList.setList(listDto);
-	        for(DayTradingPo po: listPo) {
-	        	DayTradingDto dayTradingDto = new DayTradingDto();
-	            BeanUtils.copyProperties(po, dayTradingDto);
-//	            dayTradingDto.setStartTime(new SimpleDateFormat(ConstantsUtil.DATE_FORMATD).format(po.getStartTime()));
-	            listDto.add(dayTradingDto);
-	        }
-	        return responseList;
-	    }
+	
+	// 交易趋势查询
+	@RequestMapping(value = {"/getDayTradingByPageByCondition"},method = {RequestMethod.POST})
+    public @ResponseBody BasicListResponse<DayTradingDto>  getDayTradingByPageByCondition(@RequestBody DayTradingQuery conditions) {
+		DayTradingQuery dayTradingQuery = new DayTradingQuery();
+		BeanUtils.copyProperties(conditions, dayTradingQuery);
+       
+		// 以每五分钟一条数据返回
+        if(dayTradingQuery.getFindType().equals("minute")) {
+        	   	List<DayTradingPo> listPo = dayTradingStorage.selectDayTradingByMinute(dayTradingQuery);
+	   	        BasicListResponse<DayTradingDto> responseList = new BasicListResponse<DayTradingDto>();
+		        List listDto = new ArrayList<TradingStatisticDto>();
+		        responseList.setList(listDto);
+		        for(DayTradingPo po: listPo) {
+		        	DayTradingDto dayTradingDto = new DayTradingDto();
+		            BeanUtils.copyProperties(po, dayTradingDto);
+		            listDto.add(dayTradingDto);
+		        }
+		        return responseList;
+        }
+        // 以每小时一天数据返回
+        else if(dayTradingQuery.getFindType().equals("hour")){
+        		List<DayTradingPo> listPo = dayTradingStorage.selectDayTradingByMinute(dayTradingQuery);
+	   	        BasicListResponse<DayTradingDto> responseList = new BasicListResponse<DayTradingDto>();
+		        List listDto = new ArrayList<TradingStatisticDto>();
+		        responseList.setList(listDto);
+		        for(DayTradingPo po: listPo) {
+		        	DayTradingDto dayTradingDto = new DayTradingDto();
+		            BeanUtils.copyProperties(po, dayTradingDto);
+		            listDto.add(dayTradingDto);
+		        }
+		        return responseList;
+        }
+        //以每天一条数据返回
+        else if(dayTradingQuery.getFindType().equals("day")){
+        		List<DayTradingPo> listPo = dayTradingStorage.selectDayTradingByDay(dayTradingQuery);
+	   	        BasicListResponse<DayTradingDto> responseList = new BasicListResponse<DayTradingDto>();
+		        List listDto = new ArrayList<TradingStatisticDto>();
+		        responseList.setList(listDto);
+		        for(DayTradingPo po: listPo) {
+		        	DayTradingDto dayTradingDto = new DayTradingDto();
+		            BeanUtils.copyProperties(po, dayTradingDto);
+		            listDto.add(dayTradingDto);
+		        }
+		        return responseList;
+        }
+        
+        return null;
+    }
 
 }

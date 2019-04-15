@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.alibaba.dubbo.common.utils.ConfigUtils;
 import com.dubboclub.dk.common.ExcelUtil;
 import com.dubboclub.dk.common.SendMessage;
 import com.dubboclub.dk.remote.MsgSystemService;
+import com.dubboclub.dk.remote.esb.dto.SendEmailReq;
 import com.dubboclub.dk.storage.NotificationStorage;
 import com.dubboclub.dk.storage.TradingStatisticStorage;
 import com.dubboclub.dk.storage.model.ChnlDefPo;
@@ -51,19 +53,21 @@ public class StatisticsNewMailTaskImpl implements StatisticsMailTask {
     @Qualifier("notificationStorage")
     private NotificationStorage notificationStorage;
     
-    String excelPath = ConfigUtils.getProperty("excel.Path");
+    private String excelPath = ConfigUtils.getProperty("excel.Path");
+    
+    private String sendMailStatistic = ConfigUtils.getProperty("sendMailStatistic.url");
 	
     /**
              *具体实现方法
      */
-    @Scheduled(cron="0/30 * *  * * ? ")   //每天凌晨1点执行一次 "0 0 1 1/1 * ?"
+    @Scheduled(cron="0 0 1 1/1 * ?")   //每天凌晨1点执行一次 "0 0 1 1/1 * ?"
 	@Override
 	public void getStatisticsMailTask() {
     	// 获取指定时间
 //    	String nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24));
-    	String nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24*7));
+    	String nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24*2));
 //    	String rebackSevenTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24*7));
-    	String rebackSevenTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24*9));
+    	String rebackSevenTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date(System.currentTimeMillis()-1000*60*60*24*4));
     	
     	// 封装Excel表头
     	String [] formHead = {"交易码","交易名称","交易类别","交易笔数","成功笔数","失败笔数","失败率(%)","平均耗时(ms)"};
@@ -78,7 +82,7 @@ public class StatisticsNewMailTaskImpl implements StatisticsMailTask {
     	notificationPo.setType("01");
     	dataMails = notificationStorage.selectNotificationByConditions(notificationPo);
     	
-    	logger.info("开始统计当日交易信息并添加到excel中");
+    	logger.debug("开始统计当日交易信息并添加到excel中");
     	for (NotificationPo dataMail : dataMails) {
     		// 全渠道邮箱信息仅接受系统异常信息故跳出循环
     		if (dataMail.getChnlCode().equals("IBS")) {
@@ -148,8 +152,28 @@ public class StatisticsNewMailTaskImpl implements StatisticsMailTask {
     			}
             	listAll.clear();
         	}
-
         	
+        	// 判断发送邮件开关是否打开
+        	if(sendMailStatistic.equals("true")) {
+        		logger.info("发送交易信息统计 ==>"+sendMailStatistic);
+        		// 组装邮件内容
+            	ArrayList<String> address= new ArrayList<String>();
+            	address.add( dataMail.getAddress());
+    			Map<String, String> mapFile = new HashMap<String, String>();
+    			mapFile.put(xlsPath, nowTime+"-"+chnlDef.getChnlName()+"交易信息统计.xls");
+            	// 发送邮件
+        		SendEmailReq sendEmailReq = new SendEmailReq();
+        		sendEmailReq.setSceneCode("M001");
+        		sendEmailReq.setBusType("OutOpenAcc");
+        		sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
+        		sendEmailReq.setMailTo(address);
+        		sendEmailReq.setAttachments(mapFile);
+        		sendEmailReq.setMsg( chnlDef.getChnlName()+"("+chnlDef.getChnlCode()+")交易信息统计（详情点击下载附件）");
+        		sendMessage.sendWarningMailAsyc(sendEmailReq, "000000");
+        	}else {
+        		logger.info("发送交易信息统计 ==>"+sendMailStatistic);
+        	}
+
 		}
 		
 	}

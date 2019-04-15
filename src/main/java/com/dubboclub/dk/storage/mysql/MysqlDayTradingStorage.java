@@ -44,13 +44,26 @@ public class MysqlDayTradingStorage implements DayTradingStorage,InitializingBea
         List<DayTradingPo> dayTradings = dayTradingMapper.selectDayTradingByPageByCondition(dayTradingQuery);
 		return dayTradings;
 	}
-
 	@Override
 	public Integer deleteDayTradingByPageByCondition(DayTradingPo dayTradingPo) {
 		// TODO Auto-generated method stub
 		return dayTradingMapper.deleteDayTradingByPageByCondition(dayTradingPo);
 	}
-
+	@Override
+	public List<DayTradingPo> selectDayTradingByMinute(DayTradingQuery dayTradingQuery) {
+        List<DayTradingPo> dayTradings = dayTradingMapper.selectDayTradingByMinute(dayTradingQuery);
+		return dayTradings;
+	}
+	@Override
+	public List<DayTradingPo> selectDayTradingByHour(DayTradingQuery dayTradingQuery) {
+        List<DayTradingPo> dayTradings = dayTradingMapper.selectDayTradingByHour(dayTradingQuery);
+		return dayTradings;
+	}
+	@Override
+	public List<DayTradingPo> selectDayTradingByDay(DayTradingQuery dayTradingQuery) {
+        List<DayTradingPo> dayTradings = dayTradingMapper.selectDayTradingByDay(dayTradingQuery);
+		return dayTradings;
+	}
 
 
 

@@ -54,6 +54,12 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 	@Override 
 	//解决时间重叠问题 
     public void getTradingStatisticTask(){
+		
+		//统一定义时间
+		long timestamp = System.currentTimeMillis()/1000;
+		String nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date());
+		String startTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date().getTime());
+		
 		Long startT;
 		Long endT;
 		if(lastEndTime == 0){
@@ -79,19 +85,17 @@ public class TradingStatisticTaskImpl implements TradingStatisticTask {
 //		如果没有交易定时向每日峰值表中插入数据
 		if(jsonTrads == null || jsonTrads.size() == 0){
 			DayTradingPo dayTradingPo = new DayTradingPo();
-			dayTradingPo.setTxCode("Reserved");
-			dayTradingPo.setChnlCode("Reserved");
+			dayTradingPo.setTxCode("0000");
+			dayTradingPo.setChnlCode("000000");
 			dayTradingPo.setTotalTimeNum(0);
-			dayTradingPo.setStartTime(new SimpleDateFormat(ConstantsUtil.DATE_FORMATD).format(new Date()));
-			dayTradingPo.setTimestamp(((new Date()).getTime())/1000);
+			dayTradingPo.setNowTime(nowTime);
+			dayTradingPo.setStartTime(startTime);
+			dayTradingPo.setTimestamp(timestamp);
 			dayTradingStorage.addDayTrading(dayTradingPo);
 		}
 		Map<String, StatisticObject> statisticMap = new HashMap<String, StatisticObject>();  //交易量，平均耗时，成功或失败次数Map
 		
 		//遍历返回的数据并put到statisticMap中，以serviceName+txCode+sourceType+为Key
-		long timestamp = System.currentTimeMillis()/1000;
-		String nowTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMATE).format(new Date());
-		String startTime = new SimpleDateFormat(ConstantsUtil.DATE_FORMAT).format(new Date().getTime());
 		for (Object jsonTrad : jsonTrads) {
 		String txCode = "";
 		long duration = 0;

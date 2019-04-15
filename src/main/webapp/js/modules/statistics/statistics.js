@@ -93,13 +93,31 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
         	      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
         	      return fmt; 
         	    }
-        		var x = new Date();
+/*        		var x = new Date();
     			if(!$scope.daydate) dayStratTime = Number(x.getTime()/1000 - 28800);
     			if(!$scope.daydate) dayEndTime = Number(x.getTime()/1000 + 57600);
-    			$scope.daydate = new Date().Format("yyyy-MM-dd");
+    			$scope.daydate = new Date().Format("yyyy-MM-dd");*/
+    			var nowtime = CurentTime();
+    			// 获取页面输入条件
+    			var txCode = $scope.txCode;
+    			var chnlType = $scope.chnlType;
+    			var findType = $scope.findType;
+    			if(!$scope.txCode) txCode = "";
+    			if(!$scope.chnlType) chnlType = "";
+    			if(!$scope.findType) findType = "minute";
+    			
+    			var dayStratTime = $scope.startdate1;
+    			var dayEndTime = $scope.enddate1;
+    			if(!$scope.startdate1) dayStratTime = nowtime;
+    			if(!$scope.enddate1) dayEndTime = nowtime;
+    			// 如条件为minute 即只返回一条数据避免数据过多
+    			if("minute"==findType){
+    				dayStratTime = nowtime;
+        			dayEndTime = nowtime;
+    			}
     			$httpWrapper.post({
     			url:"dayTrading/getDayTradingByPageByCondition",
-    			data:'{"dayTradingStartDate": '+dayStratTime+',"dayTradingEndDate": '+dayEndTime+' }',
+    			data:'{"dayTradingStartDate": "'+dayStratTime+'","dayTradingEndDate": "'+dayEndTime+'","findType": "'+findType+'","txCode": "'+txCode+'","chnlCode": "'+chnlType+'"}',
                 success:function(data){
                     require( [
                               'echarts',
@@ -188,25 +206,100 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                   myChart.setTheme(curTheme)
                                   myChart.setOption(option);
                                   window.onresize = myChart.resize;
-//                                  $(window).resize(function(){
-//                                    	 myChart.resize();
-//                                    	 });
                               });
                           });
                 }
             });
+    	        $scope.chnlDefs=[];
+    	        $httpWrapper.post({
+    	            url:"notification/getChnlDef",
+    	            success:function(data){
+    	                $scope.chnlDefs=data.list;
+    	                $(function() {
+    	        			$(".selectpicker").selectpicker({
+    	        				noneSelectedText: '请选择',
+    	        				countSelectedText: function(){}
+    	        			});
+    	        		});
+    	        	   function selectValue() {
+    	               //获取选择的值
+    	                    alert($('#chnlType').selectpicker('val'));
+    	                }
+    	                if(!data||data.length<0){
+    	                    $scope.isEmpty=true;
+    	                }
+    	                $scope.originData=data;
+    	            }
+    	        });
+    	        
+    	        $scope.txDefs=[];
+    	        $httpWrapper.post({
+    	            url:"notification/getTxCode",
+    	            success:function(data){
+    	                $scope.txDefs=data.list;
+    	                $(function() {
+    	        			$(".selectpicker").selectpicker({
+    	        				noneSelectedText: '请选择',
+    	        				countSelectedText: function(){}
+    	        			});
+    	        		});
+    	        	   function selectValue() {
+    	               //获取选择的值
+    	                    alert($('#txCode').selectpicker('val'));
+    	                }
+    	                if(!data||data.length<0){
+    	                    $scope.isEmpty=true;
+    	                }
+    	                $scope.originData=data;
+    	            }
+    	        });
+    			
+    			// 获取时间字符串
+    		    function CurentTime()  
+    	        {   
+    	            var now = new Date();  
+    	                 
+    	            var year = now.getFullYear();       //年  
+    	            var month = now.getMonth() + 1;     //月  
+    	            var day = now.getDate();            //日  
+    	                 
+    	            var clock = year + "-";  
+    	                 
+    	            if(month < 10) clock += "0";         
+    	            clock += month + "-";  
+    	                 
+    	            if(day < 10) clock += "0";   
+    	            clock += day;  
+    	          
+    	            return(clock);   
+    	        }
     			
         		//每日交易量查询
         		$scope.queryDayTrading = function(){
-        			var day = new Date($scope.daydate);
-        			var dayStratTime = Number(day.getTime()/1000 - 28800);
-        			var dayEndTime = Number(day.getTime()/1000 + 57600);
-        			var x = new Date();
-        			if(!$scope.daydate) dayStratTime = Number(x.getTime()/1000 - 28800);
-        			if(!$scope.daydate) dayEndTime = Number(x.getTime()/1000 + 57600);
+        			var nowtime = CurentTime();
+        			// 获取页面输入条件
+        			var txCode = $scope.txCode;
+        			var chnlType = $scope.chnlType;
+        			var findType = $scope.findType;
+        			if(!$scope.txCode) txCode = "";
+        			if(!$scope.chnlType) chnlType = "";
+        			if(!$scope.findType) findType = "minute";
+        			
+        			var dayStratTime = $scope.startdate1;
+        			var dayEndTime = $scope.enddate1;
+        			if(!$scope.startdate1) dayStratTime = nowtime;
+        			if(!$scope.enddate1) dayEndTime = nowtime;
+        			// 如条件为minute 即只返回一条数据避免数据过多
+        			if("minute"==findType){
+        				dayStratTime = nowtime;
+            			dayEndTime = nowtime;
+        			}
+        			if("day"==findType){
+        				
+        			}
         			$httpWrapper.post({
         			url:"dayTrading/getDayTradingByPageByCondition",
-        			data:'{"dayTradingStartDate": '+dayStratTime+',"dayTradingEndDate": '+dayEndTime+' }',
+        			data:'{"dayTradingStartDate": "'+dayStratTime+'","dayTradingEndDate": "'+dayEndTime+'","findType": "'+findType+'","txCode": "'+txCode+'","chnlCode": "'+chnlType+'"}',
                     success:function(data){
                         require( [
                                   'echarts',
@@ -216,12 +309,24 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                   require(['echarts/theme/macarons2'], function(curTheme){
                                 	  var arrs = data.list;
                                       var xAxisData=[];
+                                      var successData=[];
+                                      var failData=[];
                                       
                                       for(var a=0; a<arrs.length; a++){
                                     	  
-                                    	  xAxisData.push([new Date(arrs[a].timestamp*1000),
+/*                                    	  xAxisData.push([new Date(arrs[a].timestamp*1000),
                                     	                  arrs[a].totalTimeNum
-                                    	                  ]);
+                                    	                  ]);*/
+                                    	  if(findType=="day"){
+                                    		  xAxisData.push([arrs[a].nowtime,arrs[a].totalTimeNum]);
+                                    		  successData.push([arrs[a].nowtime,arrs[a].success]);
+                                    		  failData.push([arrs[a].nowtime,arrs[a].fail]);
+                                    	  }else{
+                                    		  xAxisData.push([arrs[a].startTime,arrs[a].totalTimeNum]);
+                                    		  successData.push([arrs[a].startTime,arrs[a].success]);
+                                    		  failData.push([arrs[a].startTime,arrs[a].fail]);
+                                    	  }
+                                    	 
                                       }
                                 	  var option = {
     	                            			title: {
@@ -283,10 +388,22 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                 			    ],
                                 			    series : [
                                 			        {
-                                			            name: '每日交易量(单位/笔)',
+                                			            name: '总交易量(单位/笔)',
                                 			            type: 'line',
                                 			            showAllSymbol: true,
                                 			            data:xAxisData
+                                			        },
+                                			        {
+                                			            name: '成功交易量(单位/笔)',
+                                			            type: 'line',
+                                			            showAllSymbol: true,
+                                			            data:successData
+                                			        },
+                                			        {
+                                			            name: '失败交易量(单位/笔)',
+                                			            type: 'line',
+                                			            showAllSymbol: true,
+                                			            data:failData
                                 			        }
                                 			    ]
                                 			};
@@ -294,9 +411,6 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                       myChart.setTheme(curTheme)
                                       myChart.setOption(option);
                                       window.onresize = myChart.resize;
-//                                      $(window).resize(function(){
-//                                     	 myChart.resize();
-//                                     	 });
                                   });
                               });
                     }

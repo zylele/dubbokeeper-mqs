@@ -93,28 +93,15 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
         	      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
         	      return fmt; 
         	    }
-/*        		var x = new Date();
-    			if(!$scope.daydate) dayStratTime = Number(x.getTime()/1000 - 28800);
-    			if(!$scope.daydate) dayEndTime = Number(x.getTime()/1000 + 57600);
-    			$scope.daydate = new Date().Format("yyyy-MM-dd");*/
-    			var nowtime = CurentTime();
-    			// 获取页面输入条件
-    			var txCode = $scope.txCode;
-    			var chnlType = $scope.chnlType;
-    			var findType = $scope.findType;
-    			if(!$scope.txCode) txCode = "";
-    			if(!$scope.chnlType) chnlType = "";
-    			if(!$scope.findType) findType = "minute";
     			
-    			var dayStratTime = $scope.startdate1;
-    			var dayEndTime = $scope.enddate1;
-    			if(!$scope.startdate1) dayStratTime = nowtime;
-    			if(!$scope.enddate1) dayEndTime = nowtime;
-    			// 如条件为minute 即只返回一条数据避免数据过多
-    			if("minute"==findType){
-    				dayStratTime = nowtime;
-        			dayEndTime = nowtime;
-    			}
+    			// 初始化查询条件
+        		var nowtime = CurentTime();
+    			var txCode = "";
+    			var chnlType = "";
+    			var findType = "minute";
+    			var dayStratTime = nowtime;
+    			var dayEndTime = nowtime;
+    			
     			$httpWrapper.post({
     			url:"dayTrading/getDayTradingByPageByCondition",
     			data:'{"dayTradingStartDate": "'+dayStratTime+'","dayTradingEndDate": "'+dayEndTime+'","findType": "'+findType+'","txCode": "'+txCode+'","chnlCode": "'+chnlType+'"}',
@@ -127,81 +114,108 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                               require(['echarts/theme/macarons2'], function(curTheme){
                             	  var arrs = data.list;
                                   var xAxisData=[];
+                                  var successData=[];
+                                  var failData=[];
+                                  var timeData=[];
                                   
                                   for(var a=0; a<arrs.length; a++){
-                                	  
-                                	  xAxisData.push([new Date(arrs[a].timestamp*1000),
-                                	                  arrs[a].totalTimeNum
-                                	                  ]);
+                                	  if(findType=="day"){
+                                		  xAxisData.push(arrs[a].totalTimeNum);
+                                		  successData.push(arrs[a].success);
+                                		  failData.push(arrs[a].fail);
+                                		  timeData.push(arrs[a].nowTime);
+                                	  }else if(findType=="hour"){
+                                		  xAxisData.push(arrs[a].totalTimeNum);
+                                		  successData.push(arrs[a].success);
+                                		  failData.push(arrs[a].fail);
+                                		  timeData.push(arrs[a].startTime+":00");
+                                	  }else{
+                                		  xAxisData.push(arrs[a].totalTimeNum);
+                                		  successData.push(arrs[a].success);
+                                		  failData.push(arrs[a].fail);
+                                		  timeData.push(arrs[a].startTime);
+                                	  }
                                   }
-                            	  var option = {
-	                            			title: {
-	                              		        text: '每日交易量折线图',
-	                              		    },
-                            			    tooltip : {
-                            			        trigger: 'item',
-                            			        formatter : function (params) {
-                            			            var date = new Date(params.value[0]);
-                            			            data = date.getFullYear() + '-'
-                            			                   + (date.getMonth() + 1) + '-'
-                            			                   + date.getDate() + ' '
-                            			                   + date.getHours() + ':'
-                            			                   + date.getMinutes() + ':'
-                            			                   + date.getSeconds();
-                            			            return data + '<br/>'
-                            			                   + params.value[1] + '次交易'
-                            			        },
-                            			        enterable: true
-                            			    },
-                            			    toolbox: {
-                            			        show : true,
-                            			        feature: {
+                                  
+                                  option = {
+                                		    title: {
+                                		        text: '交易趋势图'
+                                		    },
+                                		    tooltip: {
+                                		        trigger: 'axis'
+                                		    },
+                                		    legend: {
+                                		        data:['失败总笔数','成功总笔数','交易总笔数']
+                                		    },
+                                		    grid: {
+                                		        left: '3%',
+                                		        right: '4%',
+                                		        bottom: '3%',
+                                		        containLabel: true
+                                		    },
+                                		    toolbox: {
+                                		    	show : true,
+                                		        feature: {
                                                     restore : {show: true},
                                                     saveAsImage : {show: true}
-                                  		        }
-                            			    },
+                                		        }
+                                		    },
                             			    dataZoom: {
                             			        show: true,
-                            			        start : 0
+                            			        start : 0,
+                            			        end:100
                             			    },
-                            			    legend : {
-                            			        data : ['每日交易量(单位/笔)']
-                            			    },
-                            			    grid: {
-                            			            y2: 80
-                            			    },
-                            			    
-                            			    xAxis : [
-                            			        {
-                            			            type : 'time',
-                            			            splitNumber:10,
-                                    		        splitLine:{show: false},
-                                    		        splitArea : {show : false},
-                                    		        axisLine:{
-                                                        lineStyle:{color:'#708090'}
-                                                    }
-                            			        }
-                            			    ],
-                            			    yAxis : [
-                            			        {
-                            			            type : 'value',
-                                    		        splitLine:{show: false},
-                                    		        splitArea : {show : true},
-                                    		        axisLine:{
-                                                        lineStyle:{color:'#708090'}
-                                                    }
-                            			        }
-                            			    ],
-                            			    series : [
-                            			        {
-                            			            name: '每日交易量(单位/笔)',
-                            			            type: 'line',
-                            			            showAllSymbol: true,
-                            			            data:xAxisData
-                            			        }
-                            			    ]
-                            			};
-                            			    
+                                		    xAxis: {
+                                		        type: 'category',
+                                		        boundaryGap: false,
+                                		        data: timeData
+                                		    },
+                                		    yAxis: {
+                                		        type: 'value'
+                                		    },
+                                		    series: [
+                                		        {
+                                		            name:'失败总笔数',
+                                		            type:'line',
+                                		            itemStyle : {  
+                                                        normal : {  
+                                                            color:'#B87070',  
+                                                            lineStyle:{  
+                                                                color:'#B87070'  
+                                                            }  
+                                                        }  
+                                                    },  
+                                		            data:failData
+                                		        },
+                                		        {
+                                		            name:'成功总笔数',
+                                		            type:'line',
+                                		            itemStyle : {  
+                                                        normal : {  
+                                                            color:'#0080FF',  
+                                                            lineStyle:{  
+                                                                color:'#0080FF'  
+                                                            }  
+                                                        }  
+                                                    },
+                                		            data:successData
+                                		        },
+                                		        {
+                                		            name:'交易总笔数',
+                                		            type:'line',
+                                		            itemStyle : {  
+                                                        normal : {  
+                                                            color:'#FF8040',  
+                                                            lineStyle:{  
+                                                                color:'#FF8040'  
+                                                            }  
+                                                        }  
+                                                    },
+                                		            data:xAxisData
+                                		        },
+                                		    ]
+                                		};
+                                  
                                   var myChart = echarts.init(document.getElementById('dayTrading'));
                                   myChart.setTheme(curTheme)
                                   myChart.setOption(option);
@@ -289,14 +303,17 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
         			var dayEndTime = $scope.enddate1;
         			if(!$scope.startdate1) dayStratTime = nowtime;
         			if(!$scope.enddate1) dayEndTime = nowtime;
-        			// 如条件为minute 即只返回一条数据避免数据过多
-        			if("minute"==findType){
-        				dayStratTime = nowtime;
-            			dayEndTime = nowtime;
-        			}
-        			if("day"==findType){
-        				
-        			}
+        			// 如条件为minute 即只返回一天数据避免数据过多
+/*        			if("minute"==findType){
+        				var sday = new Date(dayStratTime);
+        				var eday = new Date(dayEndTime);
+            			var sTime = Number(sday.getTime());
+            			var eTime = Number(eday.getTime());
+            			var gTime = eTime - sTime;
+            			if(gTime>=86400000){
+            				dayEndTime = dayStratTime;
+            			}
+        			}*/
         			$httpWrapper.post({
         			url:"dayTrading/getDayTradingByPageByCondition",
         			data:'{"dayTradingStartDate": "'+dayStratTime+'","dayTradingEndDate": "'+dayEndTime+'","findType": "'+findType+'","txCode": "'+txCode+'","chnlCode": "'+chnlType+'"}',
@@ -311,102 +328,108 @@ statistics.controller("statisticsIndex",function($scope,$httpWrapper,$breadcrumb
                                       var xAxisData=[];
                                       var successData=[];
                                       var failData=[];
+                                      var timeData=[];
                                       
                                       for(var a=0; a<arrs.length; a++){
-                                    	  
-/*                                    	  xAxisData.push([new Date(arrs[a].timestamp*1000),
-                                    	                  arrs[a].totalTimeNum
-                                    	                  ]);*/
                                     	  if(findType=="day"){
-                                    		  xAxisData.push([arrs[a].nowtime,arrs[a].totalTimeNum]);
-                                    		  successData.push([arrs[a].nowtime,arrs[a].success]);
-                                    		  failData.push([arrs[a].nowtime,arrs[a].fail]);
+                                    		  xAxisData.push(arrs[a].totalTimeNum);
+                                    		  successData.push(arrs[a].success);
+                                    		  failData.push(arrs[a].fail);
+                                    		  timeData.push(arrs[a].nowTime);
+                                    	  }else if(findType=="hour"){
+                                    		  xAxisData.push(arrs[a].totalTimeNum);
+                                    		  successData.push(arrs[a].success);
+                                    		  failData.push(arrs[a].fail);
+                                    		  timeData.push(arrs[a].startTime+":00");
                                     	  }else{
-                                    		  xAxisData.push([arrs[a].startTime,arrs[a].totalTimeNum]);
-                                    		  successData.push([arrs[a].startTime,arrs[a].success]);
-                                    		  failData.push([arrs[a].startTime,arrs[a].fail]);
+                                    		  xAxisData.push(arrs[a].totalTimeNum);
+                                    		  successData.push(arrs[a].success);
+                                    		  failData.push(arrs[a].fail);
+                                    		  timeData.push(arrs[a].startTime);
                                     	  }
-                                    	 
                                       }
-                                	  var option = {
-    	                            			title: {
-    	                              		        text: '每日交易量折线图',
-    	                              		    },
-                                			    tooltip : {
-                                			        trigger: 'item',
-                                			        formatter : function (params) {
-                                			            var date = new Date(params.value[0]);
-                                			            data = date.getFullYear() + '-'
-                                			                   + (date.getMonth() + 1) + '-'
-                                			                   + date.getDate() + ' '
-                                			                   + date.getHours() + ':'
-                                			                   + date.getMinutes() + ':'
-                                			                   + date.getSeconds();
-                                			            return data + '<br/>'
-                                			                   + params.value[1] + '次交易'
-                                			        },
-                                			        enterable: true
-                                			    },
-                                			    toolbox: {
-                                			        show : true,
-                                			        feature: {
-                                                        restore : {show: true},
-                                                        saveAsImage : {show: true}
-                                      		        }
-                                			    },
-                                			    dataZoom: {
-                                			        show: true,
-                                			        start : 0,
-                                			        end:100
-                                			    },
-                                			    legend : {
-                                			        data : ['每日交易量(单位/笔)']
-                                			    },
-                                			    grid: {
-                            			            y2: 80
-                                			    },
-                                			    xAxis : [
-                                			        {
-                                			            type : 'time',
-                                			            splitNumber:10,
-                                        		        splitLine:{show: false},
-                                        		        splitArea : {show : false},
-                                        		        axisLine:{
-                                                            lineStyle:{color:'#708090'}
-                                                        }
-                                			        }
-                                			    ],
-                                			    yAxis : [
-                                			        {
-                                			            type : 'value',
-                                        		        splitLine:{show: false},
-                                        		        splitArea : {show : true},
-                                        		        axisLine:{
-                                                            lineStyle:{color:'#708090'}
-                                                        }
-                                			        }
-                                			    ],
-                                			    series : [
-                                			        {
-                                			            name: '总交易量(单位/笔)',
-                                			            type: 'line',
-                                			            showAllSymbol: true,
-                                			            data:xAxisData
-                                			        },
-                                			        {
-                                			            name: '成功交易量(单位/笔)',
-                                			            type: 'line',
-                                			            showAllSymbol: true,
-                                			            data:successData
-                                			        },
-                                			        {
-                                			            name: '失败交易量(单位/笔)',
-                                			            type: 'line',
-                                			            showAllSymbol: true,
-                                			            data:failData
-                                			        }
-                                			    ]
-                                			};
+                                      
+                                      option = {
+                                  		    title: {
+                                  		        text: '交易趋势图'
+                                  		    },
+                                  		    tooltip: {
+                                  		        trigger: 'axis'
+                                  		    },
+                                  		    legend: {
+                                  		        data:['失败总笔数','成功总笔数','交易总笔数']
+                                  		    },
+                                  		    grid: {
+                                  		        left: '3%',
+                                  		        right: '4%',
+                                  		        bottom: '3%',
+                                  		        containLabel: true
+                                  		    },
+                                  		    toolbox: {
+                                  		    	show : true,
+                                  		        feature: {
+                                                      restore : {show: true},
+                                                      saveAsImage : {show: true}
+                                  		        }
+                                  		    },
+                              			    dataZoom: {
+                              			        show: true,
+                              			        start : 0,
+                              			        end:100
+                              			    },
+                                  		    xAxis: {
+                                  		        type: 'category',
+                                  		        boundaryGap: false,
+                                  		        data: timeData
+                                  		    },
+                                  		    yAxis: {
+                                  		        type: 'value'
+                                  		    },
+                                  		    series: [
+                                  		        {
+                                  		            name:'失败总笔数',
+                                  		            type:'line',
+                                  		            
+                                  		            itemStyle : {  
+                                                          normal : {  
+                                                              color:'#B87070',  
+                                                              lineStyle:{  
+                                                                  color:'#B87070'  
+                                                              }  
+                                                          }  
+                                                      },  
+                                  		            data:failData
+                                  		        },
+                                  		        {
+                                  		            name:'成功总笔数',
+                                  		            type:'line',
+                                  		            
+                                  		            itemStyle : {  
+                                                          normal : {  
+                                                              color:'#0080FF',  
+                                                              lineStyle:{  
+                                                                  color:'#0080FF'  
+                                                              }  
+                                                          }  
+                                                      },
+                                  		            data:successData
+                                  		        },
+                                  		        {
+                                  		            name:'交易总笔数',
+                                  		            type:'line',
+                                  		            
+                                  		            itemStyle : {  
+                                                          normal : {  
+                                                              color:'#FF8040',  
+                                                              lineStyle:{  
+                                                                  color:'#FF8040'  
+                                                              }  
+                                                          }  
+                                                      },
+                                  		            data:xAxisData
+                                  		        },
+                                  		    ]
+                                  		};
                                       var myChart = echarts.init(document.getElementById('dayTrading'));
                                       myChart.setTheme(curTheme)
                                       myChart.setOption(option);

@@ -73,7 +73,7 @@ CREATE TABLE `statistics_day`(
 	`timestamp` bigint(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '时间戳',
 	`success` int(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '成功总数',
   	`fail` int(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '失败总数',
-	`total_time_num` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '交易量',
+	`total_time_num` int(20) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '交易量',
 	PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

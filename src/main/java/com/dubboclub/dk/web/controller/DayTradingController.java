@@ -51,9 +51,9 @@ public class DayTradingController {
 		        }
 		        return responseList;
         }
-        // 以每小时一天数据返回
+        // 以每小时一条数据返回
         else if(dayTradingQuery.getFindType().equals("hour")){
-        		List<DayTradingPo> listPo = dayTradingStorage.selectDayTradingByMinute(dayTradingQuery);
+        		List<DayTradingPo> listPo = dayTradingStorage.selectDayTradingByHour(dayTradingQuery);
 	   	        BasicListResponse<DayTradingDto> responseList = new BasicListResponse<DayTradingDto>();
 		        List listDto = new ArrayList<TradingStatisticDto>();
 		        responseList.setList(listDto);

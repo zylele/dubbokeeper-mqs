@@ -29,7 +29,7 @@
     </delete>
     
     <select id="selectDayTradingByMinute" parameterType="DayTradingQuery" resultType="DayTradingPo">
-    	select start_time as startTime,total_time_num as totalTimeNum,success as success,fail as fail 
+    	select substr(start_time,6,14) as startTime,sum(total_time_num) as totalTimeNum,sum(success) as success,sum(fail) as fail  
     	from statistics_day 
     	where now_time &gt;= #{dayTradingStartDate} and now_time &lt;= #{dayTradingEndDate}
     	<if test="txCode != null and txCode != ''">
@@ -38,11 +38,11 @@
     	<if test="chnlCode != null and chnlCode != ''">
     		and chnl_code = #{chnlCode}
     	</if>
-    	order by start_time
+    	group by substr(start_time,6,14) order by start_time
     </select>
     
     <select id="selectDayTradingByHour" parameterType="DayTradingQuery" resultType="DayTradingPo">
-    	select substr(start_time,1,13) as startTime,sum(total_time_num) as totalTimeNum,sum(success) as success,sum(fail) as fail 
+    	select substr(start_time,6,8) as startTime,sum(total_time_num) as totalTimeNum,sum(success) as success,sum(fail) as fail 
     	from statistics_day 
     	where now_time &gt;= #{dayTradingStartDate} and now_time &lt;= #{dayTradingEndDate}
     	<if test="txCode != null and txCode != ''">
@@ -51,7 +51,7 @@
     	<if test="chnlCode != null and chnlCode != ''">
     		and chnl_code = #{chnlCode}
     	</if>
-    	group by substr(start_time,1,13) order by start_time
+    	group by substr(start_time,6,8) order by start_time
     </select>
     
     <select id="selectDayTradingByDay" parameterType="DayTradingQuery" resultType="DayTradingPo">

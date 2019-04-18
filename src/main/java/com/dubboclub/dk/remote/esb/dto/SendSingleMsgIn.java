@@ -1,8 +1,8 @@
 package com.dubboclub.dk.remote.esb.dto;
 
-import java.util.List;
 
-import com.dubboclub.dk.remote.esb.base.EsbBaseBO;
+import com.dubboclub.dk.remote.esb.base.EsbBaseReq;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 
@@ -11,15 +11,24 @@ import com.dubboclub.dk.remote.esb.base.EsbBaseBO;
  * @author liumintao
  *
  */
-public class SendSingleMsgIn  extends EsbBaseBO{
+public class SendSingleMsgIn  extends EsbBaseReq{
+	@JsonProperty("scene_code")
 	private String scene_code;  //场景码
+	@JsonProperty("cif_type")
 	private String cif_type;  //客户类型
+	@JsonProperty("cif_no")
 	private String cif_no;  //客户号
+	@JsonProperty("acc_no")
 	private String acc_no;   //客户账号
-	private List<String> mobiles;  //手机号
+	@JsonProperty("mobiles")
+	private String mobiles;  //手机号
+	@JsonProperty("content_data")
 	private String content_data;  //内容数据
+	@JsonProperty("use")
 	private String use; //用途
+	@JsonProperty("send_time")
 	private String send_time;  //发送时间
+	@JsonProperty("")
 	
 	public String getScene_code() {
 		return scene_code;
@@ -45,10 +54,11 @@ public class SendSingleMsgIn  extends EsbBaseBO{
 	public void setAcc_no(String acc_no) {
 		this.acc_no = acc_no;
 	}
-	public List<String> getMobiles() {
+
+	public String getMobiles() {
 		return mobiles;
 	}
-	public void setMobiles(List<String> mobiles) {
+	public void setMobiles(String mobiles) {
 		this.mobiles = mobiles;
 	}
 	public String getContent_data() {

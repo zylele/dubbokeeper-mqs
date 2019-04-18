@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,9 +43,6 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
     private ApplicationService applicationService;   
     @Autowired
     private AlarmServiceStorage alarmServiceStorage;
-    @Autowired
-    private NotificationStorage notificationStorage;
-
     
 	/**
 	  * 定时检查zookeeper中应用节点状态 
@@ -56,16 +54,16 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
     	List<AlarmServicePo> newData = selectAppdata();
     	List<AlarmServicePo> oldData = alarmServiceStorage.selectAlarmServiceAll();
     	
-    	// 如增，更新，如减，证明节点可能故障发送邮件
+    	// 如增，更新，如减，证明节点可能故障通知相关人员
     	if(newData.size()>oldData.size()){
     		updatetAppData(newData);
     	}
     	if(newData.size()<oldData.size()){
     		List<AlarmServicePo> dieData =  getDiffrent(oldData,newData);
     		updatetAppData(newData);
-    		// 获取dieService信息发邮件
-    		String dieMes =  getDieMessage(dieData);
-    		setMailObj(dieMes);    	
+    		// 发送邮件及短信通知相关人员
+    		setMailObj(dieData);    	
+    		setMsgObj(dieData);
     	}
     	
 	}
@@ -135,9 +133,10 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
 	
 	
 	/**
-	 * 拼接节点信息字符串
+	 * 发送邮件
 	 */
-	private String getDieMessage(List<AlarmServicePo> dieData){
+	private void setMailObj(List<AlarmServicePo> dieData){
+		// 拼接邮件内容
 		StringBuilder sb = new StringBuilder();
 		for (AlarmServicePo alarmServicePo : dieData) {
 			sb.append("服务名称："+alarmServicePo.getServiceName()+"------");
@@ -145,31 +144,39 @@ public class ServiceWarningTaskImpl implements ServiceWarningTask {
 		}
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
 		String time = sd.format(new Date());
-		
-		return "以下应用服务于 "+time+" 出现异常，请及时检查:"
-		+"<br><br>"+sb.toString();		
-	}
-	
-	
-	/**
-	 * 组装发邮件实体
-	 */
-	private void setMailObj(String msg){
+		String str =  "以下应用服务于 "+time+" 出现异常，请及时检查:"+"<br><br>"+sb.toString();	
 		// IBS 为全渠道(系统异常发送这个渠道)，
-		List<String> mails = notificationStorage.getMailByChnlcode("IBS");
-		List<String> maildatas = new ArrayList<String>();
-		for (String str : mails) {
-			maildatas.add(str+",");
-		}
+		List<String> mails = sendMessage.queryAddressByChnlCode("IBS");
 		SendEmailReq sendEmailReq = new SendEmailReq();
 		sendEmailReq.setSceneCode("M001");
 		sendEmailReq.setBusType("OutOpenAcc");
 		sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-		sendEmailReq.setMailTo(maildatas);
+		sendEmailReq.setMailTo(mails);
 		sendEmailReq.setAttachments(null);
-		sendEmailReq.setMsg(msg);
-		logger.info("故障节点邮件内容 ==>"+msg);
+		sendEmailReq.setMsg(str);
 		sendMessage.sendWarningMailAsyc(sendEmailReq, "000000");
+	}
+	
+
+	/**
+	 * 发送短信
+	 */
+    private void setMsgObj(List<AlarmServicePo> dieData) {
+    	// 拼接邮件内容
+    	StringBuilder sb = new StringBuilder();
+		for (AlarmServicePo alarmServicePo : dieData) {
+			sb.append("服务名称："+alarmServicePo.getServiceName()+"---");
+			sb.append("节点地址："+alarmServicePo.getHost()+";");
+		}
+		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+		String time = sd.format(new Date());
+		String str = "以下应用服务于"+time+"出现异常，请及时检查!     "+sb.toString();
+    	// IBS 为全渠道(系统异常发送这个渠道)，
+    	List<String> phones = sendMessage.queryPhoneNumsByChnlCode("IBS");
+		// 根据场景码将map的key设置为对应字符串
+		Map<String, String> msg = new LinkedHashMap<String, String>();
+		msg.put("msg", str);
+		sendMessage.sendWarningPhoneAsyc(msg, phones);
 	}
  
 }

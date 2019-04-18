@@ -39,19 +39,12 @@ public class AlarmServiceImpl implements AlarmService {
 	@Autowired
 	@Qualifier("serviceWarningStorage")
 	private ServiceWarningStorage serviceWarningStorage;
-//	@Autowired
-//	private ApplicationMailer mailer;
-//	@Autowired
-//	MsgSystemService msgSystemService;
+
 	@Autowired
 	private WarningStatusHolder warningStatusHolder;
 	private static long interval = 300000;//一定时间间隔内不再发送告警
 	private static Map<String, Date> serviceMap = new HashMap<String, Date>();
-//	private String sendMail;
-//	@PostConstruct
-//    public void init() {
-//		sendMail = ConfigUtils.getProperty("sendMail.url");
-//    }
+
 	@Override
 	public void alarmHandle(URL url,String application) {
 		
@@ -69,13 +62,13 @@ public class AlarmServiceImpl implements AlarmService {
 			serviceWarning.setCategory(Constants.PROVIDERS_CATEGORY);
 			serviceWarningStorage.insertServiceWarning(serviceWarning);
 			String warning = serviceWarning.getStartTime() + ": "+application+" 服务异常，请马上处理！";
-			SendEmailReq sendEmailReq = new SendEmailReq();
-			sendEmailReq.setSceneCode("M001");
-			sendEmailReq.setBusType("OutOpenAcc");
-			sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-			sendEmailReq.setMailTo(sendMessage.queryAddress());
-			sendEmailReq.setAttachments(null);
-			sendEmailReq.setMsg(warning);
+			/*
+			 * SendEmailReq sendEmailReq = new SendEmailReq();
+			 * sendEmailReq.setSceneCode("M001"); sendEmailReq.setBusType("OutOpenAcc");
+			 * sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
+			 * sendEmailReq.setMailTo(sendMessage.queryAddress());
+			 * sendEmailReq.setAttachments(null); sendEmailReq.setMsg(warning);
+			 */
 			if (isAllowedSend(application)) {
 //				sendMessage.sendWarningMailAsyc(sendEmailReq, "000000");
 				warningStatusHolder.setServiceStatus(true);
@@ -92,13 +85,13 @@ public class AlarmServiceImpl implements AlarmService {
 			serviceWarning.setCategory(Constants.CONSUMERS_CATEGORY);
 			serviceWarningStorage.insertServiceWarning(serviceWarning);
 			String warning = serviceWarning.getStartTime() + ": "+application+" 服务异常，请马上处理！";
-			SendEmailReq sendEmailReq = new SendEmailReq();
-			sendEmailReq.setSceneCode("M001");
-			sendEmailReq.setBusType("OutOpenAcc");
-			sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-			sendEmailReq.setMailTo(sendMessage.queryAddress());
-			sendEmailReq.setAttachments(null);
-			sendEmailReq.setMsg(warning);
+			/*
+			 * SendEmailReq sendEmailReq = new SendEmailReq();
+			 * sendEmailReq.setSceneCode("M001"); sendEmailReq.setBusType("OutOpenAcc");
+			 * sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
+			 * sendEmailReq.setMailTo(sendMessage.queryAddress());
+			 * sendEmailReq.setAttachments(null); sendEmailReq.setMsg(warning);
+			 */
 			if (isAllowedSend(application)) {
 //				sendMessage.sendWarningMailAsyc(sendEmailReq, "000000");
 				warningStatusHolder.setServiceStatus(true);
@@ -107,42 +100,6 @@ public class AlarmServiceImpl implements AlarmService {
 		}
 		
 	}
-
-//	private void sendWarningMailAsyc(SendEmailReq errormsg) {
-//		//		ApplicationEmail email = new ApplicationEmail();
-//		//		NotificationPo po = new NotificationPo();
-//		//		po.setType("01");// 邮件
-//		//		List<NotificationPo> notificationPoList = notificationStorage.selectNotificationByConditions(po);
-//		//		email.setSubject("服务异常_"+serviceName);
-//		//		String addresses = "";
-//		//		for (NotificationPo notificationPo : notificationPoList) {
-//		//			addresses += notificationPo.getAddress() + ",";
-//		//		}
-//		//		email.setAddressee(addresses);
-//		//		email.setContent(error);
-//		//		mailer.sendMailByAsynchronousMode(email);
-//		SingleEmailReq singleEmailReq = new SingleEmailReq();
-//		singleEmailReq.setSceneCode("M001");
-//		singleEmailReq.setContentData(errormsg.getContent());
-//		singleEmailReq.setServiceId("120020013");
-//		singleEmailReq.setSceneId("01");// 场景码
-//		// singleEmailReq.setTranMode("ONLINE");//交易模式
-//		singleEmailReq.setTranMode("234");// 交易模式
-//		singleEmailReq.setSourceType("DK-MQS");// 渠道编号
-//		singleEmailReq.setBranchId("90001");// 机构号
-//		singleEmailReq.setUserId("CB-IBSM");// 柜员号:核心-内管虚拟柜员
-//		singleEmailReq.setTranDate(new SimpleDateFormat(ConstantsUtil.DATE_FORMATA).format(new Date()));// 交易日期
-//		singleEmailReq.setTranTimestamp(new SimpleDateFormat(ConstantsUtil.DATE_FORMATB).format(new Date()));// 交易时间
-//		// singleEmailReq.setUserLang("CHINESE");//操作员语言
-//		singleEmailReq.setUserLang("en");// 操作员语言
-//		int i = (int)(Math.random()*900 + 100);
-//		singleEmailReq.setSeqNo(System.currentTimeMillis() + i +"" );// 渠道流水号
-//		singleEmailReq.setSystemId("IBS");// 发起方系统编码
-//		singleEmailReq.setCompany("");// 法人代表
-//		singleEmailReq.getSysHead().setSrcSysSvrid("0");// 源发起系统服务器Id
-//		if(sendMail.equals("true"))
-//			msgSystemService.SendSingleEmail(singleEmailReq);
-//	}
 
 	private boolean isAllowedSend(String application) {
 		Date lastSendTime = serviceMap.get(application);
@@ -157,17 +114,5 @@ public class AlarmServiceImpl implements AlarmService {
 		}
 		return false;
 	}
-//	private List<String> queryAddress(){
-//		NotificationPo notificationPo = new NotificationPo();
-//		notificationPo.setType("01");
-//		List<NotificationPo> notificationPos = notificationStorage.selectNotificationByConditions(notificationPo);
-//		List<String> mails = new ArrayList<String>();
-//		for (NotificationPo notificationPo2 : notificationPos) {
-//			mails.add(notificationPo2.getAddress());
-//		}
-//		return mails;
-//		
-//	}
-	
 
 }

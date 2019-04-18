@@ -171,7 +171,7 @@ public class StatisticsNewMailTaskImpl implements StatisticsMailTask {
         		sendEmailReq.setMsg( chnlDef.getChnlName()+"("+chnlDef.getChnlCode()+")交易信息统计（详情点击下载附件）");
         		sendMessage.sendWarningMailAsyc(sendEmailReq, "000000");
         	}else {
-        		logger.info("发送交易信息统计 ==>"+sendMailStatistic);
+        		logger.info("发送交易信息统计Excel ==>"+sendMailStatistic);
         	}
 
 		}

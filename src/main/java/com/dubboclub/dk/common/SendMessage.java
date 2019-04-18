@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -13,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 
 import com.alibaba.dubbo.common.utils.ConfigUtils;
+import com.alibaba.fastjson.JSONObject;
 import com.dubboclub.dk.admin.service.ApplicationService;
 import com.dubboclub.dk.remote.MsgSystemService;
+import com.dubboclub.dk.remote.esb.base.EsbBaseOutBO;
 import com.dubboclub.dk.remote.esb.dto.SendEmailReq;
 import com.dubboclub.dk.remote.esb.dto.SendSingleMsgIn;
 import com.dubboclub.dk.remote.esb.dto.SingleEmailReq;
@@ -73,8 +76,10 @@ public class SendMessage {
 		singleEmailReq.setCompany("");// 法人代表
 		singleEmailReq.getSysHead().setSrcSysSvrid("0");// 源发起系统服务器Id
 		if (sendMail.equals("true")){
-			logger.info("sendMail ==>  true,发送邮件！");
+			logger.info("sendMail ==>  true！");
 			msgSystemService.SendSingleEmail(singleEmailReq);
+		}else {
+			logger.info("sendMail ==>  false！");
 		}
 			
 	}
@@ -83,33 +88,27 @@ public class SendMessage {
 	/**
 	 * 手机发送
 	 */
-	public void sendWarningPhoneAsyc(SendEmailReq error, String txCode) {
-		// 短信
-		SendSingleMsgIn sendSingleMsgInput = new SendSingleMsgIn();
-		sendSingleMsgInput.setScene_code("M001");
-		sendSingleMsgInput.setMobiles(queryPhoneNum());
-		sendSingleMsgInput.setContent_data(error.getContent());
-		if (sendPhone.equals("true")){
-			logger.info("sendPhone ==>  true,发送短信！");
-			msgSystemService.sendSingleMsg(sendSingleMsgInput);
+	public void sendWarningPhoneAsyc(Map msg,List<String> phoneNums) {
+		for (String number : phoneNums) {
+			// 短信
+			SendSingleMsgIn sendSingleMsgInput = new SendSingleMsgIn();
+			SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+			String time = sd.format(new Date());
+			sendSingleMsgInput.setScene_code("0084");
+			sendSingleMsgInput.setSend_time(time);
+			sendSingleMsgInput.setUse("运维监控平台实时反馈");
+			sendSingleMsgInput.setMobiles(number);
+			sendSingleMsgInput.setContent_data(JSONObject.toJSONString(msg));
+			if (sendPhone.equals("true")){
+				logger.info("sendPhone ==>  true！");
+				msgSystemService.sendSingleMsg(sendSingleMsgInput);
+			}else {
+				logger.info("sendPhone ==>  false！");
+			}	
 		}
-
+		
 	}
 	
-	
-	/**
-	 * 查询邮件地址 
-	 */
-	public List<String> queryAddress(){
-		NotificationPo notificationPo = new NotificationPo();
-		notificationPo.setType("01");
-		List<NotificationPo> notificationPos = notificationStorage.selectNotificationByConditions(notificationPo);
-		List<String> mails = new ArrayList<String>();
-		for (NotificationPo notificationPo2 : notificationPos) {
-			mails.add(notificationPo2.getAddress());
-		}
-		return mails;		
-	}
 	
 	/**
 	 * 根据渠道号查询邮件地址 
@@ -128,16 +127,17 @@ public class SendMessage {
 	
 	
 	/**
-	 * 查询手机号码
+	 * 根据渠道号查询手机号码
 	 */
-	public List<String> queryPhoneNum(){
+	public List<String> queryPhoneNumsByChnlCode(String chnlCode){
 		NotificationPo notificationPo = new NotificationPo();
+		notificationPo.setChnlCode(chnlCode);
 		notificationPo.setType("02");
 		List<NotificationPo> notificationPos = notificationStorage.selectNotificationByConditions(notificationPo);
-		List<String> PhoneNums = new ArrayList<String>();
+		List<String> phoneNums = new ArrayList<String>();
 		for(NotificationPo notificationPo2 : notificationPos){
-			PhoneNums.add(notificationPo2.getAddress());
+			phoneNums.add(notificationPo2.getAddress());
 		}
-		return PhoneNums;
+		return phoneNums;
 	}
 }

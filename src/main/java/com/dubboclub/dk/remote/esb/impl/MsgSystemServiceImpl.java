@@ -33,13 +33,14 @@ public class MsgSystemServiceImpl implements MsgSystemService {
 	public EsbBaseOutBO sendSingleMsg(SendSingleMsgIn sendSingleMsgInput) {
 		LOGGER.info("远程调用开始");
 		sendSingleMsgInput.setSystemId("IBS");
-		sendSingleMsgInput.setTxCode("100001");
+		sendSingleMsgInput.setTxcode("100001");
 		sendSingleMsgInput.setSceneId("01");
 		sendSingleMsgInput.setUserLang("en");
 		sendSingleMsgInput.setServiceId("120020013");
 		sendSingleMsgInput.setSrcSysSvrid("0");
 		sendSingleMsgInput.setTranMode("234");
-		return esbComService.remoteCallnoLog(sendSingleMsgInput, EsbBaseOutBO.class,ConfigUtils.getProperty("esb.core.url.NTCP"));
+//		return esbComService.remoteCallnoLog(sendSingleMsgInput, EsbBaseOutBO.class,ConfigUtils.getProperty("esb.core.url.NTCP"));
+		return esbComService.remoteCallNew(sendSingleMsgInput, EsbBaseOutBO.class, ConfigUtils.getProperty("esb.core.url.NTCP"));
 	}
 	
 	/**

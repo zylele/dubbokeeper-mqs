@@ -48,7 +48,7 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 	MsgSystemService msgSystemService;
 	@Autowired
 	private WarningStatusHolder warningStatusHolder;
-	private final static String BIZ_EXCEPTION_URL = "/zipkin/api/v2/traces?annotationQuery=error&limit=100&lookback=10000";
+	private final static String BIZ_EXCEPTION_URL = "/zipkin/api/v2/traces?annotationQuery=error&limit=100&lookback=20000";
 	private String zipkinUrl;
 	private String sendBizException;
 
@@ -100,22 +100,15 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 									bizWarningPo.setError(error);
 									bizWarningPo.setTxCode(txCode);
 									bizWarningStorage.addBizWarning(bizWarningPo);
-
-									SendEmailReq sendEmailReq = new SendEmailReq();
-									sendEmailReq.setSceneCode("M001");
-									sendEmailReq.setBusType("OutOpenAcc");
-									sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
-									sendEmailReq.setMailTo(sendMessage.queryAddress());
-									sendEmailReq.setAttachments(null);
-									sendEmailReq.setMsg("新的业务异常，traceId: " + traceId + ",error: " + error);
-									// 业务异常邮件发送
-									logger.debug("新的业务异常，traceId: " + traceId + ",error: " + error);
-									
-									if(sendBizException.equals("true"))
-										sendMessage.sendWarningMailAsyc(sendEmailReq, txCode);
-									
-//									  	sendMessage.sendWarningPhoneAsyc(sendEmailReq, txCode);
-									 								 
+									/*
+									 * SendEmailReq sendEmailReq = new SendEmailReq();
+									 * sendEmailReq.setSceneCode("M001"); sendEmailReq.setBusType("OutOpenAcc");
+									 * sendEmailReq.setSubject(ConstantsUtil.MAIL_SUBJECT);
+									 * sendEmailReq.setMailTo(sendMessage.queryAddress());
+									 * sendEmailReq.setAttachments(null); sendEmailReq.setMsg("新的业务异常，traceId: " +
+									 * traceId + ",error: " + error); if(sendBizException.equals("true"))
+									 * sendMessage.sendWarningMailAsyc(sendEmailReq, txCode);
+									 */
 									warningStatusHolder.setBizStatus(true);
 								}
 							}
@@ -127,73 +120,6 @@ public class BizExceptionTaskImpl implements BizExceptionTask {
 			}
 		}
 	}
-
-//	private void sendWarningMailAsyc(SendEmailReq error, String txCode) {
-////				ApplicationEmail email = new ApplicationEmail();
-////				NotificationPo po = new NotificationPo();
-////				po.setType("01");//邮件
-////				List<NotificationPo> notificationPoList = notificationStorage.selectNotificationByConditions(po);
-////				email.setSubject("业务异常_"+txCode);
-////				String addresses = "";
-////				for(NotificationPo notificationPo : notificationPoList) {
-////					addresses += notificationPo.getAddress() + ",";
-////				}
-////				email.setAddressee(addresses);
-////				email.setContent(error);
-////				mailer.sendMailByAsynchronousMode(email);
-//		SingleEmailReq singleEmailReq = new SingleEmailReq();
-//		singleEmailReq.setSceneCode("M001");
-//		singleEmailReq.setContentData(error.getContent());
-//		singleEmailReq.setServiceId("120020013");
-//		singleEmailReq.setSceneId("01");// 场景码
-//		// singleEmailReq.setTranMode("ONLINE");//交易模式
-//		singleEmailReq.setTranMode("234");// 交易模式
-//		singleEmailReq.setSourceType("DK-MQS");// 渠道编号
-//		singleEmailReq.setBranchId("90001");// 机构号
-//		singleEmailReq.setUserId("CB-IBSM");// 柜员号:核心-内管虚拟柜员
-//		singleEmailReq.setTranDate(new SimpleDateFormat(ConstantsUtil.DATE_FORMATA).format(new Date()));// 交易日期
-//		singleEmailReq.setTranTimestamp(new SimpleDateFormat(ConstantsUtil.DATE_FORMATB).format(new Date()));// 交易时间
-//		// singleEmailReq.setUserLang("CHINESE");//操作员语言
-//		singleEmailReq.setUserLang("en");// 操作员语言
-//		int i = (int)(Math.random()*900 + 100);
-//		singleEmailReq.setSeqNo(System.currentTimeMillis() + i +"" );// 渠道流水号
-//		singleEmailReq.setSystemId("IBS");// 发起方系统编码
-//		singleEmailReq.setCompany("");// 法人代表
-//		singleEmailReq.getSysHead().setSrcSysSvrid("0");// 源发起系统服务器Id
-//		if(sendMail.equals("true"))
-//			msgSystemService.SendSingleEmail(singleEmailReq);
-//		//短信
-//		SendSingleMsgIn sendSingleMsgInput = new SendSingleMsgIn();
-//		sendSingleMsgInput.setScene_code("0099");
-//		sendSingleMsgInput.setMobiles(queryPhoneNum());
-//		sendSingleMsgInput.setContent_data(error.getContent());
-//		if(sendPhone.equals("true"))
-//			msgSystemService.sendSingleMsg(sendSingleMsgInput);
-//		
-//	}
-
-//	private List<String> queryAddress(){
-//		NotificationPo notificationPo = new NotificationPo();
-//		notificationPo.setType("01");
-//		List<NotificationPo> notificationPos = notificationStorage.selectNotificationByConditions(notificationPo);
-//		List<String> mails = new ArrayList<String>();
-//		for (NotificationPo notificationPo2 : notificationPos) {
-//			mails.add(notificationPo2.getAddress());
-//		}
-//		return mails;
-//		
-//	}
-	// 取到数据库中手机号
-//	private List<String> queryPhoneNum(){
-//		NotificationPo notificationPo = new NotificationPo();
-//		notificationPo.setType("02");
-//		List<NotificationPo> notificationPos = notificationStorage.selectNotificationByConditions(notificationPo);
-//		List<String> PhoneNums = new ArrayList<String>();
-//		for(NotificationPo notificationPo2 : notificationPos){
-//			PhoneNums.add(notificationPo2.getAddress());
-//		}
-//		return PhoneNums;
-//	}
 
 	private boolean methodName(String servicename) {
 		int server = servicename.indexOf("server");

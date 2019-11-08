@@ -1,5 +1,8 @@
 # dubbokeeper-mqs
 
+[![Stargazers over time](https://starchart.cc/apache/incubator-shardingsphere.svg)](https://starchart.cc/apache/incubator-shardingsphere)
+
+
 ## dubbokeeper-mqs是什么
 
 dubbokeeper-mqs是基于Spring mvc开发的社区版dubboadmin集成服务管理以及服务监控一体的DUBBO服务管理系统，自[dubbokeeper](https://github.com/dubboclub/dubbokeeper)基础上整合而成的**MySQL快速启动版**，并新增服务预警接口、权限登录功能

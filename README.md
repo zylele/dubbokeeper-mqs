@@ -1,5 +1,7 @@
 # dubbokeeper-mqs
 
+[![License](http://img.shields.io/badge/license-apache%202-brightgreen.svg)](https://github.com/zylele/dubbokeeper-mqs/blob/master/LICENSE)
+
 [![Stargazers over time](https://starchart.cc/zylele/dubbokeeper-mqs.svg)](https://starchart.cc/zylele/dubbokeeper-mqs)
 
 

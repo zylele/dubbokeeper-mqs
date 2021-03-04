@@ -1,0 +1,68 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dubboclub.dk.storage.mysql.mapper.BizWarningMapper">
+	<select id="selectBizWarningById" resultType="BizWarningPo">
+       select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt, error, tx_code as txCode
+       from biz_warning 
+       where id = #{bizWarning.id};
+    </select>
+    <delete id="deleteBizWarningById">
+    	delete from biz_warning 
+    	where id = #{bizWarning.id};
+    </delete>
+    <insert id="addBizWarning">
+    	insert into biz_warning (trace_id,trace_content,trace_dt, error, tx_code)
+    	values (#{bizWarning.traceId},
+            #{bizWarning.traceContent},
+            #{bizWarning.traceDt},
+            #{bizWarning.error},
+            #{bizWarning.txCode})
+    </insert>
+    <update id="updateBizWarningById" parameterType="BizWarningPo">
+    	update biz_warning set 
+    	<if test="traceId != null and traceId != ''">
+    		trace_id = #{traceId}
+    	</if>
+    	<if test="traceContent != null and traceContent != ''">
+    		trace_content = #{traceContent}
+    	</if>
+    	<if test="traceDt != null and traceDt != ''">
+    		trace_dt = #{traceDt}
+    	</if>
+    	<if test="error != null and error != ''">
+    		error = #{error}
+    	</if>
+    	<if test="txCode != null and txCode != ''">
+    		tx_code = #{txCode}
+    	</if>   		
+    	where id = #{id};
+    </update>
+    <select  id="selectBizWarningByPage" parameterType="BizWarningPo" resultType="BizWarningPo">
+    	select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt,error, tx_code as txCode from biz_warning where 1=1
+    	<if test="traceId != null and traceId != ''">
+    		and trace_id = #{traceId}
+    	</if>
+    	<if test="traceContent != null and traceContent != ''">
+    		and trace_content = #{traceContent}
+    	</if>
+    	ORDER BY id asc
+    </select>
+<!--     <select id="selectBizWarningByPageByCondition" parameterType="BizWarningQuery" resultType="BizWarningPo">
+    	select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt,error, tx_code as txCode 
+    	from biz_warning 
+    	where 1=1 and trace_dt between #{bizStartDate} and #{bizEndDate}
+    </select> -->
+    <select id="selectBizWarningByPageByCondition" parameterType="BizWarningQuery" resultType="BizWarningPo">
+    	select id,trace_id as traceId,trace_content as traceContent,trace_dt as traceDt,error, tx_code as txCode 
+    	from biz_warning 
+    	where 1=1 and trace_dt between #{bizStartDate} and #{bizEndDate}
+    	<if test="txCode != null and txCode != ''">
+    		and tx_code =  #{txCode}
+    	</if>
+    	<if test="chnlType != null and chnlType != ''">
+    		and trace_content like  "%"#{chnlType}"%"
+    	</if>
+    </select>
+</mapper>
+	

@@ -1,12 +1,81 @@
 <div class="row">
     <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
         <ul class="nav nav-tabs">
+        	<li role="presentation"  ng-click="switchTab('tradingStatistic')"><a href="#/statistics">交易统计</a></li>
             <li role="presentation" class="{{currentTab=='apps'?'active':''}}" ng-click="switchTab('apps')"><a href="#/statistics">应用信息</a></li>
             <li role="presentation" class="{{currentTab=='service'?'active':''}}" ng-click="switchTab('service')"><a href="#/statistics">服务信息</a></li>
             <li role="presentation" class="{{currentTab=='nodes'?'active':''}}" ng-click="switchTab('nodes')"><a href="#/statistics">应用部署节点信息</a></li>
             <li role="presentation" class="{{currentTab=='dependencies'?'active':''}}" ng-click="switchTab('dependencies')"><a href="#/statistics">依赖关系图</a></li>
         </ul>
     </div>
+</div>
+
+<div class="row" ng-show="currentTab=='tradingStatistic'">
+	<div class="col-md-12 col-xs-12 col-lg-12 col-sm-12 ">
+	<div class="panel-heading" style="text-align:center">
+		<strong>请选择需要查询的时间段:</strong>
+		<wui-date format="yyyy-mm-dd" placeholder="请选择或输入开始日期" id="startdate1" btns="{'ok':'确定','now':'此刻'}" ng-model="startdate1"></wui-date>
+		--
+		<wui-date format="yyyy-mm-dd" placeholder="请选择或输入结束日期" id="enddate1" btns="{'ok':'确定','now':'此刻'}" ng-model="enddate1"></wui-date>
+		&nbsp<strong>交易码:</strong>
+		<div style="width:190px;display:inline-block;">
+			<select "id="txCode" name="txCode" class="selectpicker show-tick form-control" multiple data-max-options="1" data-live-search="true" ng-model="txCode">
+				<option id="selectTxCode" ng-show="txDefs&&txDefs.length>0" ng-repeat="txDef in txDefs" value="{{txDef.txCode}}">{{txDef.txCode}}----{{txDef.txName}}</option>
+			</select>
+		</div>
+		&nbsp<strong>渠道号:</strong>
+		<div style="width:190px;display:inline-block;">
+			<select "id="chnlType" name="chnlType" class="selectpicker show-tick form-control" multiple data-max-options="1" data-live-search="true" ng-model="chnlType">
+				<option id="selectChnlType" ng-show="chnlDefs&&chnlDefs.length>0" ng-repeat="chnlDef in chnlDefs" value="{{chnlDef.chnlCode}}">{{chnlDef.chnlCode}}----{{chnlDef.chnlName}}</option>
+			</select>
+		</div>
+		&nbsp<strong>时间:</strong>
+		<div style="width:80px;display:inline-block;">
+			<select "id="findType" name="findType" class="selectpicker show-tick form-control" multiple data-max-options="1" ng-model="findType">
+				<option value="minute">分</option>
+				<option value="hour">时</option>
+				<option value="day">天</option>
+			</select>
+		</div>
+		&nbsp<button type="button" class="btn"  ng-click="queryDayTrading()">查询</button>
+	</div>
+		<div class="row " id="dayTrading" style="height:500px;">
+         	
+        </div>
+     </div>
+	<div class="panel-heading" style="text-align:center">
+		<strong>请选择需要查询的时间段:</strong>
+		<wui-date format="yyyy-mm-dd" placeholder="请选择或输入开始日期" id="startdate" btns="{'ok':'确定','now':'此刻'}" ng-model="startdate"></wui-date>
+		--
+		<wui-date format="yyyy-mm-dd" placeholder="请选择或输入结束日期" id="enddate" btns="{'ok':'确定','now':'此刻'}" ng-model="enddate"></wui-date>
+		<button type="button" class="btn"  ng-click="queryTrading()">查询</button>
+	</div>
+     <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12 max-view-height" >
+         <div class="row" >
+             <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" id="total" style="height:300px">
+                 
+             </div>
+             <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" id="time1" style="height:300px">
+                 
+             </div>
+         </div>
+        <div class="row">
+             <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" id="success" style="height:300px">
+                 
+             </div>
+             <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" id="fail" style="height:300px"> 
+                 
+             </div>
+         </div>
+     </div>
+     <div class="row">
+             <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" id="successRate" style="height:300px">
+                 
+             </div>
+             <div class="col-md-6 col-xs-6 col-lg-6 col-sm-6" id="failRate" style="height:300px"> 
+                 
+             </div>
+         </div>
 </div>
 <div class="row" ng-show="currentTab=='apps'">
     <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6" id="statisticsAppsTypes" style="height: 400px;">

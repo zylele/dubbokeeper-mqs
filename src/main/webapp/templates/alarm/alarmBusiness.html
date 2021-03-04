@@ -1,0 +1,70 @@
+<div class="panel-heading">
+		<strong>请输入或选择需要查询的时间段:</strong>
+		<wui-date format="yyyy-mm-dd hh:mm:ss" placeholder="请选择或输入开始日期" id="startdate" btns="{'ok':'确定','now':'此刻'}" ng-model="startdate"></wui-date>
+		--
+		<wui-date format="yyyy-mm-dd hh:mm:ss" placeholder="请选择或输入结束日期" id="enddate" btns="{'ok':'确定','now':'此刻'}" ng-model="enddate"></wui-date>
+		
+		&nbsp<strong>交易码:</strong>
+		<div style="width:200px;display:inline-block;">
+			<select "id="txCode" name="txCode" class="selectpicker show-tick form-control" multiple data-max-options="1" data-live-search="true" ng-model="txCode">
+				<option id="selectTxCode" ng-show="txDefs&&txDefs.length>0" ng-repeat="txDef in txDefs" value="{{txDef.txCode}}">{{txDef.txCode}}----{{txDef.txName}}</option>
+			</select>
+		</div>
+		
+		&nbsp<strong>渠道号:</strong>
+		<div style="width:200px;display:inline-block;">
+			<select "id="chnlType" name="chnlType" class="selectpicker show-tick form-control" multiple data-max-options="1" data-live-search="true" ng-model="chnlType">
+				<option id="selectChnlType" ng-show="chnlDefs&&chnlDefs.length>0" ng-repeat="chnlDef in chnlDefs" value="{{chnlDef.chnlCode}}">{{chnlDef.chnlCode}}----{{chnlDef.chnlName}}</option>
+			</select>
+		</div>
+		&nbsp<button type="button" class="btn" ng-click="queryBizWarning()">查询</button>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <i class="icon-th-large"></i> <span>业务告警列表</span>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
+        <table class="table-striped table-hover table-condensed table table-condensed table-responsive">
+            <thead>
+            <tr>
+            	<th class="text-center"><strong>#</strong></th>
+                <th class="text-left" >
+                	<strong>报文ID</strong>
+                </th>
+                <th class="text-center" >
+					<strong>时间</strong>
+                </th>
+                <th class="text-center" >
+					<strong>交易码</strong>
+                </th>
+                <th class="text-center" >
+					<strong>异常信息</strong>
+                </th>
+                <th class="text-left" ng-show="!isConsumer">
+                	<strong>详情列表</strong> 
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr  ng-show="alarms&&alarms.length>0" ng-repeat="alarm in alarms " class="ng-animation">
+            	<td class="text-center ">{{$index+1}}</td>
+                <td class="text-left text-warning">{{alarm.traceId}}</td>
+                <td class="text-center text-warning">{{alarm.traceDt}}</td>
+                <td class="text-center text-warning">{{alarm.txCode}}</td>
+                <td class="text-center text-warning">{{alarm.error}}</td>
+                <td class="text-left text-warning">
+                	<button type="button" class="btn-small btn-link"  ng-click="openModal(alarm.traceContent)">详  情</button>
+                </td>
+            </tr>
+            
+            </tbody>
+        </table>
+       </div>
+      </div>
+    </div>
+    <div ng-if="myPage.totalItems" my-pagination pg="myPage"></div>
+    
+   
+</div>

@@ -18,12 +18,17 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/angularjs/angular-route.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/angularjs/angular-animate.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/angularjs/angular-cookies.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/angularjs/wui-date.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/angularjs/angular1.5.5.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/angularjs/my-pagination.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/common/filter.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/common/util.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/common/libs-mapping.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/angularjs-ui-tree/treeView.js"></script>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/bootstrap/bootstrap-select.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/bootstrap/ui-bootstrap-tpls0.11.2.min.js"></script>
 <script src="${pageContext.request.contextPath}/css/libs/themes/assets/js/bootswatch.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/showdown/showdown.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/libs/showdown/showdown-table.min.js"></script>
@@ -37,7 +42,7 @@
     // 路径配置
     require.config({
         paths: {
-            echarts: 'js/echarts'
+        	echarts: 'js/echarts'
         }
     });
 </script>

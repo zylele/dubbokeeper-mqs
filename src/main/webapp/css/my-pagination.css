@@ -1,0 +1,80 @@
+.my-page{
+    overflow: hidden;
+    margin-top: 20px;
+}
+.my-page .page{
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    float: left;
+
+}
+.my-page .page .active{
+    background-color: #2f6ea9;
+    color: #FFFFFF;
+}
+.my-page .page .borderNone{
+    border-bottom: none;
+    border-top: none;
+}
+.my-page .page .page-list{
+    float: left;
+    height:100%;
+    border-right:1px ;
+    cursor: pointer;
+    min-width: 30px;
+    padding: 0px 5px;
+}
+.my-page .page .page-list:first-child,.my-page .page .page-list:last-child {
+    border: 1px solid #CCCCCC;
+
+}
+.my-page .page .page-list:not(.active):hover{
+    background-color: #EEEEEE;
+}
+.my-page .page .page-list:first-child{
+    border-right: none;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    -webkit-border-top-left-radius: 4px;
+    -moz-border-bottom-left-radius: 4px;
+    -moz-border-top-left-radius: 4px;
+    -ms-border-bottom-left-radius: 4px;
+    -ms-border-top-left-radius: 4px;
+    -o-border-bottom-left-radius: 4px;
+    -o-border-top-left-radius: 4px;
+}
+.page-list:not(:last-child){
+    border:1px solid #CCCCCC ;
+    border-right: none;
+
+}
+.my-page .page .page-list:last-child{
+    border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+    -webkit-border-bottom-right-radius: 4px;
+    -webkit-border-top-right-radius: 4px;
+    -moz-border-bottom-right-radius: 4px;
+    -moz-border-top-right-radius: 4px;
+    -ms-border-bottom-right-radius: 4px;
+    -ms-border-top-right-radius: 4px;
+    -o-border-bottom-right-radius: 4px;
+    -o-border-top-right-radius: 4px;
+}
+
+/*跳转页码*/
+.my-page .goPage{
+    float:left;
+    margin-left: 30px;
+}
+.my-page .goPage input{
+    height: 26px;
+    line-height: 26px;
+    width: 50px;
+}
+.my-page .goPage select{
+    height: 26px;
+    line-height: 26px;
+    width: 60px;
+}

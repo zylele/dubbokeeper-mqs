@@ -6,8 +6,8 @@ head.directive("headTpl",function(){
         controller:"headController"
     };
 });
-head.controller("headController",function($scope,$menu,$dkContext,$breadcrumb,$bars,$theme){
-    $scope.currentBar="dashboard";
+head.controller("headController",function($scope,$menu,$dkContext,$breadcrumb,$bars,$theme,$interval,$httpWrapper,$rootScope){
+	$scope.currentBar="dashboard";
     $scope.bars=$dkContext.getBars();
     $dkContext.changeProperty('needBreadCrumb',false);
     $scope.currentTheme = $theme.getCurrentTheme();
@@ -15,6 +15,15 @@ head.controller("headController",function($scope,$menu,$dkContext,$breadcrumb,$b
         $theme.setTheme(type);
         $scope.currentTheme = $theme.getCurrentTheme();
     }
+    $interval(function () {
+    $httpWrapper.post({
+	       url:"notification/getWarningStatus",
+	       success:function(data){
+	    	   if(!$rootScope.warnStatus.serviceStatus) {$rootScope.warnStatus.serviceStatus=data.serviceStatus};
+	    	   if(!$rootScope.warnStatus.bizStatus) {$rootScope.warnStatus.bizStatus=data.bizStatus};
+	       }
+    });
+    }, 6000);
     $scope.switchBar=function(barName){
         var menus=[];
         for(var i=0;i<$scope.bars.length;i++){

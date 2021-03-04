@@ -1,15 +1,16 @@
-var dubbokeeper=angular.module("dubbokeeper",["apps","head","menu","breadCrumb",'aboutus','fullScreen','dialog','statistics','monitor','isteven-multi-select','appDependencies','zoopeeper','httpWrapper','override','router','theme','lineChart','dateRangePicker']);
-dubbokeeper.controller("dubbokeeperCtrl",function($scope,$dkContext){
+var dubbokeeper=angular.module("dubbokeeper",["apps","head","menu","breadCrumb",'aboutus','fullScreen',"tracking","alarm",'dialog','statistics','monitor','isteven-multi-select','appDependencies','zoopeeper','httpWrapper','override','router','theme','lineChart','dateRangePicker']);
+dubbokeeper.controller("dubbokeeperCtrl",function($scope,$dkContext,$rootScope){
     $dkContext._init($scope);
+    $rootScope.warnStatus = {"bizStatus":false,"serviceStatus":false};
     $scope.currentHome={};
 });
 dubbokeeper.barDataset=[{
-    barShowName:"Dashboard",
+    barShowName:"控制面板",
     barIdentify:"dashboard",
     barHref:"/statistics",
     barIconClass:"icon-dashboard"
 },{
-    barShowName:"Admin",
+    barShowName:"管理",
     barIdentify:"admin",
     barHref:"/admin/apps",
     barIconClass:"glyphicon glyphicon-user",
@@ -36,7 +37,7 @@ dubbokeeper.barDataset=[{
         icon:"icon-random"
     }]
 },{
-    barShowName:"Monitor",
+    barShowName:"监控",
     barIdentify:"monitor",
     barHref:"/monitor",
     barIconClass:"icon-bar-chart",
@@ -49,15 +50,37 @@ dubbokeeper.barDataset=[{
         isHome:true
     }]
 },{
-    barShowName:"ZooPeeper",
+    barShowName:"Zoopeeper监控",
     barIdentify:"zoopeeper",
     barHref:"/zoopeeper",
     barIconClass:"icon-eye-open"
 },{
-    barShowName:"AboutUs",
-    barIdentify:"aboutus",
-    barHref:"/aboutus",
-    barIconClass:"icon-bookmark"
+    barShowName:"全链路跟踪",
+    barIdentify:"tracking",
+    barHref:"/tracking/text",
+    barIconClass:"icon-screenshot"
+},{
+    barShowName:"故障告警",
+    barIdentify:"alarm",
+    barHref:"/alarm/alarmlist",
+    barIconClass:"icon-warning-sign",
+    menus:[{
+        showName:"服务异常",
+        identify:"alarm/alarmlist",
+        href:"/alarm/alarmlist",
+        icon:"icon-th-large",
+        isHome:true
+    },{
+    	showName:"业务异常",
+        identify:"alarm/alarmBusiness",
+        href:"/alarm/alarmBusiness",
+        icon:"icon-th-large"
+    },{
+        showName:"通知设置",
+        identify:"alarm/alarmSet",
+        href:"/alarm/alarmSet",
+        icon:" icon-cogs"
+    }]
 }];
 dubbokeeper.$dkContext= function () {
     var dubboKeeperContext = function () {

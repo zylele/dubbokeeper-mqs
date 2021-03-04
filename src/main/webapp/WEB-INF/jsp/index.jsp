@@ -49,5 +49,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/head/head.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/menu/menu.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/aboutus/aboutus.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/tracking/tracking.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/alarm/alarm.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/alarm/modal-ctrl.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/modules/index.js"></script>
 <%@include file="common/footer.jsp"%>

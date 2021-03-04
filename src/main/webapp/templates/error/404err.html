@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        a{color:#252525;text-decoration:none;}
+        a:visited {text-decoration:none;}
+        /*a:hover {color:#ba2636;text-decoration:underline;}*/
+        a:active {color: #5766ba;}
+        /*一个层宽度是400，高度是300。使用绝对定位距离上部与左部都设置成50%。
+        而margin-top的值为－150。margin-left的值为－200。*/
+        .div {
+            position:absolute;
+            top:50%;
+            left:50%;
+            margin:-150px 0 0 -200px;
+            width:400px;
+            height:200px;
+            border:1px solid #008800;
+        }
+        button {
+            background: #F0F0F0 repeat-x;
+            padding-top: 3px;
+            height: auto;
+            font-size: 10pt;
+            cursor: hand;
+        }
+    </style>
+    <title>温馨提示</title>
+</head>
+
+<body>
+
+<div class="div">
+
+        <h3 align="center" style="margin-top:30px;">
+            温馨提示
+        </h3>
+        <h4 style="margin-bottom:40px;margin-top:30px;font-weight:normal;" align="center">
+            非指定局域网访问或无权限访问，请检查后重新访问
+        </h4>
+    <p align="center">
+        <button><a href="http://10.4.0.34:8080/uiap/login">返回登录</a></button>
+    </p>
+</div>
+</body>
+</html>

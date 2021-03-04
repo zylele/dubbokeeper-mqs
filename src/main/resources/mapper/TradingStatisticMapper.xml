@@ -1,0 +1,99 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dubboclub.dk.storage.mysql.mapper.TradingStatisticMapper">
+    <insert id="addTradingStatistic" parameterType="TradingStatisticPo">
+    	insert into trading (tx_code,now_time,total_num, time_avg,success,fail,service_name,source_type)
+    	values (#{txCode},
+            #{nowTime},
+            #{totalNum},
+            #{timeAvg},
+            #{success},
+            #{fail},
+            #{serviceName},
+            #{sourceType})
+    </insert>
+    <update id="updateTradingStatisticByTxCode" parameterType="TradingStatisticPo">
+    	update trading set
+    		total_num = #{totalNum},
+    		time_avg = #{timeAvg},
+    		success = #{success},
+    		fail = #{fail}		
+    	where 1=1 and tx_code = #{txCode} and now_time = #{nowTime} and service_name = #{serviceName} and source_type = #{sourceType} ;
+    </update>
+    <select id="selectTradingStatisticByTxCode" resultType="TradingStatisticPo"  parameterType="TradingStatisticPo">
+       select tx_code as txCode,now_time as nowTime,total_num as totalNum, time_avg as timeAvg,success,fail,service_name as serviceName,source_type as sourceType
+       from trading 
+       where tx_code = #{txCode} and now_time = #{nowTime} and service_name = #{serviceName}  and source_type = #{sourceType};
+    </select>
+    <select id="selectTradingStatisticByPageByCondition" parameterType="TradingStatisticQuery" resultType="TradingStatisticPo">
+    	select b.tx_name as txName,b.tx_type as txType,a.tx_code as txCode,SUM(a.total_num) as totalNum, SUM(a.total_num*a.time_avg)/SUM(a.total_num) as timeAvg,SUM(a.success) as success,
+		SUM(a.fail) as fail,service_name as serviceName,source_type as sourceType,SUM(a.success)/SUM(a.total_num) as successRate,(SUM(a.fail)/SUM(a.total_num))*100 as failRate
+       	from trading a join tx_code_info b on a.tx_code = b.tx_code
+    	where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate} 
+    	<if test="chnlCode != null and chnlCode != ''">
+    		and source_type = #{chnlCode}
+    	</if>
+    	GROUP BY a.tx_code
+    	<if test="type == '01'" >
+    		order by totalNum DESC
+    	</if>
+    	<if test="type == '02'" >
+    	    order by timeAvg DESC
+    	</if>
+   	    <if test="type == '03'" >
+   	    	order by success DESC
+   	    </if>
+   	    <if test="type == '04'" >
+   	    	order by fail DESC
+   	    </if>
+   	    <if test="type == '05'" >
+   	    	order by successRate DESC
+   	    </if>
+   	    <if test="type == '06'" >
+   	    	order by failRate DESC
+   	    </if>
+    </select>
+    <delete id="deleteTradingStatisticByPageByCondition" parameterType="TradingStatisticPo">
+    	delete from trading
+    	where now_time &lt; #{nowTime}
+    </delete>
+    <select id="selectTradingStatisticByPageByDayFailRate" parameterType="TradingStatisticQueryTime" resultType="TradingStatisticPo">
+    	select SUM(total_num) as totalNum,SUM(success) as success,SUM(fail) as fail,SUM(fail)/SUM(total_num) as failRate,source_type as sourceType
+    	from trading 
+    	where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate} and source_type = #{chnlCode}
+    </select>
+    <select id="selectTradingStatisticByPageByTxType" parameterType="TradingStatisticQueryTime" resultType="TradingStatisticPo">
+    	select SUM(a.total_num) as totalNum,SUM(a.fail) as fail,source_type as sourceType
+       	from trading a join tx_code_info b on a.tx_code = b.tx_code
+    	where 1=1 and b.tx_type=1 and now_time between #{tradingStartDate} and #{tradingEndDate} and source_type = #{chnlCode}
+    </select>
+    <select id="selectTradingStatisticByPageByFail" parameterType="TradingStatisticQueryTime" resultType="TradingStatisticPo">
+		select b.tx_name as txName,a.tx_code as txCode,SUM(a.total_num) as totalNum,
+		SUM(a.fail) as fail,SUM(a.fail)/SUM(a.total_num) as failRate,source_type as sourceType
+		from trading a join tx_code_info b on a.tx_code = b.tx_code
+		where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate} and source_type = #{chnlCode}
+		GROUP BY a.tx_code
+		order by failRate DESC
+	</select>
+	<select id="selectTradingStatisticByType" parameterType="TradingStatisticQueryTime" resultType="TradingStatisticPo">
+		select b.tx_name as txName,a.tx_code as txCode,SUM(a.total_num) as totalNum, AVG(a.time_avg) as timeAvg,SUM(a.success) as success,
+		SUM(a.fail) as fail,source_type as sourceType
+		from trading a join tx_code_info b on a.tx_code = b.tx_code
+		where 1=1 and b.tx_type=1 and now_time between #{tradingStartDate} and #{tradingEndDate} and source_type = #{chnlCode}
+		GROUP BY a.tx_code
+		order by totalNum DESC
+	</select>
+	
+	<select id="selectTradingStatisticBydate" parameterType="TradingStatisticQuery" resultType="TradingStatisticPo">
+    	select b.tx_name as txName,b.tx_type as txType,a.tx_code as txCode,SUM(a.total_num) as totalNum, SUM(a.total_num*a.time_avg)/SUM(a.total_num) as timeAvg,SUM(a.success) as success,
+		SUM(a.fail) as fail,service_name as serviceName,source_type as sourceType,SUM(a.success)/SUM(a.total_num) as successRate,(SUM(a.fail)/SUM(a.total_num))*100 as failRate
+       	from trading a join tx_code_info b on a.tx_code = b.tx_code
+    	where 1=1 and now_time between #{tradingStartDate} and #{tradingEndDate} 
+    	<if test="chnlCode != null and chnlCode != ''">
+    		and source_type = #{chnlCode}
+    	</if>
+    	GROUP BY a.tx_code order by totalNum DESC
+    </select>
+
+</mapper>

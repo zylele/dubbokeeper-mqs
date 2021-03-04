@@ -21,15 +21,27 @@
     <servlet-mapping>
         <servlet-name>springMVC</servlet-name>
         <url-pattern>/</url-pattern>
-    </servlet-mapping>
-
-    <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </servlet-mapping>   
+    <!-- zgcBank-uiap -->
+    <servlet>
+        <servlet-name>uiap</servlet-name>
+        <servlet-class>com.dubboclub.dk.uiap.UiapAuthnProcessorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>uiap</servlet-name>
+        <url-pattern>/uiap.do</url-pattern>
+    </servlet-mapping>   
+	<!-- ConvertRequestFilter And LogPrint -->
+<!-- 	<filter>
+		<filter-name>ConvertRequestFilter</filter-name>
+		<filter-class>com.dubboclub.dk.filter.ConvertRequestFilter</filter-class>
+		<init-param>
+			<param-name>ignores</param-name>
+			<param-value>/uiap.do,/notification,/css,/img,/js,/templates</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>ConvertRequestFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping> -->
 </web-app>

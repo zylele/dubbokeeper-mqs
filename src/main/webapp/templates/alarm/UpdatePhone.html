@@ -1,0 +1,33 @@
+<div>
+	<div class="modal-header">
+	    <h3 class="modal-title" align="center">
+	        更新接收人手机号码
+	    </h3>
+	</div>
+	    <div class="modal-body">
+              <div class="form-group">
+                  <label for="updatePhoneReceiver">接收人姓名</label>
+                  <input type="text" class="form-control" id="updatePhoneReceiver" placeholder="请输入接收人姓名" ng-model="updatePhoneReceiver">
+              </div>
+              <div class="form-group">
+                  <label for="updatePhoneAddress">接收人手机号码</label>
+                  <input type="text" class="form-control" id="updatePhoneAddress" placeholder="请输入接收人手机号码" ng-model="updatePhoneAddress">
+              </div>
+              <div class="form-group">
+				<label class="control-label">渠道</label>
+				<div>
+					<select id="usertypePhone" name="usertypePhone" class="selectpicker show-tick form-control" multiple data-max-options="1" data-live-search="true" ng-model="updatePhoneChnlCode">
+					<option id="updatePhoneChnlCode" ng-show="chnlDefs&&chnlDefs.length>0" ng-repeat="chnlDef in chnlDefs" value="{{chnlDef.chnlCode}}">{{chnlDef.chnlCode}}-----{{chnlDef.chnlName}}</option>
+					</select>
+				</div>
+	          </div>
+          </div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" ng-click="updatePhone()">
+	        保存
+	    </button>
+	    <button class="btn btn-warning" ng-click="cancel()">
+	        退出
+	    </button>
+	</div>
+</div>

@@ -1,0 +1,32 @@
+<div>
+	<div class="modal-header">
+	    <h3 class="modal-title" align="center">
+	        更新邮箱
+	    </h3>
+	</div>
+	    <div class="modal-body">
+              <div class="form-group">
+                  <label for="updateMailReceiver">接收人姓名</label>
+                  <input type="text" class="form-control" id="updateMailReceiver" placeholder="请输入接收人姓名" ng-model="updateMailReceiver">
+              </div>
+              <div class="form-group">
+                  <label for="updateMailAddress">接收地址</label>
+                  <input type="text" class="form-control" id="updateMailAddress" placeholder="请输入接收地址" ng-model="updateMailAddress">
+              </div>
+              <div class="form-group">
+				<label class=" control-label">渠道</label>
+				<div>
+					<select id="usertype" name="usertype" class="selectpicker show-tick form-control" multiple data-max-options="1" data-live-search="true" ng-model="updateMailChnlCode">
+					<option id="updateMailChnlCode" ng-show="chnlDefs&&chnlDefs.length>0" ng-repeat="chnlDef in chnlDefs" value="{{chnlDef.chnlCode}}">{{chnlDef.chnlCode}}-----{{chnlDef.chnlName}}</option>
+					</select>
+				</div>
+	          </div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" ng-click="updateMail()">
+	        保存
+	    </button>
+	    <button class="btn btn-warning" ng-click="cancel()">
+	        退出
+	    </button>
+	</div>
+</div>

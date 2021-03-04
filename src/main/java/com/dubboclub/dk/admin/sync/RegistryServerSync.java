@@ -15,6 +15,16 @@
  */
 package com.dubboclub.dk.admin.sync;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicLong;
+
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
+
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.logger.Logger;
@@ -26,16 +36,6 @@ import com.alibaba.dubbo.registry.RegistryService;
 import com.dubboclub.dk.admin.sync.util.SyncUtils;
 import com.dubboclub.dk.admin.sync.util.Tool;
 import com.dubboclub.dk.alarm.AlarmService;
-
-import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author bieber
@@ -122,9 +122,14 @@ public class RegistryServerSync implements InitializingBean, DisposableBean, Not
 	                		if (Tool.getInterface(service).equals(url.getServiceInterface())
 	                				&& (Constants.ANY_VALUE.equals(group) || StringUtils.isEquals(group, Tool.getGroup(service)))
 	                				&& (Constants.ANY_VALUE.equals(version) || StringUtils.isEquals(version, Tool.getVersion(service)))) {
+	                			Map<Long, URL> dataMap = services.get(service);
+	                			for(Map.Entry<Long, URL> dataEntry : dataMap.entrySet()) {
+	                				URL dataUrl = dataEntry.getValue();
+	                				String application = dataUrl.getParameter("application");
+	                				//empty协议url预警处理方法
+		                			alarmService.alarmHandle(url, application);
+	                			}
 	                			services.remove(service);
-	                			//empty协议url预警处理方法
-	                			alarmService.alarmHandle(url);
 	                		}
 	                	}
             		}

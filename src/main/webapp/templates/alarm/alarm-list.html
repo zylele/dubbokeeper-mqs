@@ -1,0 +1,56 @@
+	<div class="panel-heading">
+		<strong>请输入或选择需要查询的时间段:</strong>
+		<wui-date format="yyyy-mm-dd hh:mm:ss" placeholder="请选择或输入开始日期" id="startdate" btns="{'ok':'确定','now':'此刻'}" ng-model="startdate"></wui-date>
+		--
+		<wui-date format="yyyy-mm-dd hh:mm:ss" placeholder="请选择或输入结束日期" id="enddate" btns="{'ok':'确定','now':'此刻'}" ng-model="enddate"></wui-date>
+		<button type="button" class="btn"  ng-click="queryServiceWarning()">查询</button>
+	</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <i class="icon-th-large"></i> <span>服务告警列表</span>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
+        <table class="table-striped table-hover table-condensed table table-condensed table-responsive">
+            <thead>
+            <tr>
+            	<th class="text-center"><strong>#</strong></th>
+                <th class="text-left" >
+                	<strong>host</strong>
+                </th>
+                <th class="text-left" >
+                	<strong>服务名称</strong>
+                </th>
+                <th class="text-center" >
+                	<strong>服务接口</strong>
+                </th>
+                <th class="text-center" >
+                	<strong>时间</strong>
+                </th>
+                <th class="text-left">
+                	<strong>详情列表</strong> 
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr  ng-show="services&&services.length>0" ng-repeat="service in services" class="ng-animation">
+            	<td class="text-center ">{{$index+1}}</td>
+                <td class="text-left text-warning">{{service.host}}</td>
+                <td class="text-left text-warning">{{service.application}}</td>
+                <td class="text-center text-warning">{{service.serviceInterface}}</td>
+                <td class="text-center text-warning">{{service.startTime}}</td>
+                <td class="text-left text-warning">
+                	<button type="button" class="btn-small btn-link"  ng-click="openModal(service.content)">详  情</button>
+                </td>
+
+            </tr>
+            
+            </tbody>
+        </table>
+       </div>
+      </div>
+    </div>
+    <div ng-if="myPage.totalItems" my-pagination pg="myPage"></div>
+</div>
+

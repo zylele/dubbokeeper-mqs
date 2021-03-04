@@ -1,0 +1,84 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dubboclub.dk.storage.mysql.mapper.NotificationMapper">
+	<select id="selectNotificationById" resultType="NotificationPo">
+       select id,type,receiver,chnl_code as chnlCode,chnl_name as chnlName
+       from notification 
+       where id = #{notification.id};
+    </select>
+    <delete id="deleteNotificationById">
+    	delete from notification
+    	where id = #{notification.id};
+    </delete>
+    <insert id="addNotification">
+    	insert into notification (type,receiver,address,chnl_code,chnl_name)
+    	values(#{notification.type},#{notification.receiver},#{notification.address},#{notification.chnlCode},#{notification.chnlName});
+    </insert>
+    <update id="updateNotificationById" parameterType="NotificationPo">
+    	update notification set 
+    	<if test="type != null and type != ''">
+    		type = #{type},
+    	</if>
+    	<if test="receiver != null and receiver != ''">
+    		receiver = #{receiver},
+    	</if>
+    	<if test="address != null and address != ''">
+    		address = #{address},
+    	</if>  	
+    	<if test="chnlCode != null and chnlCode != ''">
+    		chnl_code = #{chnlCode},
+    	</if>
+    	<if test="chnlName != null and chnlName != ''">
+    		chnl_name = #{chnlName}
+    	</if>
+    	where id = #{id};
+    </update>
+    <select id="selectNotificationByPage" parameterType="NotificationPo" resultType="NotificationPo">
+    	select id,type,receiver,address,chnl_code as chnlCode,chnl_name as chnlName  from notification where 1=1 and type = #{type}
+    	<if test="receiver != null and receiver != ''">
+		    and receiver = #{receiver}
+		</if>
+		<if test="address != null and address != ''">
+    	    and address = #{address}
+    	</if>
+    	<if test="chnlCode != null and chnlCode != ''">
+    		and chnl_code = #{chnlCode}
+    	</if>
+    	<if test="chnlName != null and chnlName != ''">
+    		and chnl_name = #{chnlName}
+    	</if>
+		ORDER BY id asc
+    </select>
+    <select id="selectNotificationByConditions" parameterType="NotificationPo" resultType="NotificationPo">
+    	select id,type,receiver,address,chnl_code as chnlCode,chnl_name as chnlName  from notification where 1=1
+    	<if test="type != null and type != ''">
+		    and type = #{type}
+		</if>
+		<if test="receiver != null and receiver != ''">
+		    and receiver = #{receiver}
+		</if>
+		<if test="address != null and address != ''">
+    	    and address = #{address}
+    	</if>
+    	<if test="chnlCode != null and chnlCode != ''">
+    		and chnl_code = #{chnlCode}
+    	</if>
+    	<if test="chnlName != null and chnlName != ''">
+    		and chnl_name = #{chnlName}
+    	</if>
+		ORDER BY id asc
+    </select>
+    <select id="getChnlDef" parameterType="ChnlDefPo" resultType="ChnlDefPo">
+    	select chnl_code as chnlCode,chnl_name as chnlName  from chnl_def where 1=1
+    </select>
+        <select id="getTxcode" parameterType="TxCodePo" resultType="TxCodePo">
+    	select tx_code as txCode,tx_name as txName  from tx_code_info where 1=1
+    </select>
+    <select id="getChnlDefByChnlcode" parameterType="java.lang.String" resultType="ChnlDefPo">
+    	select chnl_code as chnlCode,chnl_name as chnlName  from chnl_def where chnl_code =  #{chnlCode};
+    </select>
+    <select id="getMailByChnlcode" parameterType="java.lang.String" resultType="java.lang.String">
+    	select address from notification  where chnl_code =  #{chnlCode};	
+    </select>
+</mapper>

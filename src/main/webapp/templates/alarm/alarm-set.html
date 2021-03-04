@@ -1,0 +1,105 @@
+<div class="row"> 
+	<div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+	<ul class="nav nav-tabs">
+	  <li role="presentation" ng-click="switchTab('setMail')"><a style="cursor:pointer;">邮箱设置</a></li>
+	  <li role="presentation" class="{{currentTab=='setPhone'?'active':''}}" ng-click="switchTab('setPhone')"><a style="cursor:pointer;">手机设置</a></li>
+	</ul> 
+  	</div>
+</div>
+<div class="row" ng-show="currentTab=='setMail'">
+   <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12">
+        	<table class="table-striped table-hover table-condensed table table-condensed table-responsive">
+            <thead>
+            <tr>
+            	<th class="text-center"><strong>#</strong></th>
+                <th class="text-left" >
+                	<strong>接收人姓名</strong>
+                </th>
+                <th class="text-left" >
+                	<strong>接收地址</strong>
+                </th>
+
+                <th class="text-left" >
+                	<strong>渠道</strong>
+                </th>
+                <th class="text-center">
+                	<button type="button" class="btn btn-default btn-sm"  ng-click="addMail()">
+                		<span class="glyphicon glyphicon-plus"></span> 增加
+                	</button>
+        			
+                </th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            <tr  ng-show="mails&&mails.length>0" ng-repeat="mail in mails" class="ng-animation">
+            	<td class="text-center ">{{$index+1}}</td>
+                <td class="text-left text-warning">{{mail.receiver}}</td>
+                <td class="text-left text-warning">{{mail.address}}</td>
+                <td class="text-left text-warning">{{mail.chnlCode}}</td>
+                <td class="text-center" ng-show="!isConsumer">
+                    <button type="button" class="btn btn-default btn-sm"  ng-click="updateMail(mail.id,mail.type,mail.receiver,mail.address,mail.chnlCode,mail.chnlName)">
+                		<span class="glyphicon glyphicon-edit"></span> 修改
+                	</button>
+                    &nbsp;| &nbsp;
+                    <button type="button" class="btn btn-default btn-sm"  ng-click="deleteMail(mail.id)">
+                		<span class="glyphicon glyphicon-remove"></span> 删除
+                	</button> 
+                </td>
+                
+            </tr>
+            
+            </tbody>
+        </table>
+       </div>
+       <div ng-if="myPage.totalItems" my-pagination pg="myPage"></div>
+</div>
+
+
+<div class="row" ng-show="currentTab=='setPhone'">
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12"  >
+	<table class="table-striped table-hover table-condensed table table-condensed table-responsive">
+            <thead>
+            <tr>
+            	<th class="text-center"><strong>#</strong></th>
+                <th class="text-left" >
+                	<strong>接收人姓名</strong>
+                </th>
+                <th class="text-left" >
+                	<strong>接收电话号码</strong>
+                </th>
+                <th class="text-left" >
+                	<strong>渠道</strong>
+                </th>
+                <th class="text-center">
+                	<button type="button" class="btn btn-default btn-sm"  ng-click="addPhone()">
+                		<span class="glyphicon glyphicon-plus"></span> 增加
+                	</button>
+        			
+                </th>
+                
+            </tr>
+            </thead>
+            <tbody>
+            <tr  ng-show="phones&&phones.length>0" ng-repeat="phone in phones" class="ng-animation">
+            	<td class="text-center ">{{$index+1}}</td>
+                <td class="text-left text-warning">{{phone.receiver}}</td>
+                <td class="text-left text-warning">{{phone.address}}</td>
+                <td class="text-left text-warning">{{phone.chnlCode}}</td>
+                <td class="text-center" ng-show="!isConsumer">
+                    <button type="button" class="btn btn-default btn-sm"  ng-click="updatePhone(phone.id,phone.type,phone.receiver,phone.address,phone.chnlCode,phone.chnlName)">
+                		<span class="glyphicon glyphicon-edit"></span> 修改
+                	</button>
+                    &nbsp;| &nbsp;
+                    <button type="button" class="btn btn-default btn-sm"  ng-click="deletePhone(phone.id)">
+                		<span class="glyphicon glyphicon-remove"></span> 删除
+                	</button> 
+                </td>
+                
+            </tr>
+            
+            </tbody>
+        </table>
+    </div>
+</div>
+
